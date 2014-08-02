@@ -37,6 +37,22 @@ public class DefaultPersonDao implements PersonDao{
 			closeStatement(createPersonStatement);
 		}
 	}
+	
+	@Override
+	public void deletePerson(int idPerson) throws DataAccessException{
+		PreparedStatement deletePersonStatement = null;
+		try {
+			deletePersonStatement = connection.prepareStatement(SQLQuery.DELETE_PERSON.getValue());
+			deletePersonStatement.setInt(1, idPerson);
+			System.out.println(deletePersonStatement);
+			deletePersonStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(deletePersonStatement);
+		}
+
+	}
 
 
 	private void closeStatement(PreparedStatement createPersonStatement) {
@@ -62,11 +78,7 @@ public class DefaultPersonDao implements PersonDao{
 		createPersonStatement.setString(9, person.getWorkplace());
 	}
 
-	@Override
-	public void deletePerson(Person person) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void getPerson() {

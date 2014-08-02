@@ -2,6 +2,8 @@ package constants;
 
 public class PersonColumnNames {
 	
+	public static final String idPerson = "idPerson";
+	
 	public static final String firstName = "firstName";
 	
 	public static final String secondName = "secondName";

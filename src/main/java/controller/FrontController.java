@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import exceptioin.ContactCreationFailedException;
-import model.ContactService;
+import exceptioin.ContactDelitionFailedException;
 import model.entity.Address;
 import model.entity.Contact;
 import model.entity.Person;
 import model.entity.Phone;
+import model.service.ContactService;
 
 @SuppressWarnings("serial")
 public class FrontController extends HttpServlet {
@@ -24,29 +25,30 @@ public class FrontController extends HttpServlet {
         response.getWriter().println("<h1>Hello Servlet</h1>");
         response.getWriter().println("session=" + request.getSession(true).getId());
         ContactService service = new ContactService();
-        Contact c = new Contact();
-        Person p = new Person();
-        p.setIdPerson(2);
-        p.setFirstName("Hello");
-        p.setSecondName("Agi");
-        p.setDateOfBirth(new Date(2000, 12, 25));
-        Address a = new Address();
-        a.setCountry("USA");
-        a.setCity("LA");
-        a.setStreet("SantaMonica");
-        c.setPerson(p);
-        c.setAddress(a);
-        Phone p1 = new Phone();
-        p1.setOperatorCode(12);
-        p1.setCountryCode(2);
-        p1.setPhoneType("дом");
-        c.addPhone(p1);
-        try {
-			service.createContact(c);
-		} catch (ContactCreationFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//        Contact c = new Contact();
+//        Person p = new Person();
+//        p.setIdPerson(2);
+//        p.setFirstName("Hello");
+//        p.setSecondName("Agi");
+//        p.setDateOfBirth(new Date(2000, 12, 25));
+//        Address a = new Address();
+//        a.setCountry("USA");
+//        a.setCity("LA");
+//        a.setStreet("SantaMonica");
+//        c.setPerson(p);
+//        c.setAddress(a);
+//        Phone p1 = new Phone();
+//        p1.setOperatorCode(12);
+//        p1.setCountryCode(2);
+//        p1.setPhoneType("дом");
+//        c.addPhone(p1);
+//        try {
+//        	service.createContact(c);
+//        	service.deleteContact(9);
+//        } catch (ContactDelitionFailedException | ContactCreationFailedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 

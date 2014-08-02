@@ -13,4 +13,6 @@ public interface AddressDao extends HasConnection{
 	
 	public void updateAddress(Address address);
 	
+	public void deletePersonAdress(int idPerson) throws DataAccessException;
+	
 }

@@ -15,7 +15,7 @@ public enum SQLQuery {
 			" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"),
 	
 	CREATE_PHONE("INSERT INTO " + TableNames.databaseName + "." + TableNames.phoneTable + 
-			"(" + PhoneColumnNames.idPerson + "," +
+			"(" + PersonColumnNames.idPerson + "," +
 			PhoneColumnNames.countryCode + "," +
 			PhoneColumnNames.operatorCode + "," +
 			PhoneColumnNames.phoneNumber + ", " + 
@@ -24,7 +24,7 @@ public enum SQLQuery {
 	" VALUES(?, ?, ?, ?, ?, ?)"),
 	
 	CREATE_ADDRESS("INSERT INTO " + TableNames.databaseName + "." + TableNames.addressTable + 
-			"(" + PhoneColumnNames.idPerson + "," +
+			"(" + PersonColumnNames.idPerson + "," +
 			AddressColumnNames.country + "," +
 			AddressColumnNames.city + "," + 
 			AddressColumnNames.street + "," + 
@@ -33,8 +33,14 @@ public enum SQLQuery {
 			AddressColumnNames.postIndex +  " )" +
 	" VALUES(?, ?, ?, ?, ?, ?, ?)"),
 	
+	DELETE_PERSON("DELETE FROM " + TableNames.databaseName + "." + TableNames.personTable +
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+	
 	DELETE_PERSON_PHONES("DELETE FROM " + TableNames.databaseName + "." + TableNames.phoneTable +
-			"WHERE " + PhoneColumnNames.idPerson + "=" + "?");
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+			
+	DELETE_PERSON_ADDRESS("DELETE FROM " + TableNames.databaseName + "." + TableNames.addressTable +
+			" WHERE " + PersonColumnNames.idPerson + "= ?");		
 	
 	
 	

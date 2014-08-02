@@ -7,7 +7,7 @@ public interface PersonDao extends HasConnection {
 
 	public int createPerson(Person person) throws DataAccessException;
 	
-	public void deletePerson(Person person);
+	public void deletePerson(int idPerson) throws DataAccessException;
 	
 	public void getPerson();
 	

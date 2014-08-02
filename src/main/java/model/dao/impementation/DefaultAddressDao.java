@@ -26,12 +26,30 @@ public class DefaultAddressDao implements AddressDao{
 			closeStatement(createAddressStatement);
 		}
 	}
+	
+	@Override
+	public void deletePersonAdress(int idPerson) throws DataAccessException{
+		PreparedStatement deletePersonAddressStatement = null;
+		try {
+			deletePersonAddressStatement = connection.prepareStatement(SQLQuery.DELETE_PERSON_ADDRESS.getValue());
+			deletePersonAddressStatement.setInt(1, idPerson);
+			System.out.println(deletePersonAddressStatement);
+			deletePersonAddressStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(deletePersonAddressStatement);
+		}
+		
+	}
 
 
 	private void closeStatement(PreparedStatement createAddressStatement) {
 		if(createAddressStatement != null){
 			try {
+				System.out.println("closing");
 				createAddressStatement.close();
+				System.out.println("closed");
 			} catch (SQLException e) {}
 		}
 	}
@@ -72,5 +90,8 @@ public class DefaultAddressDao implements AddressDao{
 	public void setConnection(Connection connection) {
 		this.connection = connection;
 	}
+
+
+	
 
 }

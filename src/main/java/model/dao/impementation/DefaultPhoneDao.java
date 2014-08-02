@@ -33,6 +33,7 @@ public class DefaultPhoneDao implements PhoneDao{
 		try {
 			deletePersonPhonesStatement = connection.prepareStatement(SQLQuery.DELETE_PERSON_PHONES.getValue());
 			deletePersonPhonesStatement.setInt(1, idPerson);
+			System.out.println(deletePersonPhonesStatement);
 			deletePersonPhonesStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage());
