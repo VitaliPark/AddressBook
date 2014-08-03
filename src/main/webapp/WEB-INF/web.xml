@@ -7,7 +7,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>FrontController</servlet-name>
-    <url-pattern>/hello</url-pattern>
+    <url-pattern>/index/*</url-pattern>
   </servlet-mapping>
   <resource-ref>
     <description>MySQL Datasource example</description>

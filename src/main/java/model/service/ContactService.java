@@ -18,8 +18,11 @@ import constants.DatabaseConstants;
 import constants.ExceptionMessages;
 import exceptioin.ContactCreationFailedException;
 import exceptioin.ContactDelitionFailedException;
+import exceptioin.ContactReadFailedException;
 import exceptioin.ServiceException;
+import model.entity.Address;
 import model.entity.Contact;
+import model.entity.Person;
 
 
 public class ContactService {
@@ -91,18 +94,30 @@ public class ContactService {
 		}
 	}
 	
-	public List<Contact> getAllContacts(){
+	public List<Contact> getAllContacts(int first, int count) throws ContactReadFailedException{
 		Connection connection = null;
 		List<Contact> result = new ArrayList<>();
+		List<Person> persons = new ArrayList<>();
 		try {
 			connection = pool.getConnection();
 			connection.setAutoCommit(false);
-		} catch (SQLException e) {
-			
+			persons = personService.getAllPersons(first, count, connection);
+			for (Person person : persons) {
+				Address address = addressService.getAddressByPersonId(person.getIdPerson(), connection);
+				Contact contact = new Contact();
+				contact.setPerson(person);
+				contact.setAddress(address);
+				result.add(contact);
+			}
+			connection.commit();
+			return result;
+		} catch (ServiceException | SQLException e) {
+			transactionRollback(connection);
+			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
+		} finally {
+			closeConnection(connection);
 		}
 		
-		
-		return result;
 	}
 
 	private void transactionRollback(Connection connection) {

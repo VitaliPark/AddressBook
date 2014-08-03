@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import constants.PersonColumnNames;
 import constants.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.PersonDao;
@@ -51,7 +54,41 @@ public class DefaultPersonDao implements PersonDao{
 		} finally {
 			closeStatement(deletePersonStatement);
 		}
+	}
+	
+	public List<Person> getAllPersons(int first, int count) throws DataAccessException{	
+		PreparedStatement getAllPersonStatement = null;
+		try {
+			getAllPersonStatement = connection.prepareStatement(SQLQuery.GET_ALL_PERSONS.getValue());
+			getAllPersonStatement.setInt(1, first);
+			getAllPersonStatement.setInt(2, count);
+			ResultSet set = getAllPersonStatement.executeQuery();
+			return buildAllPersonResult(set);
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(getAllPersonStatement);
+		}
+	}
 
+	private List<Person> buildAllPersonResult(ResultSet set) throws SQLException {
+		List<Person> result = new ArrayList<>();
+		while(set.next()){
+			Person person = new Person();
+			person.setIdPerson(set.getInt(PersonColumnNames.idPerson));
+			person.setFirstName(set.getString(PersonColumnNames.firstName));
+			person.setSecondName(set.getString(PersonColumnNames.secondName));
+			person.setPatronymicName(set.getString(PersonColumnNames.patronymicName));
+			java.util.Date date = new java.util.Date(set.getDate(PersonColumnNames.dateOfBirth).getTime());
+			person.setDateOfBirth(date);
+			person.setMaritalStatus(set.getString(PersonColumnNames.maritalStatus));
+			person.setCitizenship(set.getString(PersonColumnNames.citizenship));
+			person.setWebSite(set.getString(PersonColumnNames.website));
+			person.setEmail(set.getString(PersonColumnNames.email));
+			person.setWorkplace(set.getString(PersonColumnNames.workplace));
+			result.add(person);
+		}
+		return result;
 	}
 
 
@@ -95,7 +132,5 @@ public class DefaultPersonDao implements PersonDao{
 	public void setConnection(Connection connection){
 		this.connection = connection;
 	}
-	
-
 
 }

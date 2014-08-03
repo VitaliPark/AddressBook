@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+
+<%@page import="constants.CommandTypes"%>
+
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>index</title>
 </head>
 <body>
-	<h1>Hello World Webapp</h1>
-	<a href="hello">Hello Servlet</a>
+<a href = "index?command="<%=CommandTypes.GET_ALL_CONTACTS.getValue()%>>blabla</a>
 </body>
 </html>

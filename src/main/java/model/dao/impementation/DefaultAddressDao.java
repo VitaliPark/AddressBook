@@ -2,8 +2,10 @@ package model.dao.impementation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import constants.AddressColumnNames;
 import constants.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.AddressDao;
@@ -39,17 +41,44 @@ public class DefaultAddressDao implements AddressDao{
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deletePersonAddressStatement);
+		}	
+	}
+	
+	public Address getPersonAddress(int idPerson) throws DataAccessException{
+		PreparedStatement getPersonAddressStatement = null;
+		try {
+			getPersonAddressStatement = connection.prepareStatement(SQLQuery.GET_PERSON_ADDRESS.getValue());
+			getPersonAddressStatement.setInt(1, idPerson);
+			ResultSet set = getPersonAddressStatement.executeQuery();
+			return buildGetPersonAddress(set);
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(getPersonAddressStatement);
 		}
+
 		
 	}
+	
+	private Address buildGetPersonAddress(ResultSet set ) throws SQLException{
+		Address address = new Address();
+		if(set.next()){
+			address.setCountry(set.getString(AddressColumnNames.country));
+			address.setCity(set.getString(AddressColumnNames.city));
+			address.setStreet(set.getString(AddressColumnNames.street));
+			address.setHouseNumber(set.getInt(AddressColumnNames.houseNumber));
+			address.setAppartement(set.getInt(AddressColumnNames.appartement));
+			address.setIndex(set.getString(AddressColumnNames.postIndex));
+		}
+		return address;		
+	}
+		
 
 
 	private void closeStatement(PreparedStatement createAddressStatement) {
 		if(createAddressStatement != null){
 			try {
-				System.out.println("closing");
 				createAddressStatement.close();
-				System.out.println("closed");
 			} catch (SQLException e) {}
 		}
 	}

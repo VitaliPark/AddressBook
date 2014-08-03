@@ -5,6 +5,7 @@ import model.dao.impementation.DefaultAttachmentDao;
 
 public class AttachmentService {
 
+	@SuppressWarnings("unused")
 	private AttachmentDao attachmentDao;
 
 	public AttachmentService() {

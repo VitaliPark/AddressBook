@@ -1,5 +1,6 @@
 package model.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +46,22 @@ public class Contact {
 	
 	public void addAttachment(Attachment newAttachment){
 		attachments.add(newAttachment);
+	}
+	
+	public int getPersonId(){
+		return person.getIdPerson();
+	}
+	
+	public String getFullName(){
+		return person.getFullName();
+	}
+	
+	public String getWorkplace(){
+		return person.getWorkplace();
+	}
+	
+	public String getBirthDate(){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		return dateFormat.format(person.getDateOfBirth());
 	}
 }

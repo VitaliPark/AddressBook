@@ -40,7 +40,15 @@ public enum SQLQuery {
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 			
 	DELETE_PERSON_ADDRESS("DELETE FROM " + TableNames.databaseName + "." + TableNames.addressTable +
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+	
+	GET_ALL_PERSONS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable +
+			" LIMIT ?, ?"),
+			
+	GET_PERSON_ADDRESS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.addressTable + 
 			" WHERE " + PersonColumnNames.idPerson + "= ?");		
+	
+	
 	
 	
 	

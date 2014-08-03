@@ -2,6 +2,8 @@ package model.entity;
 
 import java.util.Date;
 
+import constants.StringConstants;
+
 public class Person {
 	
 	private int idPerson;
@@ -23,19 +25,19 @@ public class Person {
 		this.idPerson = idPerson;
 	}
 	public String getFirstName() {
-		return firstName;
+		return (firstName != null) ? firstName : StringConstants.EMPTY_STRING;
 	}
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 	public String getPatronymicName() {
-		return patronymicName;
+		return (patronymicName != null) ? patronymicName : StringConstants.EMPTY_STRING;
 	}
 	public void setPatronymicName(String patronymicName) {
 		this.patronymicName = patronymicName;
 	}
 	public String getSecondName() {
-		return secondName;
+		return (secondName != null) ? secondName : StringConstants.EMPTY_STRING;
 	}
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;
@@ -75,5 +77,13 @@ public class Person {
 	}
 	public void setWorkplace(String workplace) {
 		this.workplace = workplace;
+	}
+	
+	public String getFullName(){
+		StringBuilder builder = new StringBuilder();
+		builder.append(getSecondName()); builder.append(StringConstants.SPACE);
+		builder.append(getFirstName()); builder.append(StringConstants.SPACE);
+		builder.append(getPatronymicName()); builder.append(StringConstants.SPACE);
+		return builder.toString();
 	}
 }

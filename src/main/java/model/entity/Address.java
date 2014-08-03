@@ -1,5 +1,7 @@
 package model.entity;
 
+import constants.StringConstants;
+
 public class Address {
 	private int idAddress;
 	private String country;
@@ -16,19 +18,20 @@ public class Address {
 		this.idAddress = idAddress;
 	}
 	public String getCountry() {
-		return country;
+		return (country != null) ? country : StringConstants.EMPTY_STRING;
 	}
 	public void setCountry(String country) {
 		this.country = country;
 	}
 	public String getCity() {
-		return city;
+		return (city != null) ? city : StringConstants.EMPTY_STRING;
 	}
 	public void setCity(String city) {
 		this.city = city;
+		//this.city = (city != null) ? city : StringConstants.EMPTY_STRING;
 	}
 	public String getStreet() {
-		return street;
+		return (street != null) ? street : StringConstants.EMPTY_STRING;
 	}
 	public void setStreet(String street) {
 		this.street = street;
@@ -46,11 +49,24 @@ public class Address {
 		this.appartement = appartement;
 	}
 	public String getIndex() {
-		return index;
+		return (index != null) ? index : StringConstants.EMPTY_STRING;
 	}
 	public void setIndex(String index) {
 		this.index = index;
 	}
-	
-	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(getCountry()); builder.append(StringConstants.COMMA);
+		builder.append(getCity()); builder.append(StringConstants.COMMA);
+		builder.append(getStreet()); builder.append(StringConstants.COMMA);
+		if(houseNumber != 0) {
+			builder.append(houseNumber); builder.append(StringConstants.COMMA);
+		}
+		if(appartement != 0){
+			builder.append(appartement); builder.append(StringConstants.COMMA);
+		}
+		builder.append(getIndex());
+		return builder.toString();
+	}
 }

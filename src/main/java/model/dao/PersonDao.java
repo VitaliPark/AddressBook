@@ -1,5 +1,7 @@
 package model.dao;
 
+import java.util.List;
+
 import exceptioin.DataAccessException;
 import model.entity.Person;
 
@@ -12,5 +14,7 @@ public interface PersonDao extends HasConnection {
 	public void getPerson();
 	
 	public void updatePerson(Person person);
+	
+	public List<Person> getAllPersons(int first, int count) throws DataAccessException;
 
 }
