@@ -12,6 +12,8 @@ public class PersonColumnNames {
 	
 	public static final String dateOfBirth = "dateOfBirth";
 	
+	public static final String sex = "sex";
+	
 	public static final String maritalStatus = "maritalStatus";
 	
 	public static final String citizenship = "citizenship";

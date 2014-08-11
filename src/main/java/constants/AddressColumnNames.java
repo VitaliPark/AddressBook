@@ -10,7 +10,7 @@ public class AddressColumnNames {
 	
 	public static final String houseNumber = "houseNumber";
 	
-	public static final String appartement = "appartement";
+	public static final String apartment = "apartment";
 	
 	public static final String postIndex = "postIndex";
 	

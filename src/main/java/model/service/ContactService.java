@@ -23,6 +23,7 @@ import exceptioin.ServiceException;
 import model.entity.Address;
 import model.entity.Contact;
 import model.entity.Person;
+import model.entity.Phone;
 
 
 public class ContactService {
@@ -77,18 +78,43 @@ public class ContactService {
 		}	
 	}
 	
+	public void updateContact(Contact newContact){
+		
+	}
+	
 	public void deleteContact(int idPerson) throws ContactDelitionFailedException{
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();
 			connection.setAutoCommit(false);
-			phoneService.deleteAllPhones(idPerson, connection);
+			phoneService.deleteAllPersonPhones(idPerson, connection);
 			addressService.deleteAddressByPersonId(idPerson, connection);
 			personService.deletePerson(idPerson, connection);
 			connection.commit();
 		} catch (ServiceException | SQLException e) {
 			transactionRollback(connection);
 			throw new ContactDelitionFailedException(ExceptionMessages.CONTACT_DELITION_FAILED + e.getMessage());
+		} finally {
+			closeConnection(connection);
+		}
+	}
+	
+	public Contact getContact(int personId) throws ContactReadFailedException{
+		Connection connection = null;
+		Contact contact = new Contact();
+		try {
+			connection = pool.getConnection();
+			connection.setAutoCommit(false);
+			Person person = personService.getPerson(personId, connection);
+			List<Phone> phones = phoneService.getAllPersonPhones(personId, connection);
+			Address address = addressService.getAddressByPersonId(personId, connection);
+			contact.setPerson(person);
+			contact.setAddress(address);
+			contact.setPhoneList(phones);
+			return contact;
+		} catch (ServiceException | SQLException e){
+			transactionRollback(connection);
+			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
 		} finally {
 			closeConnection(connection);
 		}
@@ -102,13 +128,7 @@ public class ContactService {
 			connection = pool.getConnection();
 			connection.setAutoCommit(false);
 			persons = personService.getAllPersons(first, count, connection);
-			for (Person person : persons) {
-				Address address = addressService.getAddressByPersonId(person.getIdPerson(), connection);
-				Contact contact = new Contact();
-				contact.setPerson(person);
-				contact.setAddress(address);
-				result.add(contact);
-			}
+			buildAllContacts(connection, result, persons);
 			connection.commit();
 			return result;
 		} catch (ServiceException | SQLException e) {
@@ -120,6 +140,17 @@ public class ContactService {
 		
 	}
 
+	private void buildAllContacts(Connection connection, List<Contact> result,
+			List<Person> persons) throws ServiceException {
+		for (Person person : persons) {
+			Address address = addressService.getAddressByPersonId(person.getIdPerson(), connection);
+			Contact contact = new Contact();
+			contact.setPerson(person);
+			contact.setAddress(address);
+			result.add(contact);
+		}
+	}
+
 	private void transactionRollback(Connection connection) {
 		if(connection != null){
 			try {
@@ -127,7 +158,7 @@ public class ContactService {
 				connection.rollback();
 				System.out.println("rollback seccesfull");
 			} catch (SQLException e1) {
-				// TODO handle
+				// TODO logger
 			}
 		}
 	}
@@ -138,10 +169,8 @@ public class ContactService {
 				connection.setAutoCommit(true);
 				connection.close();
 			} catch (SQLException e) {
-				// TODO handle
+				// TODO logger
 			}
 		}
 	}
-	
-	// addAllAtachments	
 }

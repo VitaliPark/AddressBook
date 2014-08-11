@@ -2,8 +2,12 @@ package model.dao.impementation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import constants.PhoneColumnNames;
 import constants.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.PhoneDao;
@@ -33,7 +37,6 @@ public class DefaultPhoneDao implements PhoneDao{
 		try {
 			deletePersonPhonesStatement = connection.prepareStatement(SQLQuery.DELETE_PERSON_PHONES.getValue());
 			deletePersonPhonesStatement.setInt(1, idPerson);
-			System.out.println(deletePersonPhonesStatement);
 			deletePersonPhonesStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage());
@@ -63,9 +66,33 @@ public class DefaultPhoneDao implements PhoneDao{
 	}
 
 	@Override
-	public Phone getPhone() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Phone> getPersonPhones(int idPerson) throws DataAccessException {
+		PreparedStatement getPhoneStatement = null;
+		try {
+			getPhoneStatement = connection.prepareStatement(SQLQuery.GET_PERSON_PHONES.getValue());
+			getPhoneStatement.setInt(1, idPerson);
+			ResultSet set = getPhoneStatement.executeQuery();
+			return buildGetPersonPhone(set);
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(getPhoneStatement);
+		}		
+	}
+
+	private List<Phone> buildGetPersonPhone(ResultSet set) throws SQLException {		
+		List<Phone> phones = new ArrayList<>();
+		if(set.next()){
+			Phone phone = new Phone();
+			phone.setCountryCode(set.getInt(PhoneColumnNames.countryCode));
+			phone.setOperatorCode(set.getInt(PhoneColumnNames.operatorCode));
+			phone.setPhoneNumber(set.getString(PhoneColumnNames.phoneNumber));
+			phone.setPhoneType(set.getString(PhoneColumnNames.phoneType));
+			phone.setComment(set.getString(PhoneColumnNames.comment));
+			phone.setPhoneId(set.getInt(PhoneColumnNames.phoneId));
+			phones.add(phone);
+		}
+		return phones;
 	}
 
 	@Override
@@ -80,8 +107,6 @@ public class DefaultPhoneDao implements PhoneDao{
 		
 	}
 	
-
-
 	@Override
 	public void setConnection(Connection connection) {
 		this.connection = connection;

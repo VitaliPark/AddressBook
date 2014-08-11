@@ -17,7 +17,7 @@ a, a:link, a:visited{
 }
 
 .tab #index_title a {
-	color:#eeeeee;
+	color:#FFFFFF;
 }
 
 .activeTab #index_title  a {
@@ -25,7 +25,7 @@ a, a:link, a:visited{
 }
 
 li.tab  > a {
-	color: #eeeeee;
+	color: #FFFFFF;
 }
 
 li.activeTab > a {
@@ -36,8 +36,8 @@ li.activeTab > a {
 
 
 body {
-  background-color: #eeeeee;
-  font-family: 'Open Sans Condensed',Satellite, helvetica, arial, sans-serif;
+  background-color: #FFFFFF;
+  font-family: 'Open Sans Condensed', helvetica, arial, sans-serif;
   font-size: 16px;
   font-weight: 400;
   text-rendering: optimizeLegibility;
@@ -45,6 +45,7 @@ body {
 
 #index_wrapper {
 	margin: 0 auto;
+    max-width: 1000px;
 }
 
 #index_header {
@@ -59,7 +60,7 @@ body {
     font-size: 30px;
     font-weight: 600;
     font-style:normal;
-    font-family: 'Open Sans Condensed', Satellite, helvetica, arial, sans-serif;
+    font-family: 'Open Sans Condensed', helvetica, arial, sans-serif;
     text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
     text-transform:uppercase;
 	margin: 0;	
@@ -70,11 +71,12 @@ div.toolbar {
 	height: 60px;
 	max-width: 1000px;
 	/*background-color: #3B003B;*/
-	font-family: 'Open Sans Condensed', Satellite, helvetica, arial, sans-serif;
+	font-family: 'Open Sans Condensed', helvetica, arial, sans-serif;
 	font-size: 18px;
 	font-weight: 500;
 	margin-left: auto;
 	margin-right: auto;
+    padding-bottom: 10%;
 }
 
 .tab{
@@ -84,7 +86,7 @@ div.toolbar {
   padding-top:20px;
   box-sizing:border-box;
   background:#3B003B;  
-  color: #eeeeee;
+  color: #FFFFFF;
   text-align:center;
   cursor:pointer;
   transition:background .4s;
@@ -93,11 +95,11 @@ div.toolbar {
 
 .tab:hover{  
   background-color: #623362;
-  color: #eeeeee;
+  color: #FFFFFF;
 }
 
 .activeTab{
-  background:#eeeeee;
+  background:#FFFFFF;
   color: #3B003B;
 }
 
@@ -117,10 +119,8 @@ div.toolbar li:first-child {
 div.table {
   display: block;
   max-width: 1000px;
-  padding-top:10%;
-  width: 130%;
-  
   margin: 0 auto;
+  margin-bottom: 5%;
 }
 
 div.table-title {
@@ -136,7 +136,7 @@ div.table-title {
    font-size: 30px;
    font-weight: 400;
    font-style:normal;
-   font-family: 'Open Sans Condensed', Satellite, helvetica, arial, sans-serif;
+   font-family: 'Open Sans Condensed', helvetica, arial, sans-serif;
    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
    text-transform:uppercase;
 }
@@ -148,20 +148,42 @@ div.table-title {
   background: white;
   border-radius:3px;
   border-collapse: collapse;
-  height: 320px;
   margin: auto;
   max-width: 1000px;
   padding:5px;
   width: 130%;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
   animation: float 5s infinite;
 }
 
+#phoneTable {
+    background: white;
+    border-radius:3px;
+    border-collapse: collapse;
+    margin-left: 3%;
+    width: 420px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom:3%;
+    animation: float 5s infinite;
+}
+
+#attachmentTable {
+    background: white;
+    border-radius:3px;
+    border-collapse: collapse;
+    width: 420px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom:3%;
+    margin-left: 3%;
+    animation: float 5s infinite;
+    z-index: -5;
+
+}
+
 hr {
-	margin: 100;
 	border-color: #3B003B;
-	margin-left: 25%;
-	margin-right:25%;
+    max-width: 400px;
+    margin-left: 0;
 	opacity: 0.7;
 }
  
@@ -251,6 +273,10 @@ td:last-child {
   border-right: 0px;
 }
 
+th.smallFont{
+    font-size:16px;
+}
+
 th.text-left {
   text-align: left;
 }
@@ -261,6 +287,10 @@ th.text-center {
 
 th.text-right {
   text-align: right;
+}
+
+td.smallFont{
+    font-size: 16px;
 }
 
 td.text-left {

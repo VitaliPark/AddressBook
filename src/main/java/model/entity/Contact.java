@@ -64,4 +64,8 @@ public class Contact {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		return dateFormat.format(person.getDateOfBirth());
 	}
+	
+	public void setPhoneList(List<Phone> phones){
+		this.phones = phones;
+	}
 }

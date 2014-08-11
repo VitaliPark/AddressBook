@@ -31,7 +31,7 @@ public class PhoneService {
 		}
 	}
 	
-	public void deleteAllPhones(int idPerson, Connection connection) throws ServiceException{
+	public void deleteAllPersonPhones(int idPerson, Connection connection) throws ServiceException{
 		phoneDao.setConnection(connection);
 		try {
 			phoneDao.deletePersonPhones(idPerson);
@@ -40,7 +40,12 @@ public class PhoneService {
 		}
 	}
 	
-	
-
-
+	public List<Phone> getAllPersonPhones(int personId, Connection connection) throws ServiceException{
+		phoneDao.setConnection(connection);
+		try {		
+		  return phoneDao.getPersonPhones(personId);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PHONE_DELETION_FAILED + e.getMessage());
+		}	
+	}
 }

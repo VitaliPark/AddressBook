@@ -2,7 +2,8 @@ package constants;
 
 public enum CommandTypes {
 
-	GET_ALL_CONTACTS("getAllContacts");
+	GET_ALL_CONTACTS("getAllContacts"), DELETE_CONTACTS("deleteContacts"), EDIT_CONTACT("editContact"),
+	CREATE_CONTACT("createContact"), SEARCH_CONTACTS("searchContacts"), SHOW_SEARCH_PAGE("showSearchPage");
 		
 	private String value;
 
@@ -21,7 +22,5 @@ public enum CommandTypes {
             }
         }
         throw new RuntimeException("unknown type");
-    }
-	
-	
+    }	
 }

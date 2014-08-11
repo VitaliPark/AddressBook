@@ -2,7 +2,7 @@ package constants;
 
 public class PhoneColumnNames {
 
-	public static final String idPerson = "idPerson";
+	public static final String phoneId = "phoneId";
 	
 	public static final String countryCode = "countryCode";
 	

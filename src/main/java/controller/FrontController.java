@@ -15,6 +15,16 @@ import controller.command.CommandFactory;
 public class FrontController extends HttpServlet {
 	
 	private CommandFactory factory;
+		
+
+//	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+//		
+//		if (request.getCharacterEncoding() == null) {
+//	        request.setCharacterEncoding("UTF-8");
+//	    }
+//	    response.setCharacterEncoding("UTF-8");   
+//	    super.service(request, response);
+//	}
 	
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -28,12 +38,12 @@ public class FrontController extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		proccessRequest(request, response);
 	}
 	
 	private void proccessRequest(HttpServletRequest request, HttpServletResponse response){
 		Command command = factory.getCommand(request, response);
-		System.out.println(command.getClass());
 		command.execute();
 		String page = command.getResultPage();
 		dispatch(request, response, page);
@@ -41,7 +51,6 @@ public class FrontController extends HttpServlet {
 
 	private void dispatch(HttpServletRequest request,
 			HttpServletResponse response, String page) {
-		//RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
 		RequestDispatcher dispatcher = request.getRequestDispatcher(page);
 		try {
 			

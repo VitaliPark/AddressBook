@@ -47,13 +47,47 @@ public class DefaultPersonDao implements PersonDao{
 		try {
 			deletePersonStatement = connection.prepareStatement(SQLQuery.DELETE_PERSON.getValue());
 			deletePersonStatement.setInt(1, idPerson);
-			System.out.println(deletePersonStatement);
 			deletePersonStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deletePersonStatement);
 		}
+	}
+	
+	@Override
+	public Person getPerson(int personId) throws DataAccessException{
+		PreparedStatement getPersonStatement = null;
+		try {
+			getPersonStatement = connection.prepareStatement(SQLQuery.GET_PERSON.getValue());
+			getPersonStatement.setInt(1, personId);
+			ResultSet set = getPersonStatement.executeQuery();
+			return buildGetPersonResult(set);
+			
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(getPersonStatement);
+		}
+		
+	}
+
+	private Person buildGetPersonResult(ResultSet set) throws SQLException {
+		Person person = new Person();
+		if(set.next()){			
+			person.setIdPerson(set.getInt(PersonColumnNames.idPerson));
+			person.setFirstName(set.getString(PersonColumnNames.firstName));
+			person.setSecondName(set.getString(PersonColumnNames.secondName));
+			person.setPatronymicName(set.getString(PersonColumnNames.patronymicName));
+			java.util.Date date = new java.util.Date(set.getDate(PersonColumnNames.dateOfBirth).getTime());
+			person.setDateOfBirth(date);
+			person.setMaritalStatus(set.getString(PersonColumnNames.maritalStatus));
+			person.setCitizenship(set.getString(PersonColumnNames.citizenship));
+			person.setWebSite(set.getString(PersonColumnNames.website));
+			person.setEmail(set.getString(PersonColumnNames.email));
+			person.setWorkplace(set.getString(PersonColumnNames.workplace));
+		}
+		return person;
 	}
 	
 	public List<Person> getAllPersons(int first, int count) throws DataAccessException{	
@@ -117,11 +151,7 @@ public class DefaultPersonDao implements PersonDao{
 
 
 
-	@Override
-	public void getPerson() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void updatePerson(Person person) {

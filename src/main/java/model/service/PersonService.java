@@ -38,6 +38,15 @@ public class PersonService {
 		}
 	}
 	
+	public Person getPerson(int personId, Connection connection) throws ServiceException{
+		personDao.setConnection(connection);
+		try {
+			return personDao.getPerson(personId);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PERSON_READ_FAILED + e.getMessage());
+		}
+	}
+	
 	public List<Person> getAllPersons(int first, int count, Connection connection) throws ServiceException{
 		personDao.setConnection(connection);
 		try {

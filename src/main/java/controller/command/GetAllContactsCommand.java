@@ -3,7 +3,6 @@ package controller.command;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import constants.Pages;
 import exceptioin.ContactReadFailedException;
@@ -14,13 +13,11 @@ public class GetAllContactsCommand implements Command{
 
 	private ContactService contactService;
 	private HttpServletRequest request;
-	private HttpServletResponse response;
 	private String resultString;
 	
-	public GetAllContactsCommand(ContactService contactService, HttpServletRequest request, HttpServletResponse response) {
+	public GetAllContactsCommand(ContactService contactService, HttpServletRequest request) {
 		this.contactService = contactService;
 		this.request = request;
-		this.response = response;
 	}
 
 	@Override

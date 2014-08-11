@@ -29,7 +29,7 @@ public enum SQLQuery {
 			AddressColumnNames.city + "," + 
 			AddressColumnNames.street + "," + 
 			AddressColumnNames.houseNumber + "," + 
-			AddressColumnNames.appartement + "," + 
+			AddressColumnNames.apartment + "," + 
 			AddressColumnNames.postIndex +  " )" +
 	" VALUES(?, ?, ?, ?, ?, ?, ?)"),
 	
@@ -46,7 +46,13 @@ public enum SQLQuery {
 			" LIMIT ?, ?"),
 			
 	GET_PERSON_ADDRESS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.addressTable + 
-			" WHERE " + PersonColumnNames.idPerson + "= ?");		
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+			
+	GET_PERSON_PHONES("SELECT * FROM " + TableNames.databaseName + "." + TableNames.phoneTable + 
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+	
+	GET_PERSON("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable + 
+			" WHERE " + PersonColumnNames.idPerson + "= ?");
 	
 	
 	

@@ -16,13 +16,17 @@ public class ExceptionMessages {
 	
 	public static final String PHONE_CREATION_FAILED = " Unable to add phone info ";
 	
+	public static final String PHONE_DELETION_FAILED = " Unable to delete phone info ";
+	
+	public static final String PHONE_READ_FAILED = " Unable to read phone info ";
+	
 	public static final String ADDRESS_CREATION_FAILED = " Unable to add address info ";
 	
 	public static final String ADDRESS_DELITION_FAILED = " Unable to delete address info ";
 	
-	public static final String ADDRESS_READ_FAILED = " Unableto read address ";
+	public static final String ADDRESS_READ_FAILED = " Unable to read address ";
 	
-	public static final String PHONE_DELETION_FAILED = " Unable to delete phone info ";
+
 	
 	
 	

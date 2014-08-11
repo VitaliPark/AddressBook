@@ -1,10 +1,13 @@
-﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+﻿
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="utf-8" %>
+    <!DOCTYPE html>
 <html lang="ru">
 <head>
 	<meta charset="UTF-8" />
 	<title>Список контактов</title>
-	<link rel="stylesheet" href="pages/table_style.css">
+	<link rel="stylesheet" href="style/table_style.css">
+	<script type="text/javascript" src="script/multis.js"></script>
 	<meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width;">
 </head>
 
@@ -15,12 +18,12 @@
 		<ul>
 		  <li class="tab activeTab">
 			<div id="index_title">
-				<h1><a href="index.html">Contact Book</a></h1>
+				<h1><a href="index.html">Адресная Книга</a></h1>
 			</div>
 		  </li>
-		  <li class="tab"><a href="addContact.html">Add Contact</a></li>
-		  <li class="tab" ><a href="">Search</a></li>
-		  <li class="tab"><a href="">Send Email</a></li>
+		  <li class="tab"><a href="index?command=createContact">Добавить Контакт</a></li>
+		  <li class="tab" ><a href="index?command=showSearchPage">Поиск</a></li>
+		  <li class="tab"><a href="">Отправить Письмо</a></li>
 		</ul>
 	</div>
 
@@ -41,7 +44,7 @@
 		</thead>
 		<tbody class="table-hover">
             <c:forEach items="${requestScope.allContacts}" var="contact">
-            <tr>
+            <tr ondblclick = "editContact(${contact.getPersonId()})" class = "row" id = "${contact.getPersonId()}">
                 <td>
 				<c:out value="${contact.getFullName()}"></c:out>
                 </td>
@@ -55,7 +58,7 @@
 	  
 	</div>
 
-	
+	<input type = "button" onclick = "deleteContacts('index?command=deleteContacts')" value = "Удалить">
 	
 </div>
  </body>

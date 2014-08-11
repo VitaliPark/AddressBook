@@ -67,7 +67,7 @@ public class DefaultAddressDao implements AddressDao{
 			address.setCity(set.getString(AddressColumnNames.city));
 			address.setStreet(set.getString(AddressColumnNames.street));
 			address.setHouseNumber(set.getInt(AddressColumnNames.houseNumber));
-			address.setAppartement(set.getInt(AddressColumnNames.appartement));
+			address.setAppartement(set.getInt(AddressColumnNames.apartment));
 			address.setIndex(set.getString(AddressColumnNames.postIndex));
 		}
 		return address;		
