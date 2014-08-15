@@ -1,4 +1,4 @@
-﻿
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="utf-8" %>
 <!DOCTYPE html>
@@ -43,7 +43,7 @@
 			</tr>
 		</thead>
 		<tbody class="table-hover">
-            <c:forEach items="${requestScope.allContacts}" var="contact">
+            <c:forEach items="${requestScope.result}" var="contact">
             <tr ondblclick = "editContact(${contact.getPersonId()})" class = "row" id = "${contact.getPersonId()}">
                 <td>
 				<c:out value="${contact.getFullName()}"></c:out>

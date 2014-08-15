@@ -9,10 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import constants.PersonColumnNames;
-import constants.SQLQuery;
+import constants.database.PersonColumnNames;
+import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.PersonDao;
+import model.entity.Gender;
+import model.entity.MaritalStatus;
 import model.entity.Person;
 
 public class DefaultPersonDao implements PersonDao{
@@ -75,13 +77,15 @@ public class DefaultPersonDao implements PersonDao{
 	private Person buildGetPersonResult(ResultSet set) throws SQLException {
 		Person person = new Person();
 		if(set.next()){			
+			MaritalStatus maritalStatus = MaritalStatus.getType(set.getString(PersonColumnNames.maritalStatus));
+			Gender gender = Gender.getType(set.getString(PersonColumnNames.gender)); 
 			person.setIdPerson(set.getInt(PersonColumnNames.idPerson));
 			person.setFirstName(set.getString(PersonColumnNames.firstName));
 			person.setSecondName(set.getString(PersonColumnNames.secondName));
 			person.setPatronymicName(set.getString(PersonColumnNames.patronymicName));
-			java.util.Date date = new java.util.Date(set.getDate(PersonColumnNames.dateOfBirth).getTime());
-			person.setDateOfBirth(date);
-			person.setMaritalStatus(set.getString(PersonColumnNames.maritalStatus));
+			setPersonDateOfBirth(set, person);
+			person.setMaritalStatus(maritalStatus);
+			person.setGender(gender);
 			person.setCitizenship(set.getString(PersonColumnNames.citizenship));
 			person.setWebSite(set.getString(PersonColumnNames.website));
 			person.setEmail(set.getString(PersonColumnNames.email));
@@ -108,14 +112,16 @@ public class DefaultPersonDao implements PersonDao{
 	private List<Person> buildAllPersonResult(ResultSet set) throws SQLException {
 		List<Person> result = new ArrayList<>();
 		while(set.next()){
+			MaritalStatus maritalStatus = MaritalStatus.getType(set.getString(PersonColumnNames.maritalStatus));
+			Gender gender = Gender.getType(set.getString(PersonColumnNames.gender));
 			Person person = new Person();
+			setPersonDateOfBirth(set, person);
 			person.setIdPerson(set.getInt(PersonColumnNames.idPerson));
 			person.setFirstName(set.getString(PersonColumnNames.firstName));
 			person.setSecondName(set.getString(PersonColumnNames.secondName));
 			person.setPatronymicName(set.getString(PersonColumnNames.patronymicName));
-			java.util.Date date = new java.util.Date(set.getDate(PersonColumnNames.dateOfBirth).getTime());
-			person.setDateOfBirth(date);
-			person.setMaritalStatus(set.getString(PersonColumnNames.maritalStatus));
+			person.setMaritalStatus(maritalStatus);
+			person.setGender(gender);
 			person.setCitizenship(set.getString(PersonColumnNames.citizenship));
 			person.setWebSite(set.getString(PersonColumnNames.website));
 			person.setEmail(set.getString(PersonColumnNames.email));
@@ -123,6 +129,15 @@ public class DefaultPersonDao implements PersonDao{
 			result.add(person);
 		}
 		return result;
+	}
+
+	private void setPersonDateOfBirth(ResultSet set, Person person) throws SQLException {
+		java.sql.Date dateOfBirth = set.getDate(PersonColumnNames.dateOfBirth);
+		java.util.Date date = null;
+		if(dateOfBirth != null){
+			date = new java.util.Date(set.getDate(PersonColumnNames.dateOfBirth).getTime());
+		}
+		person.setDateOfBirth(date);
 	}
 
 
@@ -142,16 +157,13 @@ public class DefaultPersonDao implements PersonDao{
 		createPersonStatement.setString(2, person.getSecondName());
 		createPersonStatement.setString(3, person.getPatronymicName());
 		createPersonStatement.setDate(4, date);
-		createPersonStatement.setString(5, person.getMaritalStatus());
-		createPersonStatement.setString(6, person.getCitizenship());
-		createPersonStatement.setString(7, person.getWebSite());
-		createPersonStatement.setString(8, person.getEmail());
-		createPersonStatement.setString(9, person.getWorkplace());
+		createPersonStatement.setString(5, person.getMaritalStatus().getValue());
+		createPersonStatement.setString(6, person.getGender().getValue());
+		createPersonStatement.setString(7, person.getCitizenship());
+		createPersonStatement.setString(8, person.getWebSite());
+		createPersonStatement.setString(9, person.getEmail());
+		createPersonStatement.setString(10, person.getWorkplace());
 	}
-
-
-
-
 
 	@Override
 	public void updatePerson(Person person) {

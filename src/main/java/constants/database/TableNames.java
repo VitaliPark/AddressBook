@@ -1,4 +1,4 @@
-package constants;
+package constants.database;
 
 public class TableNames {
 	

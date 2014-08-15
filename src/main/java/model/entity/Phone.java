@@ -1,5 +1,7 @@
 package model.entity;
 
+import constants.StringConstants;
+
 public class Phone {
 	
 	private int phoneId;
@@ -45,5 +47,13 @@ public class Phone {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	
+	public String getFullPhone(){
+		StringBuilder builder = new StringBuilder();
+		builder.append(getCountryCode()); builder.append(StringConstants.PHONE_SEPARATOR);
+		builder.append(getOperatorCode()); builder.append(StringConstants.PHONE_SEPARATOR);
+		builder.append(getPhoneNumber());
+		return builder.toString();
 	}
 }

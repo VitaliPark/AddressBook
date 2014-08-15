@@ -1,5 +1,7 @@
 (function() {
 
+
+
     var Phone = function(id, countryCode, operatorCode, phoneNumber, phoneType, comment, status) {
         this.id = id;
         this.countyrCode = countryCode;
@@ -13,10 +15,10 @@
         };
     };
 
-    document.contactController = {
+        document.contactController = {
 
         // container for Pairs
-        phones: {},
+        //phones: {},
         //phones: {},
         lastUsedId: -1,
         arrayIndex: 1,
@@ -42,7 +44,11 @@
 
             var tr = document.createElement("tr");
             tr.className += "row create";
-            tr.setAttribute("id", phoneId);
+            tr.ondblclick = function(){showPhoneDialog("Редактирование телефона", this)};
+
+            var td0 = document.createElement("td");
+            td0.innerHTML = phoneId;
+            td0.className = "ident";
 
             var td1 = document.createElement("td");
             td1.className += "text-left smallFont";
@@ -56,17 +62,16 @@
             td3.className += "text-left smallFont";
             td3.innerHTML = phoneComment;
 
-            //var td4 = document.createElement("td");
-            //td4.innerHTML = "new";
-            //td4.style.display = "none";
+
 
             tr.appendChild(td1);
             tr.appendChild(td2);
             tr.appendChild(td3);
+            tr.appendChild(td0);
             //tr.appendChild(td4);
             var element = document.getElementById("phoneBody");
             element.appendChild(tr);
-            closeDialog();
+            closeDialog("phone");
         },
 
         deletePhones: function (){
@@ -86,14 +91,27 @@
             var phoneComment = document.getElementById("phoneComment").value;
             var phoneId = document.getElementById("phoneId");
 
-            var changedRow = document.getElementById(phoneId.innerHTML);
-            changedRow.className = "row update"
+            var changedRow = this.getChangedRow(phoneId.innerHTML);
+            changedRow.className = "row update";
+
             var dataCells = changedRow.getElementsByTagName("td");
             dataCells[0].innerHTML = countryCode + "-" + operatorCode + "-" + phoneNumber;
             dataCells[1].innerHTML = phoneType;
             dataCells[2].innerHTML = phoneComment;
             document.getElementById("phonePopup").removeChild(phoneId);
-            closeDialog();
+            closeDialog("phone");
+        },
+
+        getChangedRow: function(phoneId){
+            var tableBody = document.getElementById("phoneBody");
+            var rows = tableBody.getElementsByTagName("tr");
+            for(var i = 0; i < rows.length; i++){
+                var identTd = rows[i].getElementsByTagName("td")[3];
+                var id = identTd.innerHTML;
+                if(id == phoneId){
+                    return rows[i];
+                }
+            }
         },
 
         createInput: function (){
@@ -144,7 +162,7 @@
             var pair = this.rows[id];
             alert(pair.serialize());
         },
-				
+
 			hello: function(){
 			var p;
 			alert("hello");
@@ -157,11 +175,93 @@
     };
 })();
 
-function closeDialog() {
-    var phoneId = document.getElementById("phoneId");
-    if(phoneId != null){
-        document.getElementById("phonePopup").removeChild(phoneId);
+function closeDialog(type) {
+    if(type == "phone"){
+        var phoneId = document.getElementById("phoneId");
+        if(phoneId != null){
+            document.getElementById("phonePopup").removeChild(phoneId);
+        }
+        document.getElementById("phoneOverlay").style.visibility = 'hidden';
+    } else if(type == "attachment"){
+        var attachId = document.getElementById("attachId");
+        if(attachId != null) {
+            document.getElementById("attachmentPopup").removeChild(phoneId);
+        }
+        document.getElementById("attachmentOverlay").style.visibility = 'hidden';
     }
-    document.getElementById("phoneOverlay").style.visibility = 'hidden';
+}
+
+function showElement(element){
+	element.style.visibility = (element.style.visibility == "visible") ? "hidden" : "visible";
+}
+
+	function showPhoneDialog(title, editedRow, phoneId){
+	    var el = document.getElementById("phoneOverlay");
+	    var headerElement = document.getElementById("phoneTitle");
+	    headerElement.innerHTML = title;
+
+        if(editedRow != null){
+            var idCell = editedRow.getElementsByTagName("td")[3];
+            var phoneId = idCell.innerHTML;
+            var phoneFields = [];
+            var tr = editedRow;
+            var dataCells = tr.getElementsByTagName("td");
+            var fullPhone = dataCells[0].innerHTML;
+            var res = fullPhone.split("-");
+            for(var i = 0; i < res.length; i++){
+                phoneFields[i] = res[i];
+            }
+            phoneFields[3] = dataCells[1].innerHTML;
+            phoneFields[4] = dataCells[2].innerHTML;
+            setPhoneId(phoneId);
+            fillPhoneFields(phoneFields);
+        }
+	    showElement(el);
+	}
+
+    function showAttachmentDialog(title, attachId){
+        var element = document.getElementById("attachmentOverlay");
+        var headerElement = document.getElementById("attachmentTitle");
+        headerElement.innerHTML = title;
+
+        showElement(element);
+
+    }
+
+	function fillPhoneFields(phoneFields){
+	    //document.getElementById("countryCode").setAttribute("value", phoneFields[0]);
+	    //document.getElementById("operatorCode").setAttribute("value", phoneFields[1]);
+	   // document.getElementById("phoneNumber").setAttribute("value", phoneFields[2]);
+	   // document.getElementById("phoneType").setAttribute("value", phoneFields[3]);
+	   // document.getElementById("phoneComment").setAttribute("value", phoneFields[4]);
+        document.getElementById("countryCode").value = phoneFields[0];
+        document.getElementById("operatorCode").value = phoneFields[1];
+        document.getElementById("phoneNumber").value = phoneFields[2];
+        document.getElementById("phoneType").value = phoneFields[3];
+        document.getElementById("phoneComment").value = phoneFields[4];
+
+	}
+
+	function setPhoneId(id){
+	    var element = document.createElement("label");
+	    element.setAttribute("id", "phoneId");
+	    element.style.display = "none";
+	    element.innerHTML = id;
+	    var phoneDiv = document.getElementById("phonePopup");
+	    phoneDiv.appendChild(element);
+	}
+
+    function setFileName(fileName){
+        var element = document.getElementById("fileName");
+        var name = fileName;
+        var shortName = name.match(/[^\/\\]+$/);
+        element.setAttribute("value", shortName);
+    }
+
+function submitAttachment(){
+    var fileInput = document.getElementById("fileChooser");
+    var form = document.getElementById("mainForm");
+    var newFileInput = fileInput.cloneNode(true);
+    form.appendChild(newFileInput);
 }
 

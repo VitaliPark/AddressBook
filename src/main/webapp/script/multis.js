@@ -12,8 +12,9 @@ window.onload = function () {
 function deleteContacts(path){
     var data = [];
     data = getIdData();
-
-    sendData(path, data, "post");
+    if(data != null && data.length != 0) {
+        sendData(path, data, "post");
+    }
 }
 
 function getIdData(){

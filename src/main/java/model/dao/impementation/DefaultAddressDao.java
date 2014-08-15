@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import constants.AddressColumnNames;
-import constants.SQLQuery;
+import constants.database.AddressColumnNames;
+import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.AddressDao;
 import model.entity.Address;
@@ -35,7 +35,6 @@ public class DefaultAddressDao implements AddressDao{
 		try {
 			deletePersonAddressStatement = connection.prepareStatement(SQLQuery.DELETE_PERSON_ADDRESS.getValue());
 			deletePersonAddressStatement.setInt(1, idPerson);
-			System.out.println(deletePersonAddressStatement);
 			deletePersonAddressStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage());
@@ -67,7 +66,7 @@ public class DefaultAddressDao implements AddressDao{
 			address.setCity(set.getString(AddressColumnNames.city));
 			address.setStreet(set.getString(AddressColumnNames.street));
 			address.setHouseNumber(set.getInt(AddressColumnNames.houseNumber));
-			address.setAppartement(set.getInt(AddressColumnNames.apartment));
+			address.setApartment(set.getInt(AddressColumnNames.apartment));
 			address.setIndex(set.getString(AddressColumnNames.postIndex));
 		}
 		return address;		
@@ -91,7 +90,7 @@ public class DefaultAddressDao implements AddressDao{
 		createAddressStatement.setString(3, address.getCity());
 		createAddressStatement.setString(4, address.getStreet());
 		createAddressStatement.setInt(5, address.getHouseNumber());
-		createAddressStatement.setInt(6, address.getAppartement());
+		createAddressStatement.setInt(6, address.getApartment());
 		createAddressStatement.setString(7, address.getIndex());
 		System.out.println(createAddressStatement);
 	}

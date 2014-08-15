@@ -14,12 +14,13 @@ import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
-import constants.DatabaseConstants;
 import constants.ExceptionMessages;
+import constants.database.DatabaseConstants;
 import exceptioin.ContactCreationFailedException;
 import exceptioin.ContactDelitionFailedException;
 import exceptioin.ContactReadFailedException;
 import exceptioin.ServiceException;
+import model.SearchRequest;
 import model.entity.Address;
 import model.entity.Contact;
 import model.entity.Person;
@@ -33,6 +34,7 @@ public class ContactService {
 	private PhoneService phoneService;
 	private AddressService addressService;
 	private PersonService personService;
+	private SearchService searchService;
 	
 	public ContactService() {
 		initServices();
@@ -43,6 +45,7 @@ public class ContactService {
 		phoneService = new PhoneService();
 		addressService = new AddressService();
 		personService = new PersonService();
+		searchService = new SearchService();
 	}
 	
 	private void initDataSource(){
@@ -58,6 +61,18 @@ public class ContactService {
 	     } catch (ServletException e){
 	        	
 	     }
+	}
+	
+	public List<Contact> perfromSearch(SearchRequest request, int first, int count) throws ContactReadFailedException{
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			connection.setAutoCommit(false);
+			List<Contact> searchResult = searchService.searchContacts(connection,request, first, count);
+			return searchResult;
+		} catch (SQLException e) {
+			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
+		}
 	}
 	
 	public void createContact(Contact newContact) throws ContactCreationFailedException{
@@ -111,6 +126,7 @@ public class ContactService {
 			contact.setPerson(person);
 			contact.setAddress(address);
 			contact.setPhoneList(phones);
+			connection.commit();
 			return contact;
 		} catch (ServiceException | SQLException e){
 			transactionRollback(connection);

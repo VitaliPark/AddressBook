@@ -1,8 +1,8 @@
-package constants;
+package constants.database;
 
 public class PhoneColumnNames {
 
-	public static final String phoneId = "phoneId";
+	public static final String idPhone = "idPhone";
 	
 	public static final String countryCode = "countryCode";
 	

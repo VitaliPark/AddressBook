@@ -1,4 +1,5 @@
-package constants;
+package constants.database;
+
 
 public enum SQLQuery {
 
@@ -8,11 +9,12 @@ public enum SQLQuery {
 			PersonColumnNames.patronymicName + "," +
 			PersonColumnNames.dateOfBirth + "," + 
 			PersonColumnNames.maritalStatus + "," +
+			PersonColumnNames.gender + "," + 
 			PersonColumnNames.citizenship + "," +
 			PersonColumnNames.website + "," +
 			PersonColumnNames.email + "," +
 			PersonColumnNames.workplace + ")" +
-			" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"),
+			" VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"),
 	
 	CREATE_PHONE("INSERT INTO " + TableNames.databaseName + "." + TableNames.phoneTable + 
 			"(" + PersonColumnNames.idPerson + "," +
@@ -52,16 +54,29 @@ public enum SQLQuery {
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 	
 	GET_PERSON("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable + 
-			" WHERE " + PersonColumnNames.idPerson + "= ?");
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 	
-	
-	
-	
+	SEARCH_REQUEST("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable + 
+			" INNER JOIN " + TableNames.databaseName + "." + TableNames.addressTable + 
+			" ON " + TableNames.personTable + "." + PersonColumnNames.idPerson + "=" +
+			TableNames.addressTable + "." + PersonColumnNames.idPerson + 
+			" WHERE " + PersonColumnNames.firstName + " LIKE ?" +
+			" AND " + PersonColumnNames.secondName + " LIKE ?" + 
+			" AND " + PersonColumnNames.patronymicName + " LIKE ?" +
+			" AND " + PersonColumnNames.citizenship + " LIKE ?" +
+			" AND " + PersonColumnNames.dateOfBirth + " dateOperator ?" + 
+			" AND " + PersonColumnNames.gender + " LIKE ?" + 
+			" AND " + PersonColumnNames.maritalStatus + " LIKE ?" +
+			" AND " + AddressColumnNames.country + " LIKE ?" + 
+			" AND " + AddressColumnNames.city + " LIKE ?" + 
+			" AND " + AddressColumnNames.street + " LIKE ?" + 
+			" AND " + AddressColumnNames.houseNumber + " LIKE ?" +
+			" AND " + AddressColumnNames.apartment + " LIKE ?" + 
+			" AND " + AddressColumnNames.postIndex + " LIKE ?" +
+			" LIMIT ?, ?");
 	
 	private String value;
 	
-	
-
 	private SQLQuery(String value) {
 		this.value = value;
 	}

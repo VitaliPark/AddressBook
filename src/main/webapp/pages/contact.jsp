@@ -1,12 +1,13 @@
 ﻿<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
     <title>Add new contact</title>
     <link rel="stylesheet" href="style/table_style.css">
     <link rel="stylesheet" href="style/addContact.css">
-    <script type="text/javascript" src="script/addContact.js"></script>
     <script type="application/javascript" src="script/contactController.js"></script>
     <script type="text/javascript" src="script/multis.js"></script>
     <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width;">
@@ -29,9 +30,11 @@
 
 
 <div class="inputFields">
-    <form action="">
+    <form id="mainForm" action="">
         <c:set var="person" value="${requestScope.contact.getPerson()}" scope="request" />
         <c:set var="address" value="${requestScope.contact.getAddress()}" scope="request" />
+        <c:set var="gender" value="${requestScope.person.getGender()}" scope="request" />
+        <c:set var="status" value="${requestScope.person.getMaritalStatus()}" scope="request" />
         <ul>
             <li>
                 <label class="inputLabel firstInput" for="firstName">Имя:</label>
@@ -53,19 +56,26 @@
             </li>
             <li>
                 <label class="inputLabel" for="dateOfBirth">Дата Рождения:</label>
-                <input class="inputField" name="dateOfBirth" id="dateOfBirth" type="date"
+                <input class="inputField" name="dateOfBirth" id="dateOfBirth" type="date" required
                     value='<c:out value="${requestScope.contact.getBirthDate()}"/>'
                 >
             </li>
             <li>
+
                 <label>Пол:</label>
                 <div class="register-switch">
-                    <input type="radio" name="sex" value="F" id="sex_f" class="register-switch-input" checked>
-                    <label for="sex_f" class="register-switch-label">жен.</label>
-                    <input type="radio" name="sex" value="M" id="sex_m" class="register-switch-input">
-                    <label for="sex_m" class="register-switch-label">муж.</label>
-                    <input type="radio" name="sex" value="U" id="sex_u" class="register-switch-input">
-                    <label for="sex_u" class="register-switch-label">неопр.</label>
+                    <input type="radio" name="gender" value="G_F" id="gender_f" class="register-switch-input"
+                        <c:if test= "${requestScope.gender.getValue() == 'G_F'}">CHECKED</c:if>
+                    >
+                    <label for="gender_f" class="register-switch-label">жен.</label>
+                    <input type="radio" name="gender" value="G_M" id="gender_m" class="register-switch-input"
+                        <c:if test="${requestScope.gender.getValue() eq 'G_M'}"> CHECKED </c:if>
+                    >
+                    <label for="gender_m" class="register-switch-label">муж.</label>
+                    <input type="radio" name="gender" value="" id="gender_u" class="register-switch-input"
+                        <c:if test="${empty requestScope.gender.getValue() or requestScope.gender.getValue() eq 'G_U'}"> CHECKED </c:if>
+                    >
+                    <label for="gender_u" class="register-switch-label">неопр.</label>
                 </div>
             </li>
             <li>
@@ -77,8 +87,18 @@
             <li>
                 <label class="inputLabel"> Семейной положение:</label>
                 <select class="inputField">
-                    <option value = "maried">В браке</option>
-                    <option value = "single">Не замужем/Не женат</option>
+                    <option name="maritalStatus" value = "MS_U"
+                        <c:if test="${requestScope.status.getValue() eq 'MS_U'}">selected</c:if>
+                    >Не важно
+                    </option>
+                    <option name="maritalStatus" value = "MS_M"
+                        <c:if test="${requestScope.status.getValue() eq 'MS_M'}">selected</c:if>
+                    >В браке
+                    </option>
+                    <option name="maritalStatus" value = ""
+                        <c:if test="${requestScope.status.getValue() eq 'MS_S'}">selected</c:if>
+                    >Не замужем/Не женат
+                    </option>
                 </select>
             </li>
 
@@ -98,39 +118,51 @@
             <li>
                 <label class="inputLabel" for="workplace">Место работы:</label>
                 <input class="inputField" type="text" name="workplace" id="workplace"
-                    value='<c:out value="${requestScope.person. getWorkplace()}"/>'
+                    value='<c:out value="${requestScope.person.getWorkplace()}"/>'
                 >
             </li>
             <hr>
             <li>
                 <label class="inputLabel" for="country">Страна:</label>
-                <input class="inputField" type="text" name="country" id="country">
+                <input class="inputField" type="text" name="country" id="country"
+                    value='<c:out value="${requestScope.address.getCountry()}"/>'
+                >
             </li>
             <li>
                 <label class="inputLabel" for="city">Город:</label>
-                <input class="inputField" type="text" name="city" id="city">
+                <input class="inputField" type="text" name="city" id="city"
+                    value='<c:out value="${requestScope.address.getCity()}"/>'
+                >
             </li>
             <li>
                 <label class="inputLabel" for="street">Улица:</label>
-                <input class="inputField" type="text" name="street" id="street">
+                <input class="inputField" type="text" name="street" id="street"
+                    value='<c:out value="${requestScope.address.getStreet()}"/>'
+                >
             </li>
             <li>
                 <label class="inputLabel" for="house">Дом:</label>
-                <input class="inputField" type="number" name="house" id="house">
+                <input class="inputField" type="number" name="house" id="house"
+                    value='<c:out value="${requestScope.address.getHouseNumberAsString()}"/>'
+                >
             </li>
             <li>
                 <label class="inputLabel" for="apartment">Квартира:</label>
-                <input class="inputField" type="number" name="apartment" id="apartment">
+                <input class="inputField" type="number" name="apartment" id="apartment"
+                    value='<c:out value="${requestScope.address.getApartmentAsString()}"/>'
+                >
             </li>
             <li>
-                <label class="inputLabel" for="index">Город:</label>
-                <input class="inputField" type="text" name="index" id="index">
+                <label class="inputLabel" for="index">Почтовый индекс:</label>
+                <input class="inputField" type="text" name="index" id="index"
+                    value='<c:out value="${requestScope.address.getIndex()}"/>'
+                >
             </li>
             <input type="submit" name="Submit" value="Submit">
         </ul>
     </form>
 </div>
-
+<c:set var="phones" value="${requestScope.contact.getPhones()}" scope="request" />
 <div id="tables">
     <article class="phone">
         <div class="tableButtons">
@@ -147,19 +179,14 @@
                 </tr>
                 </thead>
                 <tbody class="table-hover" id="phoneBody">
-
-                <tr class = "row" id="3" ondblclick="showPhoneDialog('Редактирование телефона', 3)">
-                    <td class = "text-left smallFont">375-29-7223343</td>
-                    <td class = "text-left smallFont">мобильный</td>
-                    <td class = "text-left smallFont">не звонить</td>
-
-                <tr class = "row">
-                    <td class = "text-left smallFont">375-29-7223343</td>
-                    <td class = "text-left smallFont">мобильный</td>
-                    <td class = "text-left smallFont">не звонить</td>
-                </tr>
-
-
+                    <c:forEach items="${requestScope.phones}" var="phone">
+                        <tr class = "row" ondblclick = "showPhoneDialog('Редактирование телефона', this, '${phone.getPhoneId()}')" >
+                            <td class = "text-left smallFont"><c:out value="${phone.getFullPhone()}"></c:out></td>
+                            <td class = "text-left smallFont"><c:out value="${phone.getPhoneType()}"></c:out></td>
+                            <td class = "text-left smallFont"><c:out value="${phone.getComment()}"></c:out></td>
+                            <td class = "ident"><c:out value="${phone.getPhoneId()}"></c:out></td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
@@ -168,7 +195,7 @@
 
     <article>
         <div class="tableButtons">
-            <button type="button" onclick="showPhoneDialog('Создание присоединения')">Создать</button>
+            <button type="button" onclick='showAttachmentDialog("Создание присоединения")'>Создать</button>
             <button type="button">Удалить</button>
         </div>
         <div class="table">
@@ -210,15 +237,15 @@
             <ul>
                 <li>
                     <label class="inputLabel" for="countryCode">Код страны:</label>
-                    <input class="inputField" type="number" name="countryCode" id="countryCode">
+                    <input class="inputField" type="number" name="countryCode" id="countryCode" required>
                 </li>
                 <li>
                     <label class="inputLabel" for="operatorCode">Код оператора:</label>
-                    <input class="inputField" type="number" name="operatorCode" id="operatorCode">
+                    <input class="inputField" type="number" name="operatorCode" id="operatorCode" required>
                 </li>
                 <li>
                     <label class="inputLabel" for="phoneNumber">Телефон:</label>
-                    <input class="inputField" type="text" name="phoneNumber" id="phoneNumber">
+                    <input class="inputField" type="text" name="phoneNumber" id="phoneNumber" required>
                 </li>
                 <li>
                     <label class="inputLabel" for="phoneType">Тип телефона:</label>
@@ -231,7 +258,32 @@
             </ul>
         </div>
         <button type="button" onclick="document.contactController.submitPhone()">Применить</button>
-        <button type="button" onclick="closeDialog()">Закрыть</button>
+        <button type="button" onclick="closeDialog('phone')">Закрыть</button>
+    </div>
+</div>
+
+<div id="attachmentOverlay" class="overlay">
+    <div id="attachmentPopup">
+        <div id="attachmentTitle" class="popupHeader">AttachmentDialog</div>
+        <div id="attachmentFields">
+            <ul>
+                <li>
+                    <label class="inputLabel" for="attachChooser">Выберите файл:</label>
+                    <input class="inputField" type="file" onchange="setFileName(this.value)" name="attachChooser" id="fileChooser">
+                </li>
+                <li>
+                    <label class="inputLabel" for="fileName">Имя файла:</label>
+                    <input class="inputField" type="text" name="fileName" id="fileName">
+                </li>
+                <li>
+                    <label class="inputLabel" for="attachComment">Комментарий:</label>
+                    <input class="inputField" type="text" name="attachComment" id="attachComment">
+                </li>
+
+            </ul>
+        </div>
+        <button type="button" onclick="submitAttachment()">Применить</button>
+        <button type="button" onclick="closeDialog('attachment')">Закрыть</button>
     </div>
 </div>
 

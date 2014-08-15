@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import constants.PhoneColumnNames;
-import constants.SQLQuery;
+import constants.database.PhoneColumnNames;
+import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.PhoneDao;
 import model.entity.Phone;
@@ -82,14 +82,14 @@ public class DefaultPhoneDao implements PhoneDao{
 
 	private List<Phone> buildGetPersonPhone(ResultSet set) throws SQLException {		
 		List<Phone> phones = new ArrayList<>();
-		if(set.next()){
+		while(set.next()){
 			Phone phone = new Phone();
 			phone.setCountryCode(set.getInt(PhoneColumnNames.countryCode));
 			phone.setOperatorCode(set.getInt(PhoneColumnNames.operatorCode));
 			phone.setPhoneNumber(set.getString(PhoneColumnNames.phoneNumber));
 			phone.setPhoneType(set.getString(PhoneColumnNames.phoneType));
 			phone.setComment(set.getString(PhoneColumnNames.comment));
-			phone.setPhoneId(set.getInt(PhoneColumnNames.phoneId));
+			phone.setPhoneId(set.getInt(PhoneColumnNames.idPhone));
 			phones.add(phone);
 		}
 		return phones;

@@ -1,7 +1,10 @@
 package model.dao;
 
-import model.SearchRequest;
+import java.util.List;
 
-public interface SearchDao {
-	public SearchRequest searchContact(int first, int maxCount);
+import model.SearchRequest;
+import model.entity.Contact;
+
+public interface SearchDao extends HasConnection{
+	public List<Contact> search(SearchRequest searchRequest, int first, int maxCount);
 }

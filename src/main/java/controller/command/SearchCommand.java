@@ -1,29 +1,46 @@
 package controller.command;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import constants.AddressColumnNames;
-import constants.PersonColumnNames;
+import junit.textui.ResultPrinter;
+import constants.Pages;
+import constants.database.AddressColumnNames;
+import constants.database.PersonColumnNames;
+import exceptioin.ContactReadFailedException;
+import model.RequestParser;
+import model.SearchCriteria;
+import model.SearchRequest;
+import model.ValidationObject;
+import model.Validator;
 import model.entity.Contact;
-import model.service.SearchService;
+import model.service.ContactService;
 
 public class SearchCommand implements Command{
 
 	private String resultString;
 	private HttpServletRequest request;
-	private SearchService searchService;
+	private ContactService contactService;
 	
-	public SearchCommand(HttpServletRequest request, SearchService searchService) {
+	public SearchCommand(HttpServletRequest request, ContactService searchService) {
 		super();
 		this.request = request;
-		this.searchService = searchService;
+		this.contactService = searchService;
 	}
 
 	@Override
 	public void execute() {
-		
+		SearchRequest searchRequest = RequestParser.INSTANCE.parseSearchRequest(request);
+		ValidationObject validationResult = Validator.INSTANCE.validateSearchRequest(searchRequest);
+		System.out.println(validationResult.toString());
+		if(!validationResult.isEmpty()){
+			processValidationFailure(validationResult);
+		}
+		else{
+			processSearchRequest(searchRequest);
+		}
 	}
 
 	@Override
@@ -31,20 +48,20 @@ public class SearchCommand implements Command{
 		return resultString;
 	}
 	
-//	private Contact parseRequest(){
-//		String firstName = request.getParameter(PersonColumnNames.firstName);
-//		String secondName = request.getParameter(PersonColumnNames.secondName);
-//		String patronnymicName = request.getParameter(PersonColumnNames.patronymicName);
-//		String dateString = request.getParameter(PersonColumnNames.dateOfBirth);
-//		String sex = request.getParameter(PersonColumnNames.sex);
-//		String citizenship = request.getParameter(PersonColumnNames.citizenship);
-//		String maritalStatus = request.getParameter(PersonColumnNames.maritalStatus);
-//		String country = request.getParameter(AddressColumnNames.country);
-//		String city = request.getParameter(AddressColumnNames.city);
-//		String houseNumber = request.getParameter(AddressColumnNames.houseNumber);
-//		String street = request.getParameter(AddressColumnNames.street);
-//		String apartment = request.getParameter(AddressColumnNames.apartment);
-//		String postIndex = request.getParameter(AddressColumnNames.postIndex);
-//	}
+	private void processValidationFailure(ValidationObject result){
+		System.out.println("ValidationFailed");
+	}
 
+	private void processSearchRequest(SearchRequest searchRequest){
+		List<Contact> result;
+		try {
+			result = contactService.perfromSearch(searchRequest, 0, 10);
+			request.setAttribute("result", result);
+			resultString = Pages.SEARCH_RESULT;
+		} catch (ContactReadFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 }

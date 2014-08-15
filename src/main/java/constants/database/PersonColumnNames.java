@@ -1,4 +1,4 @@
-package constants;
+package constants.database;
 
 public class PersonColumnNames {
 	
@@ -12,7 +12,7 @@ public class PersonColumnNames {
 	
 	public static final String dateOfBirth = "dateOfBirth";
 	
-	public static final String sex = "sex";
+	public static final String gender = "gender";
 	
 	public static final String maritalStatus = "maritalStatus";
 	

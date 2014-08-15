@@ -1,26 +1,44 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import model.entity.Contact;
-
 public class SearchRequest {
+	
+	private List<SearchPair> requestparams;
+	private String operatortype;
 
-	private List<Contact> result;
-	private int searchQueryId;
+	public String getOperatortype() {
+		return operatortype;
+	}
 
-	public List<Contact> getResult() {
-		return result;
+	public void setOperatortype(String operatortype) {
+		this.operatortype = operatortype;
 	}
-	public void setResult(List<Contact> result) {
-		this.result = result;
-	}
-	public int getSearchQueryId() {
-		return searchQueryId;
-	}
-	public void setSearchQueryId(int searchQueryId) {
-		this.searchQueryId = searchQueryId;
+
+	public SearchRequest() {
+		requestparams = new ArrayList<>();
 	}
 	
+	public void addParam(SearchCriteria criteria, String value){
+		SearchPair pair = new SearchPair(criteria, value);
+		requestparams.add(pair);
+	}
 	
+	public List<SearchPair> getParams(){
+		return requestparams;
+	}
+	
+	public SearchPair getPair(int i){
+		return requestparams.get(i);
+	}
+	
+	public String getValueByKey(SearchCriteria criteria){
+		for (SearchPair pair: requestparams) {
+			if(pair.getCriteria() == criteria){
+				return pair.getValue();
+			}
+		}
+		return "";
+	}
 }

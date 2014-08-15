@@ -180,6 +180,8 @@ div.table-title {
 
 }
 
+
+
 hr {
 	border-color: #3B003B;
     max-width: 400px;
@@ -287,6 +289,10 @@ th.text-center {
 
 th.text-right {
   text-align: right;
+}
+
+td.ident {
+    display: none;
 }
 
 td.smallFont{

@@ -11,9 +11,9 @@ public class Person {
 	private String patronymicName;
 	private String secondName;
 	private Date dateOfBirth;
-	private String maritalStatus;
+	private MaritalStatus maritalStatus;
 	private String citizenship;
-	
+	private Gender gender;
 	private String webSite;
 	private String email;
 	private String workplace;
@@ -48,11 +48,18 @@ public class Person {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	public String getMaritalStatus() {
+
+	public MaritalStatus getMaritalStatus() {
 		return maritalStatus;
 	}
-	public void setMaritalStatus(String maritalStatus) {
+	public void setMaritalStatus(MaritalStatus maritalStatus) {
 		this.maritalStatus = maritalStatus;
+	}
+	public Gender getGender() {
+		return gender;
+	}
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 	public String getCitizenship() {
 		return citizenship;

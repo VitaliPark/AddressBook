@@ -2,7 +2,10 @@ package model.entity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import constants.StringConstants;
 
 public class Contact {
 
@@ -61,8 +64,9 @@ public class Contact {
 	}
 	
 	public String getBirthDate(){
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		return dateFormat.format(person.getDateOfBirth());
+		SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.defaultDateFormat);
+		Date date = person.getDateOfBirth();
+		return (date != null) ? dateFormat.format(person.getDateOfBirth()) : "";
 	}
 	
 	public void setPhoneList(List<Phone> phones){

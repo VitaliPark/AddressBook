@@ -45,7 +45,7 @@ public class PhoneService {
 		try {		
 		  return phoneDao.getPersonPhones(personId);
 		} catch (DataAccessException e) {
-			throw new ServiceException(ExceptionMessages.PHONE_DELETION_FAILED + e.getMessage());
+			throw new ServiceException(ExceptionMessages.PHONE_READ_FAILED + e.getMessage());
 		}	
 	}
 }

@@ -5,17 +5,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.service.ContactService;
-import model.service.SearchService;
 import constants.CommandTypes;
 import constants.StringConstants;
 
 public class CommandFactory {
 
 	private ContactService contactService;
-	private SearchService searchService;
 	
 	public CommandFactory() {
 		contactService = new ContactService();
+		
 	}
 
 	public Command getCommand(HttpServletRequest request, HttpServletResponse response){
@@ -26,7 +25,7 @@ public class CommandFactory {
 			case DELETE_CONTACTS: 	return new DeleteContactsCommand(contactService, request);
 			case EDIT_CONTACT: 		return new EditContactCommand(contactService, request);
 			case CREATE_CONTACT:	return new EditContactCommand(contactService, request);
-			case SEARCH_CONTACTS: 	return new SearchCommand(request, searchService);
+			case SEARCH_CONTACTS: 	return new SearchCommand(request, contactService);
 			case SHOW_SEARCH_PAGE : return new ShowSearchPageCommand();
 			default: 				return new ErrorCommand();
 		}

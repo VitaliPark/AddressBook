@@ -9,4 +9,8 @@ public class StringConstants {
 	public static final String SPACE = " ";
 	
 	public static final String command = "command";
+	
+	public static final String PHONE_SEPARATOR = "-";
+	
+	public static final String defaultDateFormat = "yyyy-MM-dd";
 }

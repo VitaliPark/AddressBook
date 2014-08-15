@@ -33,42 +33,59 @@
             <ul>
                 <li>
                     <label class="inputLabel firstInput" for="firstName">Имя:</label>
-                    <input class="inputField firstInput" type="text" name="firstName" id="firstName" required>
+                    <input class="inputField firstInput" type="text" name="firstName" id="firstName">
                 </li>
                 <li>
                     <label class="inputLabel" for="secondName">Фамилия:</label>
-                    <input class="inputField" type="text" name="secondName" id="secondName" required>
+                    <input class="inputField" type="text" name="secondName" id="secondName">
                 </li>
                 <li>
                     <label class="inputLabel" for="patronymicName">Отчество:</label>
                     <input class="inputField" name="patronymicName" id="patronymicName">
                 </li>
+
+                <li>
+                    <label class="inputLabel" for="citizenship">Гражданство:</label>
+                    <input class="inputField" type="text" name="citizenship" id="citizenship">
+                </li>
+
                 <li>
                     <label class="inputLabel" for="dateOfBirth">Дата Рождения:</label>
-                    <input class="inputField" name="dateOfBirth" id="dateOfBirth" type="date">
+                    <input class="inputField" name="dateOfBirth" id="dateOfBirth" type="date" required>
+                </li>
+
+                <li>
+                    <div class="register-switch">
+                        <input type="radio" name="operatorType" value=">" id="more" class="register-switch-input">
+                        <label for="more" class="register-switch-label">больше</label>
+                        <input type="radio" name="operatorType" value="<" id="less" class="register-switch-input">
+                        <label for="less" class="register-switch-label">меньше</label>
+                        <input type="radio" name="operatorType" value="=" id="equal" class="register-switch-input" checked>
+                        <label for="equal" class="register-switch-label">равно</label>
+                    </div>
                 </li>
             <li>
                 <label>Пол:</label>
                 <div class="register-switch">
-                    <input type="radio" name="sex" value="female" id="sex_f" class="register-switch-input" checked>
-                    <label for="sex_f" class="register-switch-label">жен.</label>
-                    <input type="radio" name="sex" value="male" id="sex_m" class="register-switch-input">
-                    <label for="sex_m" class="register-switch-label">муж.</label>
-                    <input type="radio" name="sex" value="unknown" id="sex_u" class="register-switch-input">
-                    <label for="sex_u" class="register-switch-label">неопр.</label>
+                    <input type="radio" name="gender" value="G_F" id="gender_f" class="register-switch-input">
+                    <label for="gender_f" class="register-switch-label">жен.</label>
+                    <input type="radio" name="gender" value="G_M" id="gender_m" class="register-switch-input">
+                    <label for="gender_m" class="register-switch-label">муж.</label>
+                    <input type="radio" name="gender" value="" id="gender_u" class="register-switch-input" checked>
+                    <label for="gender_u" class="register-switch-label">не важно</label>
                 </div>
             </li>
-            <li>
-                <label class="inputLabel" for="citizenship">Гражданство:</label>
-                <input class="inputField" type="text" name="citizenship" id="citizenship">
-            </li>
-                <li>
-                <label class="inputLabel"> Семейной положение:</label>
-                <select class="inputField">
-                    <option name="maritalStatus" value = "notImportant">Не важно</option>
-                    <option name="maritalStatus" value = "married">В браке</option>
-                    <option name="maritalStatus" value = "single">Не замужем/Не женат</option>
-                </select>
+
+             <li>
+                <label> Семейной положение:</label>
+                <div class="register-switch">
+                    <input type="radio" name="maritalStatus" value="MS_M" id="ms_m" class="register-switch-input">
+                    <label for="ms_m" class="register-switch-label">в браке</label>
+                    <input type="radio" name="maritalStatus" value="MS_S" id="ms_s" class="register-switch-input">
+                    <label for="ms_s" class="register-switch-label">не в браке</label>
+                    <input type="radio" name="maritalStatus" value="" id="ms_u" class="register-switch-input" checked>
+                    <label for="ms_u" class="register-switch-label">не важно</label>
+                </div>
             </li>
             <hr>
             <li>
@@ -92,7 +109,7 @@
                 <input class="inputField" type="number" name="apartment" id="apartment">
             </li>
             <li>
-                <label class="inputLabel" for="postIndex">Город:</label>
+                <label class="inputLabel" for="postIndex">Индекс:</label>
                 <input class="inputField" type="text" name="postIndex" id="postIndex">
             </li>
                 <input type="submit" name="Submit" value="Поиск">
