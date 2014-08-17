@@ -19,6 +19,7 @@ import constants.database.DatabaseConstants;
 import exceptioin.ContactCreationFailedException;
 import exceptioin.ContactDelitionFailedException;
 import exceptioin.ContactReadFailedException;
+import exceptioin.EmailReadFailedException;
 import exceptioin.ServiceException;
 import model.SearchRequest;
 import model.entity.Address;
@@ -134,6 +135,20 @@ public class ContactService {
 		} finally {
 			closeConnection(connection);
 		}
+	}
+	
+	public String getContactEmail(int contactId) throws EmailReadFailedException{
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			connection.setAutoCommit(false);
+			String email = personService.getPersonEmail(contactId, connection);
+			return email;
+		} catch (ServiceException | SQLException e) {
+			throw new EmailReadFailedException(ExceptionMessages.EMAIL_READ_FAILED + e.getMessage());
+		}
+		
+		
 	}
 	
 	public List<Contact> getAllContacts(int first, int count) throws ContactReadFailedException{

@@ -1,17 +1,10 @@
 package controller.command;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
-import junit.textui.ResultPrinter;
 import constants.Pages;
-import constants.database.AddressColumnNames;
-import constants.database.PersonColumnNames;
 import exceptioin.ContactReadFailedException;
 import model.RequestParser;
-import model.SearchCriteria;
 import model.SearchRequest;
 import model.ValidationObject;
 import model.Validator;

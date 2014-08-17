@@ -26,6 +26,8 @@ public class ExceptionMessages {
 	
 	public static final String ADDRESS_READ_FAILED = " Unable to read address ";
 	
+	public static final String EMAIL_READ_FAILED = " Unable to read person email ";
+	
 
 	
 	

@@ -9,7 +9,7 @@ window.onload = function () {
     document.body.onclick = select;
 };
 
-function deleteContacts(path){
+function sendRequest(path){
     var data = [];
     data = getIdData();
     if(data != null && data.length != 0) {

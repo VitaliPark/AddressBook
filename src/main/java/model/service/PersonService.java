@@ -56,5 +56,14 @@ public class PersonService {
 		}
 	}
 	
+	public String getPersonEmail(int personId, Connection connection) throws ServiceException{
+		personDao.setConnection(connection);
+		try {
+			return personDao.getEmail(personId);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PERSON_READ_FAILED  + e.getMessage());
+		}
+	}
+	 
 	
 }

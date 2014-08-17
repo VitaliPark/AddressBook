@@ -55,7 +55,10 @@ public enum SQLQuery {
 	
 	GET_PERSON("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable + 
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
-	
+			
+	GET_PERSON_EMAIL("SELECT email FROM " + TableNames.databaseName + "." + TableNames.personTable +
+			" WHERE " + PersonColumnNames.idPerson + "=?"),
+			
 	SEARCH_REQUEST("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable + 
 			" INNER JOIN " + TableNames.databaseName + "." + TableNames.addressTable + 
 			" ON " + TableNames.personTable + "." + PersonColumnNames.idPerson + "=" +

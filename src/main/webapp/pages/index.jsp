@@ -58,8 +58,8 @@
 	  
 	</div>
 
-	<input type = "button" onclick = "deleteContacts('index?command=deleteContacts')" value = "Удалить">
-	
+	<input type = "button" onclick = "sendRequest('index?command=deleteContacts')" value = "Удалить">
+    <input type = "button" onclick = "sendRequest('index?command=showMailPage')" value = "Отправить письмо">
 </div>
  </body>
  

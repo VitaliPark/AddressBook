@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import constants.StringConstants;
 import constants.database.PersonColumnNames;
 import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
@@ -54,6 +55,22 @@ public class DefaultPersonDao implements PersonDao{
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deletePersonStatement);
+		}
+	}
+	
+	public String getEmail(int idPerson) throws DataAccessException{
+		PreparedStatement emailStatement = null;
+		String email = StringConstants.EMPTY_STRING;
+		try {
+			emailStatement = connection.prepareStatement(SQLQuery.GET_PERSON_EMAIL.getValue());
+			emailStatement.setInt(1, idPerson);
+			ResultSet set = emailStatement.executeQuery();
+			if(set.next()){
+				email = set.getString(PersonColumnNames.email);
+			}
+			return email;
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
 		}
 	}
 	
@@ -139,7 +156,6 @@ public class DefaultPersonDao implements PersonDao{
 		}
 		person.setDateOfBirth(date);
 	}
-
 
 	private void closeStatement(PreparedStatement createPersonStatement) {
 		try {
