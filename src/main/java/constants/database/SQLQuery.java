@@ -76,7 +76,11 @@ public enum SQLQuery {
 			" AND " + AddressColumnNames.houseNumber + " LIKE ?" +
 			" AND " + AddressColumnNames.apartment + " LIKE ?" + 
 			" AND " + AddressColumnNames.postIndex + " LIKE ?" +
-			" LIMIT ?, ?");
+			" LIMIT ?, ?"),
+	
+	GET_PERSON_INFO_BY("SELECT * FROM " + 
+			TableNames.databaseName + "." + TableNames.personTable + " WHERE MONTH(dateOfBirth) = ?" + 
+			" AND DAY(dateOfBirth ) = ?");
 	
 	private String value;
 	

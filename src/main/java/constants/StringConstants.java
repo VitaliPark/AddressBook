@@ -13,4 +13,7 @@ public class StringConstants {
 	public static final String PHONE_SEPARATOR = "-";
 	
 	public static final String defaultDateFormat = "yyyy-MM-dd";
+	
+	public static final String adminEmail = "mailtest";
+	
 }

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import constants.StringConstants;
@@ -189,6 +190,26 @@ public class DefaultPersonDao implements PersonDao{
 	
 	public void setConnection(Connection connection){
 		this.connection = connection;
+	}
+
+	@Override
+	public List<Person> getPersonsByDate(java.util.Date date)
+			throws DataAccessException {
+		PreparedStatement getPersonsStatement = null;
+		try {
+			getPersonsStatement = connection.prepareStatement(SQLQuery.GET_PERSON_INFO_BY.getValue());
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			int month = calendar.get(Calendar.MONTH);
+			int day = calendar.get(Calendar.DAY_OF_MONTH);
+			getPersonsStatement.setInt(1, month+1);
+			getPersonsStatement.setInt(2, day);
+			ResultSet set = getPersonsStatement.executeQuery();
+			return buildAllPersonResult(set);
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		}
+		
 	}
 
 }

@@ -1,13 +1,14 @@
 package controller.command;
 
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.service.ContactService;
+import model.service.MailService;
 import constants.CommandTypes;
 import constants.StringConstants;
-import controller.MailService;
 
 public class CommandFactory {
 
@@ -31,7 +32,19 @@ public class CommandFactory {
 			case SHOW_SEARCH_PAGE:  return new ShowSearchPageCommand();
 			case SHOW_MAIL_PAGE: 	return new ShowMailPageCommand(request, contactService);	
 			case SEND_MAIL: 		return new SendMailCommand(request, mailService);
+			case SCHEDULE_MAIL_SEND:return new SheduleMailCommand(mailService, contactService);
 			default: 				return new ErrorCommand();
 		}
 	}
+	
+	public Command getCommand(CommandTypes type){
+		switch(type){
+			case SCHEDULE_MAIL_SEND:return new SheduleMailCommand(mailService, contactService);
+			default: 				return new ErrorCommand();
+		}
+	}
+	
+	
+	
+
 }

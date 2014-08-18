@@ -1,5 +1,6 @@
 package model.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import exceptioin.DataAccessException;
@@ -12,6 +13,8 @@ public interface PersonDao extends HasConnection {
 	public void deletePerson(int idPerson) throws DataAccessException;
 	
 	public Person getPerson(int personId) throws DataAccessException;
+	
+	public List<Person> getPersonsByDate(Date date) throws DataAccessException;
 	
 	public String getEmail(int personId) throws DataAccessException;
 	

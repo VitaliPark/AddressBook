@@ -4,7 +4,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.http.HttpServletRequest;
 
-import controller.MailService;
+import model.service.MailService;
 
 
 public class SendMailCommand implements Command{
@@ -12,8 +12,6 @@ public class SendMailCommand implements Command{
 	private String resultPage;
 	private HttpServletRequest request;
 	private MailService mailService;
-	
-	
 	
 	public SendMailCommand(HttpServletRequest request,
 			MailService mailService) {

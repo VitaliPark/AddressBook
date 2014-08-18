@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import constants.CommandTypes;
 import controller.command.Command;
 import controller.command.CommandFactory;
 
@@ -21,22 +22,18 @@ public class FrontController extends HttpServlet {
 	public static final Logger log = Logger.getLogger(FrontController.class);	
 	private CommandFactory factory;
 
-//	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-//		
-//		if (request.getCharacterEncoding() == null) {
-//	        request.setCharacterEncoding("UTF-8");
-//	    }
-//	    response.setCharacterEncoding("UTF-8");   
-//	    super.service(request, response);
-//	}
-	
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         factory = new CommandFactory();
-        
+        scheduleTask();
     }
-	
+    
+    private void scheduleTask(){
+    	Command scheduleTaskCommand = factory.getCommand(CommandTypes.SCHEDULE_MAIL_SEND);
+    	scheduleTaskCommand.execute();
+    }
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		proccessRequest(request, response);
 	}

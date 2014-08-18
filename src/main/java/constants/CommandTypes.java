@@ -9,7 +9,8 @@ public enum CommandTypes {
 	SEARCH_CONTACTS("searchContacts"), 
 	SHOW_SEARCH_PAGE("showSearchPage"),
 	SHOW_MAIL_PAGE("showMailPage"),
-	SEND_MAIL("sendMail");
+	SEND_MAIL("sendMail"),
+	SCHEDULE_MAIL_SEND("scheduleMail");
 		
 	private String value;
 

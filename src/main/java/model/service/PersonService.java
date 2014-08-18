@@ -1,6 +1,7 @@
 package model.service;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 
 import constants.ExceptionMessages;
@@ -51,6 +52,15 @@ public class PersonService {
 		personDao.setConnection(connection);
 		try {
 			return personDao.getAllPersons(first, count);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PERSON_READ_FAILED + e.getMessage());
+		}
+	}
+	
+	public List<Person> getPersonsByDate(Date date, Connection connection) throws ServiceException{
+		personDao.setConnection(connection);
+		try {
+			return personDao.getPersonsByDate(date);
 		} catch (DataAccessException e) {
 			throw new ServiceException(ExceptionMessages.PERSON_READ_FAILED + e.getMessage());
 		}

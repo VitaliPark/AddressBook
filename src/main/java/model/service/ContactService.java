@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.naming.Context;
@@ -147,8 +148,6 @@ public class ContactService {
 		} catch (ServiceException | SQLException e) {
 			throw new EmailReadFailedException(ExceptionMessages.EMAIL_READ_FAILED + e.getMessage());
 		}
-		
-		
 	}
 	
 	public List<Contact> getAllContacts(int first, int count) throws ContactReadFailedException{
@@ -164,6 +163,19 @@ public class ContactService {
 			return result;
 		} catch (ServiceException | SQLException e) {
 			transactionRollback(connection);
+			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
+		} finally {
+			closeConnection(connection);
+		}
+		
+	}
+	
+	public List<Person> getContactsByDate(Date date) throws ContactReadFailedException{
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			return personService.getPersonsByDate(date, connection);
+		} catch (SQLException | ServiceException e) {
 			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
 		} finally {
 			closeConnection(connection);
