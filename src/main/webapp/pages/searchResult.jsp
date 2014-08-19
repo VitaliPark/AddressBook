@@ -58,7 +58,17 @@
 	  
 	</div>
 
-	<input type = "button" onclick = "deleteContacts('index?command=deleteContacts')" value = "Удалить">
+    <input type = "button" onclick = "sendRequest('index?command=deleteContacts')" value = "Удалить">
+    <input type = "button" onclick = "sendRequest('index?command=showMailPage')" value = "Отправить письмо">
+
+    <div id=pager>
+        <a id = "previous" class="<c:out value='${requestScope.pageConfig.isHasPrev() ? "arrow arrow-left" : "arrow arrow-left disabled"}'></c:out>"
+            onclick ="switchPage('${requestScope.currentPage - 1}', 'index?command=searchContacts&requestId=${requestScope.requestId}', 'previous')">
+        </a>
+        <a id = "next" class="<c:out value='${requestScope.pageConfig.isHasNext() ? "arrow arrow-right" : "arrow arrow-right disabled"}'></c:out>"
+            onclick ="switchPage('${requestScope.currentPage + 1}', 'index?command=searchContacts&requestId=${requestScope.requestId}', 'next')">
+        </a>
+    </div>
 	
 </div>
  </body>

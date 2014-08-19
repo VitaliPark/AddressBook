@@ -44,8 +44,10 @@ public enum SQLQuery {
 	DELETE_PERSON_ADDRESS("DELETE FROM " + TableNames.databaseName + "." + TableNames.addressTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 	
-	GET_ALL_PERSONS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable +
+	GET_PERSONS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable +
 			" LIMIT ?, ?"),
+			
+	GET_PERSONS_COUNT("SELECT COUNT(*) FROM " + TableNames.databaseName + "." + TableNames.personTable),
 			
 	GET_PERSON_ADDRESS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.addressTable + 
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
@@ -77,6 +79,24 @@ public enum SQLQuery {
 			" AND " + AddressColumnNames.apartment + " LIKE ?" + 
 			" AND " + AddressColumnNames.postIndex + " LIKE ?" +
 			" LIMIT ?, ?"),
+			
+			SEARCH_REQUEST_COUNT("SELECT COUNT(*) FROM " + TableNames.databaseName + "." + TableNames.personTable + 
+					" INNER JOIN " + TableNames.databaseName + "." + TableNames.addressTable + 
+					" ON " + TableNames.personTable + "." + PersonColumnNames.idPerson + "=" +
+					TableNames.addressTable + "." + PersonColumnNames.idPerson + 
+					" WHERE " + PersonColumnNames.firstName + " LIKE ?" +
+					" AND " + PersonColumnNames.secondName + " LIKE ?" + 
+					" AND " + PersonColumnNames.patronymicName + " LIKE ?" +
+					" AND " + PersonColumnNames.citizenship + " LIKE ?" +
+					" AND " + PersonColumnNames.dateOfBirth + " dateOperator ?" + 
+					" AND " + PersonColumnNames.gender + " LIKE ?" + 
+					" AND " + PersonColumnNames.maritalStatus + " LIKE ?" +
+					" AND " + AddressColumnNames.country + " LIKE ?" + 
+					" AND " + AddressColumnNames.city + " LIKE ?" + 
+					" AND " + AddressColumnNames.street + " LIKE ?" + 
+					" AND " + AddressColumnNames.houseNumber + " LIKE ?" +
+					" AND " + AddressColumnNames.apartment + " LIKE ?" + 
+					" AND " + AddressColumnNames.postIndex + " LIKE ?"),
 	
 	GET_PERSON_INFO_BY("SELECT * FROM " + 
 			TableNames.databaseName + "." + TableNames.personTable + " WHERE MONTH(dateOfBirth) = ?" + 

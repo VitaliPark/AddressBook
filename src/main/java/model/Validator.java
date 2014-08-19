@@ -23,7 +23,6 @@ public enum Validator {
 		for(SearchPair pair : request.getParams()){
 			SearchCriteria criteria = pair.getCriteria();
 			String value = pair.getValue();
-			System.out.println(pair.toString());
 			switch (criteria) {
 			case FIRST_NAME:
 				if(isNull(value)){
@@ -32,73 +31,61 @@ public enum Validator {
 				break;
 			case SECOND_NAME: 
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.SECOND_NAME);
 				}
 				break;
 			case PATRONYMIC_NAME: 
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.PATRONYMIC_NAME);
 				}
 				break;
 			case DATE_OF_BIRTH: 
 				if(!validateDate(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.DATE_OF_BIRTH);
 				}
 				break;
 			case GENDER:
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.GENDER);
 				}
 				break;
 			case MARITAL_STATUS:
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.MARITAL_STATUS);
 				}
 				break;
 			case CITIZENSHIP:
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.CITIZENSHIP);
 				}
 				break;
 			case COUNTRY:
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.COUNTRY);
 				}
 				break;
 			case CITY:
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.CITY);
 				}
 				break;
 			case STREET:
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.STREET);
 				}
 				break;
 			case HOUSE_NUMBER:
 				if(!validateNumber(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.HOUSE_NUMBER);
 				}
 				break;
 			case APARTMENT:
 				if(!validateNumber(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.APARTMENT);
 				}
 				break;
 			case POST_CODE:
 				if(isNull(value)){
-					//System.out.println(value);
 					validationResult.addWrongField(SearchCriteria.POST_CODE);
 				}
 				break;

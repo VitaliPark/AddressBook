@@ -22,6 +22,7 @@ import exceptioin.ContactDelitionFailedException;
 import exceptioin.ContactReadFailedException;
 import exceptioin.EmailReadFailedException;
 import exceptioin.ServiceException;
+import model.ContactTransferObject;
 import model.SearchRequest;
 import model.entity.Address;
 import model.entity.Contact;
@@ -65,15 +66,23 @@ public class ContactService {
 	     }
 	}
 	
-	public List<Contact> perfromSearch(SearchRequest request, int first, int count) throws ContactReadFailedException{
+	public ContactTransferObject performSearch(SearchRequest searchRequest, int first, int maxPageCount) throws ContactReadFailedException{
 		Connection connection = null;
+		ContactTransferObject searchResult = new ContactTransferObject();
+		List<Contact> contactList = new ArrayList<>();
 		try {
 			connection = pool.getConnection();
 			connection.setAutoCommit(false);
-			List<Contact> searchResult = searchService.searchContacts(connection,request, first, count);
+			int totalCount = searchService.getCountOnSearchRequest(connection, searchRequest);
+			contactList = searchService.searchContacts(connection,searchRequest, first, maxPageCount);
+			searchResult.setContacts(contactList);
+			searchResult.setNumberOfRecords(totalCount);
+			connection.commit();
 			return searchResult;
-		} catch (SQLException e) {
+		} catch (SQLException | ServiceException e) {
 			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
+		} finally {
+			closeConnection(connection);
 		}
 	}
 	
@@ -144,21 +153,26 @@ public class ContactService {
 			connection = pool.getConnection();
 			connection.setAutoCommit(false);
 			String email = personService.getPersonEmail(contactId, connection);
+			connection.commit();
 			return email;
 		} catch (ServiceException | SQLException e) {
 			throw new EmailReadFailedException(ExceptionMessages.EMAIL_READ_FAILED + e.getMessage());
+		} finally{
+			closeConnection(connection);
 		}
 	}
 	
-	public List<Contact> getAllContacts(int first, int count) throws ContactReadFailedException{
+	public ContactTransferObject getContacts(int first, int maxCount) throws ContactReadFailedException{
 		Connection connection = null;
-		List<Contact> result = new ArrayList<>();
+		ContactTransferObject result = new ContactTransferObject();
+		List<Contact> contactList = new ArrayList<>();
 		List<Person> persons = new ArrayList<>();
 		try {
 			connection = pool.getConnection();
 			connection.setAutoCommit(false);
-			persons = personService.getAllPersons(first, count, connection);
-			buildAllContacts(connection, result, persons);
+			int count = personService.getPersonsCount(connection);
+			persons = personService.getPersons(first, maxCount, connection);
+			result = buildResult(connection, contactList, persons, count);
 			connection.commit();
 			return result;
 		} catch (ServiceException | SQLException e) {
@@ -167,7 +181,15 @@ public class ContactService {
 		} finally {
 			closeConnection(connection);
 		}
-		
+	}
+
+	private ContactTransferObject buildResult(Connection connection, List<Contact> contactList,
+			List<Person> persons, int count) throws ServiceException {
+		ContactTransferObject result = new ContactTransferObject();
+		buildAllContacts(connection, contactList, persons);
+		result.setContacts(contactList);
+		result.setNumberOfRecords(count);
+		return result;
 	}
 	
 	public List<Person> getContactsByDate(Date date) throws ContactReadFailedException{

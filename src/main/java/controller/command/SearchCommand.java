@@ -1,14 +1,19 @@
 package controller.command;
 
-import java.util.List;
+import java.net.HttpRetryException;
+
 import javax.servlet.http.HttpServletRequest;
+
+import constants.DefaultValues;
 import constants.Pages;
+import controller.PageDrawer;
 import exceptioin.ContactReadFailedException;
+import model.ContactTransferObject;
+import model.PageConfig;
 import model.RequestParser;
 import model.SearchRequest;
 import model.ValidationObject;
 import model.Validator;
-import model.entity.Contact;
 import model.service.ContactService;
 
 public class SearchCommand implements Command{
@@ -25,7 +30,7 @@ public class SearchCommand implements Command{
 
 	@Override
 	public void execute() {
-		SearchRequest searchRequest = RequestParser.INSTANCE.parseSearchRequest(request);
+		SearchRequest searchRequest = getSearchRequest(request);
 		ValidationObject validationResult = Validator.INSTANCE.validateSearchRequest(searchRequest);
 		System.out.println(validationResult.toString());
 		if(!validationResult.isEmpty()){
@@ -46,15 +51,59 @@ public class SearchCommand implements Command{
 	}
 
 	private void processSearchRequest(SearchRequest searchRequest){
-		List<Contact> result;
 		try {
-			result = contactService.perfromSearch(searchRequest, 0, 10);
-			request.setAttribute("result", result);
+			int currentPage = getCurrentPage();
+			int first = getFirstRecordNumber(currentPage);
+			ContactTransferObject searchResult = contactService.performSearch(searchRequest, first, DefaultValues.contactsOnPage);
+			int count = searchResult.getNumberOfRecords();
+			request.setAttribute("result", searchResult.getContacts());
+			request.setAttribute("currentPage", currentPage);
+			setSearchRequestInfo(request, searchRequest);
+			setPagerProperties(request, currentPage, count);
 			resultString = Pages.SEARCH_RESULT;
 		} catch (ContactReadFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	}
+	
+	private void setSearchRequestInfo(HttpServletRequest request, SearchRequest searchRequest){
+		String searchRequestId = Integer.toString(searchRequest.hashCode());
+		request.setAttribute("requestId", searchRequestId);
+		request.getSession().setAttribute(searchRequestId, searchRequest);
+	}
+	
+	private SearchRequest getSearchRequest(HttpServletRequest request){
+		SearchRequest searchRequest = null;
+		String searchId = request.getParameter("requestId");
+		if(searchId != null && !searchId.isEmpty()){
+			System.out.println("we got it");
+			searchRequest = (SearchRequest) request.getSession().getAttribute(searchId);
+			return searchRequest;
+		} else {
+			System.out.println("we dont have it");
+			return RequestParser.INSTANCE.parseSearchRequest(request);
+		}
+	}
+	
+	private int getFirstRecordNumber(int currentPage){
+		return (currentPage-1) * DefaultValues.contactsOnPage;
+	}
+	
+	private int getCurrentPage() {
+		String currentPageString = request.getParameter("currentPage");
+		int currentPage;
+		if(currentPageString != null && !currentPageString.isEmpty()){
+			currentPage = Integer.parseInt(currentPageString);
+		}
+		else {
+			currentPage = 1;
+		}
+		return currentPage;
+	}
+	
+	private void setPagerProperties(HttpServletRequest request, int newPage, int count){
+		PageConfig pageConfig = PageDrawer.INSTANCE.getPageConfig(count, newPage);
+		request.setAttribute("pageConfig", pageConfig);
 	}
 }

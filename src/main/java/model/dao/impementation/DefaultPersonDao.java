@@ -89,7 +89,24 @@ public class DefaultPersonDao implements PersonDao{
 		} finally {
 			closeStatement(getPersonStatement);
 		}
-		
+	}
+	
+	@Override
+	public int getPersonsCount() throws DataAccessException {
+		PreparedStatement getPersonCount = null;
+		int count = 0;
+		try {
+			getPersonCount = connection.prepareStatement(SQLQuery.GET_PERSONS_COUNT.getValue());
+			ResultSet set = getPersonCount.executeQuery();
+			if(set.next()){
+				count = set.getInt(1);
+			}
+			return count;
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(getPersonCount);
+		}
 	}
 
 	private Person buildGetPersonResult(ResultSet set) throws SQLException {
@@ -112,10 +129,10 @@ public class DefaultPersonDao implements PersonDao{
 		return person;
 	}
 	
-	public List<Person> getAllPersons(int first, int count) throws DataAccessException{	
+	public List<Person> getPersons(int first, int count) throws DataAccessException{	
 		PreparedStatement getAllPersonStatement = null;
 		try {
-			getAllPersonStatement = connection.prepareStatement(SQLQuery.GET_ALL_PERSONS.getValue());
+			getAllPersonStatement = connection.prepareStatement(SQLQuery.GET_PERSONS.getValue());
 			getAllPersonStatement.setInt(1, first);
 			getAllPersonStatement.setInt(2, count);
 			ResultSet set = getAllPersonStatement.executeQuery();
@@ -208,8 +225,9 @@ public class DefaultPersonDao implements PersonDao{
 			return buildAllPersonResult(set);
 		} catch (SQLException e) {
 			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(getPersonsStatement);
 		}
 		
 	}
-
 }

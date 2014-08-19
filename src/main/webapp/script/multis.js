@@ -9,6 +9,26 @@ window.onload = function () {
     document.body.onclick = select;
 };
 
+function switchPage(currentPage, path, type){
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", path);
+
+    var currentPageInput = document.createElement("input");
+    currentPageInput.setAttribute("name", "currentPage");
+    currentPageInput.setAttribute("value", currentPage);
+    form.appendChild(currentPageInput);
+    var navigatoinInput = document.createElement("input");
+    navigatoinInput.setAttribute("name", "navigation");
+    navigatoinInput.setAttribute("value", type);
+    form.appendChild(navigatoinInput);
+
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
 function sendRequest(path){
     var data = [];
     data = getIdData();

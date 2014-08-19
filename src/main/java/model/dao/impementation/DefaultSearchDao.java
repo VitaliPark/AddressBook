@@ -10,6 +10,7 @@ import java.util.List;
 import constants.database.AddressColumnNames;
 import constants.database.PersonColumnNames;
 import constants.database.SQLQuery;
+import exceptioin.DataAccessException;
 import model.SearchPair;
 import model.SearchRequest;
 import model.dao.SearchDao;
@@ -24,7 +25,7 @@ public class DefaultSearchDao implements SearchDao{
 	private Connection connection;
 	
 	@Override
-	public List<Contact> search(SearchRequest searchRequest, int first, int maxCount) {
+	public List<Contact> search(SearchRequest searchRequest, int first, int maxCount)throws DataAccessException {
 		PreparedStatement searchStatement = null;
 		String operatorType = searchRequest.getOperatortype();
 		String searchQuery = setDateTypeOperator(SQLQuery.SEARCH_REQUEST.getValue(), operatorType);
@@ -34,14 +35,45 @@ public class DefaultSearchDao implements SearchDao{
 			ResultSet set = searchStatement.executeQuery();
 			return buildResult(set);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(searchStatement);
 		}
-		return null;
+	}
+	
+
+	@Override
+	public int getCountOnRequest(SearchRequest searchRequest) throws DataAccessException{
+		PreparedStatement countStatement = null;
+		String operatorType = searchRequest.getOperatortype();
+		String searchQuery = setDateTypeOperator(SQLQuery.SEARCH_REQUEST_COUNT.getValue(), operatorType);
+		int count = 0;
+		try {
+			countStatement = connection.prepareStatement(searchQuery);
+			setMainFields(searchRequest, countStatement);
+			ResultSet set = countStatement.executeQuery();
+			if(set.next()){
+				count = Integer.parseInt(set.getString(1));
+			}
+			return count;
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(countStatement);
+		}
 	}
 
 	private void buildSearchStatement(SearchRequest searchRequest,
 			PreparedStatement searchStatement, int first, int count) throws SQLException {
 		int i = 0;
+		i = setMainFields(searchRequest, searchStatement);
+		searchStatement.setInt(++i, first);
+		searchStatement.setInt(++i, count);
+	}
+
+	private int setMainFields(SearchRequest searchRequest,
+			PreparedStatement searchStatement) throws SQLException {
+		int i;
 		for(i = 0; i < searchRequest.getParams().size(); i++){
 			SearchPair pair = searchRequest.getPair(i);
 			if(i != 4){
@@ -51,9 +83,7 @@ public class DefaultSearchDao implements SearchDao{
 				searchStatement.setString(i+1, pair.getValue());
 			}
 		}
-		searchStatement.setInt(++i, first);
-		searchStatement.setInt(++i, count);
-		System.out.println(searchStatement.toString());
+		return i;
 	}
 	
 	private String setDateTypeOperator(String searchQuery, String operator){
@@ -81,7 +111,6 @@ public class DefaultSearchDao implements SearchDao{
 		address.setHouseNumber(set.getInt(AddressColumnNames.houseNumber));
 		address.setApartment(set.getInt(AddressColumnNames.apartment));
 		address.setIndex(set.getString(AddressColumnNames.postIndex));
-		
 		return address;
 	}
 
@@ -113,13 +142,16 @@ public class DefaultSearchDao implements SearchDao{
 		person.setDateOfBirth(date);
 	}
 	
-	
-
 	@Override
 	public void setConnection(Connection connection) {
 		this.connection = connection;
 	}
 	
-
-
+	private void closeStatement(PreparedStatement createPersonStatement) {
+		try {
+			if(createPersonStatement != null){
+				createPersonStatement.close();
+			}
+		} catch (SQLException e) {}
+	}
 }

@@ -33,6 +33,48 @@ li.activeTab > a {
 }
 
 
+.arrow {
+    display:inline-block;
+    width:7px;
+    height:7px;
+    line-height:7px;
+    border-top:3px solid #FFFFFF;
+    border-right:3px solid #FFFFFF;
+    -ms-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -webkit-transform:rotate(45deg);
+    transform:rotate(45deg);
+    margin: 5px;
+}
+
+.arrow-down {
+    -ms-transform:rotate(135deg);
+    -moz-transform:rotate(135deg);
+    -webkit-transform:rotate(135deg);
+    transform:rotate(135deg);
+}
+.arrow-left {
+    -ms-transform:rotate(225deg);
+    -moz-transform:rotate(225deg);
+    -webkit-transform:rotate(225deg);
+    transform:rotate(225deg);
+}
+.arrow-up{
+    -ms-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);
+    -webkit-transform:rotate(-45deg);
+    transform:rotate(-45deg);
+}
+
+#pager {
+    max-width: 45px;
+    max-height: 20px;
+    background: #3B003B;
+    color:#FFFFFF;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: auto;
+}
 
 
 body {
@@ -309,4 +351,11 @@ td.text-center {
 
 td.text-right {
   text-align: right;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+    border-top:3px solid #3B003B;
+    border-right:3px solid #3B003B;
 }

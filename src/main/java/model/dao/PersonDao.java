@@ -18,8 +18,10 @@ public interface PersonDao extends HasConnection {
 	
 	public String getEmail(int personId) throws DataAccessException;
 	
+	public int getPersonsCount() throws DataAccessException;
+	
 	public void updatePerson(Person person);
 	
-	public List<Person> getAllPersons(int first, int count) throws DataAccessException;
+	public List<Person> getPersons(int first, int count) throws DataAccessException;
 
 }

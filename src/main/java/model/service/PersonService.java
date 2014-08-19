@@ -48,10 +48,19 @@ public class PersonService {
 		}
 	}
 	
-	public List<Person> getAllPersons(int first, int count, Connection connection) throws ServiceException{
+	public int getPersonsCount(Connection connection) throws ServiceException{
 		personDao.setConnection(connection);
 		try {
-			return personDao.getAllPersons(first, count);
+			return personDao.getPersonsCount();
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PERSON_READ_FAILED + e.getMessage());
+		}
+	}
+	
+	public List<Person> getPersons(int first, int count, Connection connection) throws ServiceException{
+		personDao.setConnection(connection);
+		try {
+			return personDao.getPersons(first, count);
 		} catch (DataAccessException e) {
 			throw new ServiceException(ExceptionMessages.PERSON_READ_FAILED + e.getMessage());
 		}
