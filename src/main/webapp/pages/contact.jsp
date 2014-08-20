@@ -28,13 +28,12 @@
     </ul>
 </div>
 
-
 <div class="inputFields">
-    <form id="mainForm" action="">
-        <c:set var="person" value="${requestScope.contact.getPerson()}" scope="request" />
-        <c:set var="address" value="${requestScope.contact.getAddress()}" scope="request" />
-        <c:set var="gender" value="${requestScope.person.getGender()}" scope="request" />
-        <c:set var="status" value="${requestScope.person.getMaritalStatus()}" scope="request" />
+    <c:set var="person" value="${requestScope.contact.getPerson()}" scope="request" />
+    <c:set var="address" value="${requestScope.contact.getAddress()}" scope="request" />
+    <c:set var="gender" value="${requestScope.person.getGender()}" scope="request" />
+    <c:set var="status" value="${requestScope.person.getMaritalStatus()}" scope="request" />
+    <form id="mainForm" action="index?command=updateContact&idPerson=${person.getIdPerson()}" method="post" onsubmit="onMainFormSubmit()">
         <ul>
             <li>
                 <label class="inputLabel firstInput" for="firstName">Имя:</label>
@@ -158,11 +157,12 @@
                     value='<c:out value="${requestScope.address.getIndex()}"/>'
                 >
             </li>
-            <input type="submit" name="Submit" value="Submit">
         </ul>
+        <input type="submit" name="Submit" value="Submit">
     </form>
 </div>
 <c:set var="phones" value="${requestScope.contact.getPhones()}" scope="request" />
+<c:set var="attachments" value="${requestScope.contact.getAttachments()}" scope="request" />
 <div id="tables">
     <article class="phone">
         <div class="tableButtons">
@@ -180,11 +180,12 @@
                 </thead>
                 <tbody class="table-hover" id="phoneBody">
                     <c:forEach items="${requestScope.phones}" var="phone">
-                        <tr class = "row" ondblclick = "showPhoneDialog('Редактирование телефона', this, '${phone.getPhoneId()}')" >
+                        <tr class = "row unmodified" ondblclick = "showPhoneDialog('Редактирование телефона', this, '${phone.getPhoneId()}')" >
                             <td class = "text-left smallFont"><c:out value="${phone.getFullPhone()}"></c:out></td>
                             <td class = "text-left smallFont"><c:out value="${phone.getPhoneType()}"></c:out></td>
                             <td class = "text-left smallFont"><c:out value="${phone.getComment()}"></c:out></td>
-                            <td class = "ident"><c:out value="${phone.getPhoneId()}"></c:out></td>
+                            <td class = "hidden"><c:out value="${phone.getPhoneId()}"></c:out></td>
+                            <td class = "hidden">unmodified</td>
                         </tr>
                     </c:forEach>
                 </tbody>
@@ -195,8 +196,8 @@
 
     <article>
         <div class="tableButtons">
-            <button type="button" onclick='showAttachmentDialog("Создание присоединения")'>Создать</button>
-            <button type="button">Удалить</button>
+            <button type="button" onclick="showAttachmentDialog('Создание присоединения')">Создать</button>
+            <button type="button" onclick="document.contactController.deleteAttachment()">Удалить</button>
         </div>
         <div class="table">
             <table id="attachmentTable">
@@ -207,27 +208,25 @@
                     <th class="text-left smallFont">Комментрарий</th>
                 </tr>
                 </thead>
-                <tbody class="table-hover">
+                <tbody class="table-hover" id="attachmentBody">
 
-                <tr class = "row">
-                    <td class = "text-left smallFont">hello.scp</td>
-                    <td class = "text-left smallFont">07.08.2014</td>
-                    <td class = "text-left smallFont">DANGER</td>
-                </tr>
-
-                <tr class = "row">
-                    <td class = "text-left smallFont">hello.pdf</td>
-                    <td class = "text-left smallFont">07.08.2014</td>
-                    <td class = "text-left smallFont">DANGER</td>
-                </tr>
-
+                    <c:forEach items="${requestScope.attachments}" var="attach">
+                        <tr class = "row unmodified" ondblclick = "showAttachmentDialog('Редактирование присоединения', this, '${attach.getIdAttachment()}')" >
+                            <td class = "text-left smallFont"><c:out value="${attach.getFileName()}"></c:out></td>
+                            <td class = "text-left smallFont"><c:out value="${attach.getUploadDateAsString()}"></c:out></td>
+                            <td class = "text-left smallFont"><c:out value="${attach.getComment()}"></c:out></td>
+                            <td class = "hidden"><c:out value="${attach.getIdAttachment()}"></c:out></td>
+                            <td class = "hidden">unmodified</td>
+                            <td class = "hidden">timestamp</td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
     </article>
 </div>
 <div id="buttons">
-    <a href='#' onclick='showPhoneDialog("Создание телефона")'>Click here to show the overlay</a>
+    <a href='#' onclick='addAttachmentInputToForm()'>Click here to show the overlay</a>
 </div>
 
 <div id="phoneOverlay" class="overlay">
@@ -269,7 +268,7 @@
             <ul>
                 <li>
                     <label class="inputLabel" for="attachChooser">Выберите файл:</label>
-                    <input class="inputField" type="file" onchange="setFileName(this.value)" name="attachChooser" id="fileChooser">
+                    <input class="inputField" type="file" onchange="setFileName(this.value)" name="attachChooser" id="attachChooser">
                 </li>
                 <li>
                     <label class="inputLabel" for="fileName">Имя файла:</label>
@@ -279,10 +278,9 @@
                     <label class="inputLabel" for="attachComment">Комментарий:</label>
                     <input class="inputField" type="text" name="attachComment" id="attachComment">
                 </li>
-
             </ul>
         </div>
-        <button type="button" onclick="submitAttachment()">Применить</button>
+        <button type="button" onclick="document.contactController.submitAttachment()">Применить</button>
         <button type="button" onclick="closeDialog('attachment')">Закрыть</button>
     </div>
 </div>

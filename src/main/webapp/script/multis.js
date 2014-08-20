@@ -67,6 +67,7 @@ function sendData(path, data, method) {
     document.body.removeChild(form);
 }
 
+
 function editContact(personId){
     var form = document.createElement("form");
     form.setAttribute("method", "post");

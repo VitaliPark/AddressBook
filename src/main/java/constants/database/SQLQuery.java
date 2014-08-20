@@ -41,6 +41,9 @@ public enum SQLQuery {
 	DELETE_PERSON_PHONES("DELETE FROM " + TableNames.databaseName + "." + TableNames.phoneTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 			
+	DELETE_PERSON_ATTACHMENTS("DELETE FROM " + TableNames.databaseName + "." + TableNames.attachmentTable +
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+			
 	DELETE_PERSON_ADDRESS("DELETE FROM " + TableNames.databaseName + "." + TableNames.addressTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 	
@@ -53,6 +56,9 @@ public enum SQLQuery {
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 			
 	GET_PERSON_PHONES("SELECT * FROM " + TableNames.databaseName + "." + TableNames.phoneTable + 
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+			
+    GET_PERSON_ATTACHMENTS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.attachmentTable + 
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 	
 	GET_PERSON("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable + 

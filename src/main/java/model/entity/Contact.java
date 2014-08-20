@@ -72,4 +72,8 @@ public class Contact {
 	public void setPhoneList(List<Phone> phones){
 		this.phones = phones;
 	}
+	
+	public void setAttachmentList(List<Attachment> attachments){
+		this.attachments = attachments;
+	}
 }

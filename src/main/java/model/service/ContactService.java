@@ -25,6 +25,7 @@ import exceptioin.ServiceException;
 import model.ContactTransferObject;
 import model.SearchRequest;
 import model.entity.Address;
+import model.entity.Attachment;
 import model.entity.Contact;
 import model.entity.Person;
 import model.entity.Phone;
@@ -38,6 +39,7 @@ public class ContactService {
 	private AddressService addressService;
 	private PersonService personService;
 	private SearchService searchService;
+	private AttachmentService attachmentService;
 	
 	public ContactService() {
 		initServices();
@@ -48,6 +50,7 @@ public class ContactService {
 		phoneService = new PhoneService();
 		addressService = new AddressService();
 		personService = new PersonService();
+		attachmentService = new AttachmentService();
 		searchService = new SearchService();
 	}
 	
@@ -116,6 +119,7 @@ public class ContactService {
 			phoneService.deleteAllPersonPhones(idPerson, connection);
 			addressService.deleteAddressByPersonId(idPerson, connection);
 			personService.deletePerson(idPerson, connection);
+			attachmentService.deletePersonAttachments(idPerson, connection);
 			connection.commit();
 		} catch (ServiceException | SQLException e) {
 			transactionRollback(connection);
@@ -133,10 +137,12 @@ public class ContactService {
 			connection.setAutoCommit(false);
 			Person person = personService.getPerson(personId, connection);
 			List<Phone> phones = phoneService.getAllPersonPhones(personId, connection);
+			List<Attachment> attachments = attachmentService.getAllPersonPhones(personId, connection);
 			Address address = addressService.getAddressByPersonId(personId, connection);
 			contact.setPerson(person);
 			contact.setAddress(address);
 			contact.setPhoneList(phones);
+			contact.setAttachmentList(attachments);
 			connection.commit();
 			return contact;
 		} catch (ServiceException | SQLException e){

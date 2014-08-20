@@ -26,7 +26,7 @@ public class FrontController extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         factory = new CommandFactory();
-        scheduleTask();
+        //scheduleTask();
     }
     
     private void scheduleTask(){

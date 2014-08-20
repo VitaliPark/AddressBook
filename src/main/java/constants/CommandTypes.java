@@ -5,6 +5,7 @@ public enum CommandTypes {
 	GET_ALL_CONTACTS("getAllContacts"), 
 	DELETE_CONTACTS("deleteContacts"), 
 	EDIT_CONTACT("editContact"),
+	UPDATE_CONTACT("updateContact"),
 	CREATE_CONTACT("createContact"), 
 	SEARCH_CONTACTS("searchContacts"), 
 	SHOW_SEARCH_PAGE("showSearchPage"),

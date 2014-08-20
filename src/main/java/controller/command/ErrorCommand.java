@@ -4,7 +4,7 @@ public class ErrorCommand implements Command{
 
 	@Override
 	public void execute() {
-		
+		System.out.println("errorrrrr");
 	}
 
 	@Override
