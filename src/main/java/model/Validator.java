@@ -7,10 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import constants.StringConstants;
 
-public enum Validator {
+public class Validator {
 
-	INSTANCE;
-	
 	private Pattern pattern;
 	private Matcher matcher;
 	private String emailPattern = 
@@ -96,32 +94,32 @@ public enum Validator {
 		return validationResult;
 	}
 	
-	private boolean validateRequiredField(String requiredField){
+	public boolean validateRequiredField(String requiredField){
 		return requiredField != null && !requiredField.isEmpty(); 
 	}
 	
-	private boolean isNull(String field){
+	public boolean isNull(String field){
 		return field == null;
 	}
 	
-	private boolean validateEmail(String email){
+	public boolean validateEmail(String email){
 		if(email == null) return false;
 		pattern = Pattern.compile(emailPattern);
 		matcher = pattern.matcher(email);
 		return matcher.matches() || email.isEmpty();
 	}
 	
-	private boolean validateNumber(String number){
+	public boolean validateNumber(String number){
 		if(number == null) return false;
 		pattern = Pattern.compile(numberPattern);
 		matcher = pattern.matcher(number);
 		return matcher.matches() || number.isEmpty();
 	}
 	
-	private boolean validateDate(String stringDate){
+	public boolean validateDate(String stringDate){
 		if(stringDate == null) return false;
 		if(stringDate.isEmpty()) return true;
-		SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.defaultDateFormat);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.DEFAULT_DATE_FORMAT);
 		dateFormat.setLenient(false);
 		try {
 			@SuppressWarnings("unused")

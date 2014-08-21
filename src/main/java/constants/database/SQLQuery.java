@@ -25,6 +25,14 @@ public enum SQLQuery {
 			PhoneColumnNames.comment + " )" + 
 	" VALUES(?, ?, ?, ?, ?, ?)"),
 	
+	CREATE_ATTACHMENT("INSERT INTO " + TableNames.databaseName + "." + TableNames.attachmentTable + 
+			"(" + PersonColumnNames.idPerson + "," + 
+			AttachmentColumnNames.fileName + "," + 
+			AttachmentColumnNames.uploadDate + "," + 
+			AttachmentColumnNames.comment + "," + 
+			AttachmentColumnNames.localFileName + ")" + 
+	" VALUES(?,?,?,?,?)"),
+	
 	CREATE_ADDRESS("INSERT INTO " + TableNames.databaseName + "." + TableNames.addressTable + 
 			"(" + PersonColumnNames.idPerson + "," +
 			AddressColumnNames.country + "," +
@@ -34,6 +42,15 @@ public enum SQLQuery {
 			AddressColumnNames.apartment + "," + 
 			AddressColumnNames.postIndex +  " )" +
 	" VALUES(?, ?, ?, ?, ?, ?, ?)"),
+	
+	UPDATE_ADDRESS("UPDATE " + TableNames.databaseName + "." + TableNames.addressTable + 
+			" SET " + AddressColumnNames.country + " = ?," +
+			AddressColumnNames.city + "=?," + 
+			AddressColumnNames.street + "=?," + 
+			AddressColumnNames.houseNumber + "=?," +
+			AddressColumnNames.apartment + "=?," +
+			AddressColumnNames.postIndex + "=?" + 
+			" WHERE " + PersonColumnNames.idPerson + "=?"),
 	
 	DELETE_PERSON("DELETE FROM " + TableNames.databaseName + "." + TableNames.personTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),

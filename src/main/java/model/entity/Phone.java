@@ -1,5 +1,6 @@
 package model.entity;
 
+import constants.Status;
 import constants.StringConstants;
 
 public class Phone {
@@ -10,6 +11,8 @@ public class Phone {
 	private String phoneNumber;
 	private String phoneType;
 	private String comment;
+	
+	private Status status;
 	
 	public int getPhoneId() {
 		return phoneId;
@@ -49,6 +52,12 @@ public class Phone {
 		this.comment = comment;
 	}
 	
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 	public String getFullPhone(){
 		StringBuilder builder = new StringBuilder();
 		builder.append(getCountryCode()); builder.append(StringConstants.PHONE_SEPARATOR);

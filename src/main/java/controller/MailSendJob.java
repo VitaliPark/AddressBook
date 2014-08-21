@@ -45,7 +45,7 @@ public class MailSendJob implements Job{
 		StringBuilder builder = new StringBuilder();
 		builder.append("Не забудь поздравить с днём рождения:"); builder.append("\n");
 		for(Person person : list){
-			SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.defaultDateFormat);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.DEFAULT_DATE_FORMAT);
 			String date = dateFormat.format(person.getDateOfBirth());
 			builder.append(person.getSecondName()); builder.append(" ");
 			builder.append(person.getFirstName()); builder.append(" ");

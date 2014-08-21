@@ -21,11 +21,12 @@ public class ValidationObject {
 
 	@Override
 	public String toString() {
-		String a = "";
+		StringBuilder builder = new StringBuilder();
 		for(SearchCriteria criteria : wrongFields){
-			a += criteria.getValue();
+			builder.append(criteria.getValue());
+			builder.append("\n");
 		}
-		return a;
+		return builder.toString();
 	}
 	
 	

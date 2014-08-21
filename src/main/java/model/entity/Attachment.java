@@ -3,6 +3,7 @@ package model.entity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import constants.Status;
 import constants.StringConstants;
 
 public class Attachment {
@@ -12,6 +13,8 @@ public class Attachment {
 	private String localFileName;
 	private Date uploadDate;
 	private String comment;
+	
+	private Status status;
 	
 	public int getIdAttachment() {
 		return idAttachment;
@@ -39,10 +42,16 @@ public class Attachment {
 	}
 	
 	public String getUploadDateAsString(){
-		SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.defaultDateFormat);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.DEFAULT_DATE_FORMAT);
 		return (uploadDate != null) ? dateFormat.format(uploadDate) : "";
 	}
 	
+	public Status getStatus() {
+		return status;
+	}
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 	public String getLocalFileName() {
 		return localFileName;
 	}

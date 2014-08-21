@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import constants.database.AddressColumnNames;
 import constants.database.PersonColumnNames;
 
-public enum RequestParser {
+public enum SearchRequestParser {
 	INSTANCE;
 	
 	public SearchRequest parseSearchRequest(HttpServletRequest request){
@@ -28,10 +28,10 @@ public enum RequestParser {
 		return searchRequest;
 	}
 
-	private void addOperatorTypeToSearchRequest(HttpServletRequest request,
-			SearchRequest searchRequest) {
-		searchRequest.addParam(SearchCriteria.OPERATOR_TYPE, getOperatorType(request));
-	}
+//	private void addOperatorTypeToSearchRequest(HttpServletRequest request,
+//			SearchRequest searchRequest) {
+//		searchRequest.addParam(SearchCriteria.OPERATOR_TYPE, getOperatorType(request));
+//	}
 
 	private void addDateOfBirthToSearchRequest(HttpServletRequest request,
 			SearchRequest searchRequest) {

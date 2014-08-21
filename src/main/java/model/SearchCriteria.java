@@ -2,6 +2,7 @@ package model;
 
 import constants.database.AddressColumnNames;
 import constants.database.PersonColumnNames;
+import constants.database.PhoneColumnNames;
 
 public enum SearchCriteria {
 
@@ -22,7 +23,14 @@ public enum SearchCriteria {
     
     WEB_SITE(PersonColumnNames.website),
     EMAIL(PersonColumnNames.email),
-    WORKPLACE(PersonColumnNames.workplace);
+    WORKPLACE(PersonColumnNames.workplace),
+	
+	COUNTRY_CODE(PhoneColumnNames.countryCode),
+	OPERATOR_CODE(PhoneColumnNames.operatorCode),
+	PHONE_NUMBER(PhoneColumnNames.phoneNumber),
+	
+	STATUS("status");
+	
 	
 	private String value;
 

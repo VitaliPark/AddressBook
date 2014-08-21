@@ -43,6 +43,7 @@ public class DefaultAddressDao implements AddressDao{
 		}	
 	}
 	
+	@Override
 	public Address getPersonAddress(int idPerson) throws DataAccessException{
 		PreparedStatement getPersonAddressStatement = null;
 		try {
@@ -55,8 +56,11 @@ public class DefaultAddressDao implements AddressDao{
 		} finally {
 			closeStatement(getPersonAddressStatement);
 		}
-
-		
+	}
+	
+	@Override
+	public void updateAddress(Address address, int personid) {
+		PreparedStatement updateAddress = null;
 	}
 	
 	private Address buildGetPersonAddress(ResultSet set ) throws SQLException{
@@ -108,11 +112,6 @@ public class DefaultAddressDao implements AddressDao{
 		return null;
 	}
 
-	@Override
-	public void updateAddress(Address address) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void setConnection(Connection connection) {

@@ -62,26 +62,27 @@ public class Person {
 		this.gender = gender;
 	}
 	public String getCitizenship() {
-		return citizenship;
+		return (citizenship != null) ? citizenship : StringConstants.EMPTY_STRING;
 	}
 	public void setCitizenship(String citizenship) {
 		this.citizenship = citizenship;
 	}
 	public String getWebSite() {
-		return webSite;
+		return (webSite != null) ? webSite : StringConstants.EMPTY_STRING;
 	}
 	public void setWebSite(String webSite) {
 		this.webSite = webSite;
 	}
 	public String getEmail() {
-		return email;
+		return (email != null) ? email : StringConstants.EMPTY_STRING;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	public String getWorkplace() {
-		return workplace;
+		return (workplace != null) ? workplace : StringConstants.EMPTY_STRING;
 	}
+	
 	public void setWorkplace(String workplace) {
 		this.workplace = workplace;
 	}

@@ -33,7 +33,7 @@
     <c:set var="address" value="${requestScope.contact.getAddress()}" scope="request" />
     <c:set var="gender" value="${requestScope.person.getGender()}" scope="request" />
     <c:set var="status" value="${requestScope.person.getMaritalStatus()}" scope="request" />
-    <form id="mainForm" action="index?command=updateContact&idPerson=${person.getIdPerson()}" method="post" onsubmit="onMainFormSubmit()">
+    <form id="mainForm" enctype="multipart/form-data" action="index?command=updateContact&idPerson=${person.getIdPerson()}" method="post" onsubmit="onMainFormSubmit()">
         <ul>
             <li>
                 <label class="inputLabel firstInput" for="firstName">Имя:</label>
@@ -85,16 +85,16 @@
             </li>
             <li>
                 <label class="inputLabel"> Семейной положение:</label>
-                <select class="inputField">
-                    <option name="maritalStatus" value = "MS_U"
+                <select name="maritalStatus" class="inputField">
+                    <option  value = ""
                         <c:if test="${requestScope.status.getValue() eq 'MS_U'}">selected</c:if>
                     >Не важно
                     </option>
-                    <option name="maritalStatus" value = "MS_M"
+                    <option value = "MS_M"
                         <c:if test="${requestScope.status.getValue() eq 'MS_M'}">selected</c:if>
                     >В браке
                     </option>
-                    <option name="maritalStatus" value = ""
+                    <option value = "MS_S"
                         <c:if test="${requestScope.status.getValue() eq 'MS_S'}">selected</c:if>
                     >Не замужем/Не женат
                     </option>
@@ -103,7 +103,7 @@
 
             <li>
                 <label class="inputLabel" for="webSite">Сайт:</label>
-                <input class="inputField" type="text" name="webSite" id="webSite"
+                <input class="inputField" type="text" name="website" id="webSite"
                     value='<c:out value="${requestScope.person.getWebSite()}"/>'
                 >
 
@@ -140,8 +140,8 @@
                 >
             </li>
             <li>
-                <label class="inputLabel" for="house">Дом:</label>
-                <input class="inputField" type="number" name="house" id="house"
+                <label class="inputLabel" for="houseNumber">Дом:</label>
+                <input class="inputField" type="number" name="houseNumber" id="house"
                     value='<c:out value="${requestScope.address.getHouseNumberAsString()}"/>'
                 >
             </li>
@@ -152,8 +152,8 @@
                 >
             </li>
             <li>
-                <label class="inputLabel" for="index">Почтовый индекс:</label>
-                <input class="inputField" type="text" name="index" id="index"
+                <label class="inputLabel" for="postIndex">Почтовый индекс:</label>
+                <input class="inputField" type="text" name="postIndex" id="postIndex"
                     value='<c:out value="${requestScope.address.getIndex()}"/>'
                 >
             </li>

@@ -64,7 +64,7 @@ public class Contact {
 	}
 	
 	public String getBirthDate(){
-		SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.defaultDateFormat);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(StringConstants.DEFAULT_DATE_FORMAT);
 		Date date = person.getDateOfBirth();
 		return (date != null) ? dateFormat.format(person.getDateOfBirth()) : "";
 	}

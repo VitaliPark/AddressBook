@@ -29,6 +29,7 @@ public class SendMailCommand implements Command{
 		try {
 			mailService.sendMail(recipents, subject, messageText);
 		} catch (MessagingException e) {
+			System.out.println("нет соединения");
 			e.printStackTrace();
 		}
 	}

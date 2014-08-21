@@ -97,6 +97,7 @@ public class ContactService {
 			int newId = personService.createPerson(newContact, connection);
 			newContact.getPerson().setIdPerson(newId);
 			phoneService.addAllPhones(newContact, connection);
+			attachmentService.addAllAttachments(newContact, connection);
 			addressService.addAddress(newContact, connection);			
 			connection.commit();
 		} catch (ServiceException | SQLException e){
@@ -107,7 +108,15 @@ public class ContactService {
 		}	
 	}
 	
-	public void updateContact(Contact newContact){
+	public void updateContact(Contact contact){
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

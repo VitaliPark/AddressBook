@@ -1,6 +1,7 @@
 package model.dao.impementation;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.AttachmentDao;
 import model.entity.Attachment;
+import model.entity.Contact;
 
 public class DefaultAttachmentDao implements AttachmentDao{
 
@@ -38,7 +40,7 @@ public class DefaultAttachmentDao implements AttachmentDao{
 	}
 	
 	@Override
-	public void deletePersonAttachments(int idPerson) throws DataAccessException {
+	public void deleteContactAttachments(int idPerson) throws DataAccessException {
 		PreparedStatement deletePersonAttachments = null;
 		try {
 			deletePersonAttachments = connection.prepareStatement(SQLQuery.DELETE_PERSON_ATTACHMENTS.getValue());
@@ -49,6 +51,31 @@ public class DefaultAttachmentDao implements AttachmentDao{
 		} finally{
 			closeStatement(deletePersonAttachments);
 		}
+	}
+	
+	public void createAttachment(Attachment attach, int personId) throws DataAccessException{
+		PreparedStatement createAttachmentStatement = null;
+		try {
+			createAttachmentStatement = connection.prepareStatement(SQLQuery.CREATE_ATTACHMENT.getValue());
+			buildCreateAttachmentStatement(attach, personId,
+					createAttachmentStatement);
+			createAttachmentStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(createAttachmentStatement);
+		}
+	}
+
+	private void buildCreateAttachmentStatement(Attachment attach,
+			int personId, PreparedStatement createAttachmentStatement)
+			throws SQLException {
+		Date date = new Date(attach.getUploadDate().getTime());
+		createAttachmentStatement.setInt(1, personId);
+		createAttachmentStatement.setString(2, attach.getFileName());
+		createAttachmentStatement.setDate(3, date);
+		createAttachmentStatement.setString(4, attach.getComment());
+		createAttachmentStatement.setString(5, attach.getLocalFileName());
 	}
 
 	

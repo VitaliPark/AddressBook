@@ -21,13 +21,12 @@ public class CommandFactory {
 	}
 
 	public Command getCommand(HttpServletRequest request, HttpServletResponse response){		
-		String command = request.getParameter(StringConstants.command);
-		System.out.println(command);
+		String command = request.getParameter(StringConstants.COMMAND);
 		CommandTypes type = CommandTypes.getType(command);
 		switch(type){
 			case GET_ALL_CONTACTS: 	return new GetAllContactsCommand(contactService, request);
 			case DELETE_CONTACTS: 	return new DeleteContactsCommand(contactService, request);
-			case UPDATE_CONTACT:    return new UpdateContactCommand(request);
+			case UPDATE_CONTACT:    return new UpdateContactCommand(request, contactService);
 			case EDIT_CONTACT: 		return new EditContactCommand(contactService, request);
 			case CREATE_CONTACT:	return new EditContactCommand(contactService, request);
 			case SEARCH_CONTACTS: 	return new SearchCommand(request, contactService);

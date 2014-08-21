@@ -10,7 +10,7 @@ import controller.PageDrawer;
 import exceptioin.ContactReadFailedException;
 import model.ContactTransferObject;
 import model.PageConfig;
-import model.RequestParser;
+import model.SearchRequestParser;
 import model.SearchRequest;
 import model.ValidationObject;
 import model.Validator;
@@ -31,7 +31,8 @@ public class SearchCommand implements Command{
 	@Override
 	public void execute() {
 		SearchRequest searchRequest = getSearchRequest(request);
-		ValidationObject validationResult = Validator.INSTANCE.validateSearchRequest(searchRequest);
+		Validator validator = new Validator();
+		ValidationObject validationResult = validator.validateSearchRequest(searchRequest);
 		System.out.println(validationResult.toString());
 		if(!validationResult.isEmpty()){
 			processValidationFailure(validationResult);
@@ -82,7 +83,7 @@ public class SearchCommand implements Command{
 			return searchRequest;
 		} else {
 			System.out.println("we dont have it");
-			return RequestParser.INSTANCE.parseSearchRequest(request);
+			return SearchRequestParser.INSTANCE.parseSearchRequest(request);
 		}
 	}
 	

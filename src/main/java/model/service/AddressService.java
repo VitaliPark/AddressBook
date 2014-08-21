@@ -45,5 +45,8 @@ public class AddressService {
 			throw new ServiceException(ExceptionMessages.ADDRESS_READ_FAILED + e.getMessage());
 		}
 	}
-		
+	
+	public void updatePersonAddress(Address address, int personId, Connection connection) throws ServiceException{
+		addressDao.setConnection(connection);
+	}
 }

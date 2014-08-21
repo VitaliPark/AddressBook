@@ -29,12 +29,9 @@ public class ExceptionMessages {
 	public static final String ATTACHMENT_READ_FAILED = " Unable to read attachment ";
 	
 	public static final String ATTACHMENT_DELETION_FAILED = " Unable to delete attachment ";
+
+	public static final String ATTACHMENT_CREATION_FAILED = " Unable to create attachment info ";
 	
 	public static final String EMAIL_READ_FAILED = " Unable to read person email ";
-	
-
-	
-	
-	
 	
 }
