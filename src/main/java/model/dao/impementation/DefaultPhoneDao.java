@@ -32,6 +32,44 @@ public class DefaultPhoneDao implements PhoneDao{
 	}
 	
 	@Override
+	public void updatePhone(Phone phone) throws DataAccessException {
+		PreparedStatement updatePhoneStatement= null;
+		try {
+			updatePhoneStatement = connection.prepareStatement(SQLQuery.UPDATE_PHONE.getValue());
+			buildUpdateStatement(phone, updatePhoneStatement);
+			updatePhoneStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(updatePhoneStatement);
+		}
+	}
+	
+	@Override
+	public void deletePhone(int phoneId) throws DataAccessException{
+		PreparedStatement deletePhoneStatement = null;
+		try {
+			deletePhoneStatement = connection.prepareStatement(SQLQuery.DELETE_PHONE.getValue());
+			deletePhoneStatement.setInt(1, phoneId);
+			deletePhoneStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(deletePhoneStatement);
+		}
+	}
+
+	private void buildUpdateStatement(Phone phone,PreparedStatement updatePhoneStatement) throws SQLException {
+		updatePhoneStatement.setInt(1, phone.getCountryCode());
+		updatePhoneStatement.setInt(2, phone.getOperatorCode());
+		updatePhoneStatement.setString(3, phone.getPhoneNumber());
+		updatePhoneStatement.setString(4, phone.getPhoneType());
+		updatePhoneStatement.setString(5, phone.getComment());
+		updatePhoneStatement.setInt(6, phone.getPhoneId());
+	}
+
+	
+	@Override
 	public void deletePersonPhones(int idPerson) throws DataAccessException{
 		PreparedStatement deletePersonPhonesStatement = null;
 		try {
@@ -44,7 +82,7 @@ public class DefaultPhoneDao implements PhoneDao{
 			closeStatement(deletePersonPhonesStatement);
 		}
 	}
-
+	
 	private void closeStatement(PreparedStatement statement) {
 		try {
 			if(statement != null){
@@ -95,18 +133,6 @@ public class DefaultPhoneDao implements PhoneDao{
 		return phones;
 	}
 
-	@Override
-	public void updatePhone(Phone phone) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deletePhone(Phone phone) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	@Override
 	public void setConnection(Connection connection) {
 		this.connection = connection;

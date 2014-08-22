@@ -22,6 +22,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import constants.StringConstants;
 import constants.database.PersonColumnNames;
 import exceptioin.ContactCreationFailedException;
+import exceptioin.ContactUpdateFailed;
 import exceptioin.ContactValidationException;
 
 public class UpdateContactCommand implements Command{
@@ -100,9 +101,17 @@ public class UpdateContactCommand implements Command{
 			ParameterContainer parameterContainer = new DefaultParameterContainer(items);
 			Contact contact = parser.parseContactRequest(parameterContainer);
 			contact.getPerson().setIdPerson(contactId);
+			storeFiles(files);
+			contactService.updateContact(contact);
 		} catch (FileUploadException e) {
 			e.printStackTrace();
 		} catch (ContactValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ContactUpdateFailed e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

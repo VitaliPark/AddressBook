@@ -13,7 +13,6 @@ import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.AttachmentDao;
 import model.entity.Attachment;
-import model.entity.Contact;
 
 public class DefaultAttachmentDao implements AttachmentDao{
 
@@ -66,6 +65,44 @@ public class DefaultAttachmentDao implements AttachmentDao{
 			closeStatement(createAttachmentStatement);
 		}
 	}
+	
+	@Override
+	public void updateAttachment(Attachment attachment)throws DataAccessException {
+		PreparedStatement updateAttachmentStatement = null;
+		try {
+			updateAttachmentStatement = connection.prepareStatement(SQLQuery.UPDATE_ATTACHMENT.getValue());
+			buildUpdateStatement(attachment, updateAttachmentStatement);
+			updateAttachmentStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(updateAttachmentStatement);
+		}
+	}
+	
+	public void deleteAttachment(int attachmentId) throws DataAccessException{
+		PreparedStatement deleteAttachmentStatement = null;
+		try {
+			deleteAttachmentStatement = connection.prepareStatement(SQLQuery.DELETE_ATTACHMENT.getValue());
+			deleteAttachmentStatement.setInt(1, attachmentId);
+			deleteAttachmentStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(deleteAttachmentStatement);
+		}
+		
+	}
+
+	private void buildUpdateStatement(Attachment attachment, 
+			PreparedStatement updateAttachmentStatement) throws SQLException {
+		Date date = new Date(attachment.getUploadDate().getTime());
+		updateAttachmentStatement.setString(1, attachment.getFileName());
+		updateAttachmentStatement.setDate(2, date);
+		updateAttachmentStatement.setString(3, attachment.getComment());
+		updateAttachmentStatement.setString(4, attachment.getLocalFileName());
+		updateAttachmentStatement.setInt(5, attachment.getIdAttachment());
+	}
 
 	private void buildCreateAttachmentStatement(Attachment attach,
 			int personId, PreparedStatement createAttachmentStatement)
@@ -109,5 +146,4 @@ public class DefaultAttachmentDao implements AttachmentDao{
 			}
 		} catch (SQLException e) {}
 	}
-
 }

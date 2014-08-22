@@ -20,7 +20,7 @@ public interface PersonDao extends HasConnection {
 	
 	public int getPersonsCount() throws DataAccessException;
 	
-	public void updatePerson(Person person);
+	public void updatePerson(Person person) throws DataAccessException;
 	
 	public List<Person> getPersons(int first, int count) throws DataAccessException;
 

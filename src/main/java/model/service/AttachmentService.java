@@ -18,6 +18,33 @@ public class AttachmentService {
 		this.attachmentDao = new DefaultAttachmentDao();
 	}
 	
+	public void createAttachment(Attachment attachment, int idPerson, Connection connection) throws ServiceException{
+		attachmentDao.setConnection(connection);
+		try {
+			attachmentDao.createAttachment(attachment, idPerson);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.ATTACHMENT_CREATION_FAILED + e.getMessage());
+		}
+	}
+	
+	public void deleteAttachment(int attachmentId, Connection connection) throws ServiceException{
+		attachmentDao.setConnection(connection);
+		try {
+			attachmentDao.deleteAttachment(attachmentId);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.ATTACHMENT_DELETION_FAILED + e.getMessage());
+		}
+	}
+	
+	public void updateAttachment(Attachment attachment, Connection connection) throws ServiceException{
+		attachmentDao.setConnection(connection);
+		try {
+			attachmentDao.updateAttachment(attachment);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.ATTACHMENT_UPDATE_FAILED + e.getMessage());
+		}
+	}
+	
 	public List<Attachment> getAllPersonPhones(int personId, Connection connection) throws ServiceException{
 		attachmentDao.setConnection(connection);
 		try {		

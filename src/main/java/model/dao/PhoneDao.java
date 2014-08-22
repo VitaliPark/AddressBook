@@ -11,9 +11,9 @@ public interface PhoneDao extends HasConnection {
 	
 	public List<Phone> getPersonPhones(int idPerson) throws DataAccessException;
 	
-	public void updatePhone(Phone phone);
+	public void updatePhone(Phone phone) throws DataAccessException;
 	
-	public void deletePhone(Phone phone);
+	public void deletePhone(int phoneId) throws DataAccessException;
 	
 	public void deletePersonPhones(int idPerson) throws DataAccessException;
 		

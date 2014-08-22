@@ -12,11 +12,15 @@ public class ExceptionMessages {
 	
 	public static final String PERSON_DELITION_FAILED = " Unable to delete person info ";
 	
-	public static final String PERSON_READ_FAILED = " Unable to get person ";  
+	public static final String PERSON_READ_FAILED = " Unable to get person ";
+	
+	public static final String PERSON_UPDATE_FAILED = " Unable to update person ";  
 	
 	public static final String PHONE_CREATION_FAILED = " Unable to add phone info ";
 	
 	public static final String PHONE_DELETION_FAILED = " Unable to delete phone info ";
+	
+	public static final String PHONE_UPDATE_FAILED = " Unable to update phone ";
 	
 	public static final String PHONE_READ_FAILED = " Unable to read phone info ";
 	
@@ -26,9 +30,13 @@ public class ExceptionMessages {
 	
 	public static final String ADDRESS_READ_FAILED = " Unable to read address ";
 	
+	public static final String ADDRESS_UPDATE_FAILED = " Unable to update address ";
+	
 	public static final String ATTACHMENT_READ_FAILED = " Unable to read attachment ";
 	
 	public static final String ATTACHMENT_DELETION_FAILED = " Unable to delete attachment ";
+	
+	public static final String ATTACHMENT_UPDATE_FAILED = " Unable to update attachment ";
 
 	public static final String ATTACHMENT_CREATION_FAILED = " Unable to create attachment info ";
 	

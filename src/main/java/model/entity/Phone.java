@@ -34,19 +34,19 @@ public class Phone {
 		this.operatorCode = operatorCode;
 	}
 	public String getPhoneNumber() {
-		return phoneNumber;
+		return (phoneNumber != null) ? phoneNumber : StringConstants.EMPTY_STRING;
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 	public String getPhoneType() {
-		return phoneType;
+		return (phoneType != null) ? phoneType : StringConstants.EMPTY_STRING;
 	}
 	public void setPhoneType(String phoneType) {
 		this.phoneType = phoneType;
 	}
 	public String getComment() {
-		return comment;
+		return (comment != null) ? comment : StringConstants.EMPTY_STRING;
 	}
 	public void setComment(String comment) {
 		this.comment = comment;

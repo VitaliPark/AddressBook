@@ -43,6 +43,19 @@ public enum SQLQuery {
 			AddressColumnNames.postIndex +  " )" +
 	" VALUES(?, ?, ?, ?, ?, ?, ?)"),
 	
+	UPDATE_PERSON("UPDATE " + TableNames.databaseName + "." + TableNames.personTable + 
+			" SET " + PersonColumnNames.firstName + " = ?," +
+			PersonColumnNames.secondName + "=?," + 
+			PersonColumnNames.patronymicName + "=?," + 
+			PersonColumnNames.dateOfBirth + "=?," +
+			PersonColumnNames.maritalStatus + "=?," +
+			PersonColumnNames.gender + "=?," +
+			PersonColumnNames.citizenship + "=?," + 
+			PersonColumnNames.website + "=?," + 
+			PersonColumnNames.email + "=?," +
+			PersonColumnNames.workplace + "=?" +
+	" WHERE " + PersonColumnNames.idPerson + "=?"),
+	
 	UPDATE_ADDRESS("UPDATE " + TableNames.databaseName + "." + TableNames.addressTable + 
 			" SET " + AddressColumnNames.country + " = ?," +
 			AddressColumnNames.city + "=?," + 
@@ -50,7 +63,22 @@ public enum SQLQuery {
 			AddressColumnNames.houseNumber + "=?," +
 			AddressColumnNames.apartment + "=?," +
 			AddressColumnNames.postIndex + "=?" + 
-			" WHERE " + PersonColumnNames.idPerson + "=?"),
+	" WHERE " + PersonColumnNames.idPerson + "=?"),
+	
+	UPDATE_PHONE("UPDATE " + TableNames.databaseName + "." + TableNames.phoneTable + 
+			" SET " + PhoneColumnNames.countryCode + " = ?," +
+			PhoneColumnNames.operatorCode + "=?," + 
+			PhoneColumnNames.phoneNumber + "=?," + 
+			PhoneColumnNames.phoneType + "=?," +
+			PhoneColumnNames.comment + "=?" +
+	" WHERE " + PhoneColumnNames.idPhone + "=?"),
+	
+	UPDATE_ATTACHMENT("UPDATE " + TableNames.databaseName + "." + TableNames.attachmentTable + 
+			" SET " + AttachmentColumnNames.fileName + " = ?," +
+			AttachmentColumnNames.uploadDate + "=?," + 
+			AttachmentColumnNames.comment + "=?," + 
+			AttachmentColumnNames.localFileName + "=?" +
+	" WHERE " + AttachmentColumnNames.idAttachment + "=?"),
 	
 	DELETE_PERSON("DELETE FROM " + TableNames.databaseName + "." + TableNames.personTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
@@ -58,8 +86,14 @@ public enum SQLQuery {
 	DELETE_PERSON_PHONES("DELETE FROM " + TableNames.databaseName + "." + TableNames.phoneTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
 			
+	DELETE_PHONE("DELETE FROM " + TableNames.databaseName + "."+ TableNames.phoneTable + 
+			" WHERE " + PhoneColumnNames.idPhone + "=?"),		
+			
 	DELETE_PERSON_ATTACHMENTS("DELETE FROM " + TableNames.databaseName + "." + TableNames.attachmentTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+			
+	DELETE_ATTACHMENT("DELETE FROM " + TableNames.databaseName + "."+ TableNames.attachmentTable + 
+			" WHERE " + AttachmentColumnNames.idAttachment + "=?"),
 			
 	DELETE_PERSON_ADDRESS("DELETE FROM " + TableNames.databaseName + "." + TableNames.addressTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),

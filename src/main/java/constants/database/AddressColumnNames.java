@@ -2,6 +2,8 @@ package constants.database;
 
 public class AddressColumnNames {
 
+	public static final String idAddress = "idAddress";
+	
 	public static final String country = "country";
 	
 	public static final String city = "city";

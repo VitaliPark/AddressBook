@@ -19,6 +19,24 @@ public class PhoneService {
 		phoneDao = new DefaultPhoneDao();
 	}
 	
+	public void createPhone(Phone phone, int personId, Connection connection) throws ServiceException{
+		phoneDao.setConnection(connection);
+		try {
+			phoneDao.createPhone(phone, personId);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PHONE_CREATION_FAILED + e.getMessage());
+		}
+	}
+	
+	public void updatePhone(Phone phone, Connection connection ) throws ServiceException{
+		phoneDao.setConnection(connection);
+		try {
+			phoneDao.updatePhone(phone);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PERSON_UPDATE_FAILED + e.getMessage());
+		} 
+	}
+	
 	public void addAllPhones(Contact newContact, Connection connection) throws ServiceException{
 		List<Phone> phones = newContact.getPhones();
 		phoneDao.setConnection(connection);	
@@ -35,6 +53,15 @@ public class PhoneService {
 		phoneDao.setConnection(connection);
 		try {
 			phoneDao.deletePersonPhones(idPerson);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PHONE_DELETION_FAILED + e.getMessage());
+		}
+	}
+	
+	public void deletePhone(int phoneId, Connection connection) throws ServiceException{
+		phoneDao.setConnection(connection);
+		try {
+			phoneDao.deletePhone(phoneId);
 		} catch (DataAccessException e) {
 			throw new ServiceException(ExceptionMessages.PHONE_DELETION_FAILED + e.getMessage());
 		}

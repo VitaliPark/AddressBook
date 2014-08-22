@@ -48,5 +48,10 @@ public class AddressService {
 	
 	public void updatePersonAddress(Address address, int personId, Connection connection) throws ServiceException{
 		addressDao.setConnection(connection);
+		try {
+			addressDao.updateAddress(address, personId);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.ADDRESS_UPDATE_FAILED + e.getMessage());
+		}
 	}
 }

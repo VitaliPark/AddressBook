@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +66,9 @@ public class ContactRequestParser {
 		if(attachmentsInput != null){
 			for(String attachmentString : attachmentsInput){
 				Attachment attach = parseAttachmentInput(attachmentString);
-				attachments.add(attach);
+				if(attach != null){
+					attachments.add(attach);
+				}
 			}
 		}
 
@@ -75,27 +76,30 @@ public class ContactRequestParser {
 	}
 	
 	private Attachment parseAttachmentInput(String inputValue){
-		Attachment attachment = new Attachment();
 		String [] values = inputValue.split(StringConstants.SEMICOLON);
-		setAttachmentFields(values, attachment);
+		Attachment attachment = getAttachment(values);
 		return attachment;
 	}
 
-	private void setAttachmentFields(String[] values, Attachment attachment) {
+	private Attachment getAttachment(String[] values) {
+		Attachment attachment = null;
 		String fileName = values[0];
-		//
-		Date date = getUploadDate(values[1]);
-		String comment = values[2];
-		int id = getId(values[3]);
-		Status status = getStatus(values[4]);
-		String localFileName = values[5] + fileName;
-		
-		attachment.setFileName(fileName);
-		attachment.setLocalFileName(localFileName);
-		attachment.setIdAttachment(id);
-		attachment.setComment(comment);
-		attachment.setStatus(status);
-		attachment.setUploadDate(date);
+		if(!fileName.isEmpty()){
+			attachment = new Attachment();
+			Date date = getUploadDate(values[1]);
+			String comment = values[2];
+			int id = getId(values[3]);
+			Status status = getStatus(values[4]);
+			String localFileName = values[5] + fileName;
+			
+			attachment.setFileName(fileName);
+			attachment.setLocalFileName(localFileName);
+			attachment.setIdAttachment(id);
+			attachment.setComment(comment);
+			attachment.setStatus(status);
+			attachment.setUploadDate(date);
+		}
+		return attachment;
 	}
 	
 	private Date getUploadDate(String stringDate){
@@ -153,7 +157,7 @@ public class ContactRequestParser {
 	}
 	
 	private int getId(String stringId){
-		int id;
+		//int id;
 		return Integer.parseInt(stringId);
 	}
 	

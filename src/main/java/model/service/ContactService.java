@@ -16,10 +16,12 @@ import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 import constants.ExceptionMessages;
+import constants.Status;
 import constants.database.DatabaseConstants;
 import exceptioin.ContactCreationFailedException;
 import exceptioin.ContactDelitionFailedException;
 import exceptioin.ContactReadFailedException;
+import exceptioin.ContactUpdateFailed;
 import exceptioin.EmailReadFailedException;
 import exceptioin.ServiceException;
 import model.ContactTransferObject;
@@ -108,16 +110,21 @@ public class ContactService {
 		}	
 	}
 	
-	public void updateContact(Contact contact){
+	public void updateContact(Contact contact) throws ContactUpdateFailed{
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();
 			connection.setAutoCommit(false);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			personService.updatePerson(contact.getPerson(), connection);
+			addressService.updatePersonAddress(contact.getAddress(), contact.getPersonId(), connection);
+			processPhones(contact, connection);
+			processAttachments(contact, connection);
+			connection.commit();
+		} catch (SQLException | ServiceException e) {
+			throw new ContactUpdateFailed(" Unable to update contcat " + e.getMessage());
+		} finally {
+			closeConnection(connection);
 		}
-		
 	}
 	
 	public void deleteContact(int idPerson) throws ContactDelitionFailedException{
@@ -198,6 +205,48 @@ public class ContactService {
 		}
 	}
 
+	private void processAttachments(Contact contact, Connection connection)
+			throws ServiceException {
+		for(Attachment attach : contact.getAttachments()){
+			Status status = attach.getStatus();
+			switch(status){
+				case DELETED:{
+					attachmentService.deleteAttachment(attach.getIdAttachment(), connection);
+					break;
+				}
+				case CREATED: {
+					attachmentService.createAttachment(attach, contact.getPersonId(), connection);
+					break;
+				}
+				case UPDATED: {
+					attachmentService.updateAttachment(attach, connection);
+					break;
+				}
+			}
+		}
+	}
+
+	private void processPhones(Contact contact, Connection connection) throws ServiceException {
+		for(Phone phone : contact.getPhones()){
+			Status status = phone.getStatus();
+			System.out.println(status.getValue());
+			switch(status){
+				case DELETED: {
+					phoneService.deletePhone(phone.getPhoneId(), connection);
+					break;
+				}
+				case CREATED:{
+					phoneService.createPhone(phone, contact.getPersonId(), connection);
+					break;
+				}
+				case UPDATED:{
+					phoneService.updatePhone(phone, connection);
+					break;
+				}
+			}
+		}
+	}
+	
 	private ContactTransferObject buildResult(Connection connection, List<Contact> contactList,
 			List<Person> persons, int count) throws ServiceException {
 		ContactTransferObject result = new ContactTransferObject();

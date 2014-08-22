@@ -129,6 +129,21 @@ public class DefaultPersonDao implements PersonDao{
 		return person;
 	}
 	
+	@Override
+	public void updatePerson(Person person) throws DataAccessException {
+		PreparedStatement updatePersonStatement = null;
+		try {
+			updatePersonStatement = connection.prepareStatement(SQLQuery.UPDATE_PERSON.getValue());
+			buildUpdateStatement(person, updatePersonStatement);
+			updatePersonStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(updatePersonStatement);
+		}
+		
+	}
+
 	public List<Person> getPersons(int first, int count) throws DataAccessException{	
 		PreparedStatement getAllPersonStatement = null;
 		try {
@@ -165,6 +180,23 @@ public class DefaultPersonDao implements PersonDao{
 		}
 		return result;
 	}
+	
+	private void buildUpdateStatement(Person person,
+			PreparedStatement updatePersonStatement) throws SQLException {
+		Date date = new Date(person.getDateOfBirth().getTime());	
+		updatePersonStatement.setString(1, person.getFirstName());
+		updatePersonStatement.setString(2, person.getSecondName());
+		updatePersonStatement.setString(3, person.getPatronymicName());
+		updatePersonStatement.setDate(4, date);
+		updatePersonStatement.setString(5, person.getMaritalStatus().getValue());
+		updatePersonStatement.setString(6, person.getGender().getValue());
+		updatePersonStatement.setString(7, person.getCitizenship());
+		updatePersonStatement.setString(8, person.getWebSite());
+		updatePersonStatement.setString(9, person.getEmail());
+		updatePersonStatement.setString(10, person.getWorkplace());
+		updatePersonStatement.setInt(11, person.getIdPerson());
+	}
+	
 
 	private void setPersonDateOfBirth(ResultSet set, Person person) throws SQLException {
 		java.sql.Date dateOfBirth = set.getDate(PersonColumnNames.dateOfBirth);
@@ -199,12 +231,6 @@ public class DefaultPersonDao implements PersonDao{
 		createPersonStatement.setString(10, person.getWorkplace());
 	}
 
-	@Override
-	public void updatePerson(Person person) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void setConnection(Connection connection){
 		this.connection = connection;
 	}

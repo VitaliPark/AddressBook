@@ -59,8 +59,28 @@ public class DefaultAddressDao implements AddressDao{
 	}
 	
 	@Override
-	public void updateAddress(Address address, int personid) {
-		PreparedStatement updateAddress = null;
+	public void updateAddress(Address address, int personid) throws DataAccessException{
+		PreparedStatement updateAddressStatement = null;
+		try {
+			updateAddressStatement = connection.prepareStatement(SQLQuery.UPDATE_ADDRESS.getValue());
+			buildUpdateStetement(address, personid,updateAddressStatement);
+			updateAddressStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DataAccessException(e.getMessage());
+		} finally {
+			closeStatement(updateAddressStatement);
+		}
+	}
+
+	private void buildUpdateStetement(Address address, int idPerson, 
+			PreparedStatement updateAddressStatement) throws SQLException {
+		updateAddressStatement.setString(1, address.getCountry());
+		updateAddressStatement.setString(2, address.getCity());
+		updateAddressStatement.setString(3, address.getStreet());
+		updateAddressStatement.setInt(4, address.getHouseNumber());
+		updateAddressStatement.setInt(5, address.getApartment());
+		updateAddressStatement.setString(6, address.getIndex());
+		updateAddressStatement.setInt(7, idPerson);
 	}
 	
 	private Address buildGetPersonAddress(ResultSet set ) throws SQLException{
@@ -96,7 +116,6 @@ public class DefaultAddressDao implements AddressDao{
 		createAddressStatement.setInt(5, address.getHouseNumber());
 		createAddressStatement.setInt(6, address.getApartment());
 		createAddressStatement.setString(7, address.getIndex());
-		System.out.println(createAddressStatement);
 	}
 
 

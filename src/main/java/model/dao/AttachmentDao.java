@@ -11,5 +11,9 @@ public interface AttachmentDao extends HasConnection{
 	
 	public void deleteContactAttachments(int idPerson) throws DataAccessException;
 	
+	public void deleteAttachment(int attachmentId) throws DataAccessException; 
+	
 	public void createAttachment(Attachment attachment, int idPerson) throws DataAccessException;
+	
+	public void updateAttachment(Attachment attachment) throws DataAccessException;
 }

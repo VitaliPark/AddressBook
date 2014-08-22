@@ -39,6 +39,15 @@ public class PersonService {
 		}
 	}
 	
+	public void updatePerson(Person person, Connection connection) throws ServiceException{
+		personDao.setConnection(connection);
+		try {
+			personDao.updatePerson(person);
+		} catch (DataAccessException e) {
+			throw new ServiceException(ExceptionMessages.PERSON_UPDATE_FAILED + e.getMessage());
+		}
+	}
+	
 	public Person getPerson(int personId, Connection connection) throws ServiceException{
 		personDao.setConnection(connection);
 		try {
