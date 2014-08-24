@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import constants.database.AddressColumnNames;
 import constants.database.PersonColumnNames;
 import constants.database.SQLQuery;
@@ -23,6 +25,7 @@ import model.entity.Person;
 public class DefaultSearchDao implements SearchDao{
 
 	private Connection connection;
+	private Logger LOGGER = Logger.getLogger(DefaultSearchDao.class);
 	
 	@Override
 	public List<Contact> search(SearchRequest searchRequest, int first, int maxCount)throws DataAccessException {
@@ -35,6 +38,7 @@ public class DefaultSearchDao implements SearchDao{
 			ResultSet set = searchStatement.executeQuery();
 			return buildResult(set);
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(searchStatement);
@@ -57,6 +61,7 @@ public class DefaultSearchDao implements SearchDao{
 			}
 			return count;
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(countStatement);
@@ -152,6 +157,8 @@ public class DefaultSearchDao implements SearchDao{
 			if(createPersonStatement != null){
 				createPersonStatement.close();
 			}
-		} catch (SQLException e) {}
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+		}
 	}
 }

@@ -41,6 +41,41 @@
 
         },
 
+        submitImage: function (){
+            var imageId = document.getElementById("imageId").innerHTML.toString();
+            var status = "created";
+            if(imageId != null && imageId.length != 0){
+                status = "updated";
+            }
+
+            var mainFormImageFileInput = document.getElementById("mainFormImageFileInput");
+            var mainForm = document.getElementById("mainForm");
+            if(mainFormImageFileInput != null){
+                var parent = mainFormImageFileInput.parentNode;
+                parent.removeChild(mainFormImageFileInput);
+            }
+            var popupImageInput = document.getElementById("imageChooser");
+            var newImageFileInput = popupImageInput.cloneNode();
+            popupImageInput.id = "mainFormImageFileInput";
+            var timeStamp = getTimeStamp();
+            popupImageInput.setAttribute("name", "contact_image" + timeStamp);
+            //popupImageInput.className = 'hidden';
+            switchInputs(newImageFileInput, popupImageInput);
+            mainForm.appendChild(popupImageInput);
+
+            var mainFormImageFileName = document.getElementById("mainFormImageFileName");
+            var imageFileName = document.getElementById("imageFileName");
+            if(mainFormImageFileName == null){
+                mainFormImageFileName = document.createElement("input");
+                mainFormImageFileName.setAttribute("name", "mainFormImageFileName");
+                mainFormImageFileName.id = "mainFormImageFileName";
+                mainFormImageFileName.value = imageFileName.value;
+                mainForm.appendChild(mainFormImageFileName);
+            }
+            mainFormImageFileName.value =  "contact_image" + timeStamp + ";" + imageFileName.value + ";" + status;
+            closeDialog("image");
+        },
+
         // CRUD methods & helpers...
 
         addPhone: function () {
@@ -233,7 +268,7 @@
              var timeStamp = getTimeStamp();
             // fileChooser.id = "attachment" + attachId.innerHTML;
              fileChooser.id = timeStamp;
-             //fileChooser.className = "hidden";
+             fileChooser.className = "hidden";
              //fileChooser.setAttribute("name", "attachment" + attachId.innerHTML);
              fileChooser.setAttribute("name", timeStamp);
 
@@ -321,6 +356,18 @@
     };
 })();
 
+    function showImageDialog(){
+        var element = document.getElementById("imageOverlay");
+        var mainFormImageName = document.getElementById("mainFormImageFileName");
+        var imageFileNameInput = document.getElementById("imageFileName");
+        if(mainFormImageName != null){
+            imageFileNameInput.value = mainFormImageName.value;
+        }
+
+        showElement(element);
+
+    }
+
     function switchInputs(newInput, oldInput){
         oldInput.parentNode.replaceChild(newInput, oldInput);
     }
@@ -342,6 +389,8 @@
                 document.getElementById("attachmentPopup").removeChild(attachTimeStamp);
             }
             document.getElementById("attachmentOverlay").style.visibility = 'hidden';
+        } else if(type == "image"){
+            document.getElementById("imageOverlay").style.visibility = 'hidden';
         }
     }
 
@@ -394,6 +443,8 @@
         showElement(element);
     }
 
+
+
 	function fillPhoneFields(phoneFields){
         document.getElementById("countryCode").value = phoneFields[0];
         document.getElementById("operatorCode").value = phoneFields[1];
@@ -436,15 +487,11 @@
 	    phoneDiv.appendChild(element);
 	}
 
-    function setFileName(fileName){
-        var element = document.getElementById("fileName");
+    function setFileName(fileName, fileNamefield){
+        var element = document.getElementById(fileNamefield);
         var name = fileName;
         var shortName = name.match(/[^\/\\]+$/);
         element.value = shortName;
-    }
-
-    function submitAttachment(){
-
     }
 
     function getCurrentDate(){
@@ -537,6 +584,18 @@
         var time = new Date().getTime();
         var timeStamp = time.toString().slice(0, 10);
         return timeStamp;
+    }
+
+    function formImagePath(localFileName, imageElement){
+        var pathToFile = new String();
+        if(localFileName != null && localFileName.length != 0){
+            pathToFile = "static/images/" + localFileName;
+        }else {
+            pathToFile = "static/images/avatar.jpg";
+        }
+
+        imageElement.setAttribute("src", pathToFile);
+
     }
 
 

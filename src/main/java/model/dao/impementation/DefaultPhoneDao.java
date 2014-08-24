@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import constants.database.PhoneColumnNames;
 import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
@@ -16,6 +18,7 @@ import model.entity.Phone;
 public class DefaultPhoneDao implements PhoneDao{
 
 	private Connection connection;
+	private Logger LOGGER = Logger.getLogger(DefaultPhoneDao.class);
 	
 	@Override
 	public void createPhone(Phone phone, int idPerson) throws DataAccessException{
@@ -25,6 +28,7 @@ public class DefaultPhoneDao implements PhoneDao{
 			buildCreatePhoneStatement(phone, idPerson, createPhoneStatement);
 			createPhoneStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(createPhoneStatement);
@@ -39,6 +43,7 @@ public class DefaultPhoneDao implements PhoneDao{
 			buildUpdateStatement(phone, updatePhoneStatement);
 			updatePhoneStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(updatePhoneStatement);
@@ -53,6 +58,7 @@ public class DefaultPhoneDao implements PhoneDao{
 			deletePhoneStatement.setInt(1, phoneId);
 			deletePhoneStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deletePhoneStatement);
@@ -77,6 +83,7 @@ public class DefaultPhoneDao implements PhoneDao{
 			deletePersonPhonesStatement.setInt(1, idPerson);
 			deletePersonPhonesStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deletePersonPhonesStatement);
@@ -89,7 +96,7 @@ public class DefaultPhoneDao implements PhoneDao{
 				statement.close();
 			}
 		} catch (SQLException e) {
-			//TODO logger
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -112,6 +119,7 @@ public class DefaultPhoneDao implements PhoneDao{
 			ResultSet set = getPhoneStatement.executeQuery();
 			return buildGetPersonPhone(set);
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(getPhoneStatement);

@@ -3,22 +3,20 @@ package controller.command;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import model.ContactRequestParser;
 import model.DefaultParameterContainer;
 import model.ParameterContainer;
+import model.ValidationObject;
 import model.entity.Contact;
-import model.entity.Phone;
 import model.service.ContactService;
-
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
+import org.apache.log4j.Logger;
+import constants.ExceptionMessages;
+import constants.Pages;
 import constants.StringConstants;
 import constants.database.PersonColumnNames;
 import exceptioin.ContactCreationFailedException;
@@ -30,8 +28,10 @@ public class UpdateContactCommand implements Command{
 	private ContactService contactService;
 	private HttpServletRequest request;
 	private ServletFileUpload servletFileUpload;
-	private String repositoryPath;
 	private String uploadPath;
+	private String resultPage;
+	
+	private Logger LOGGER = Logger.getLogger(UpdateContactCommand.class);
 	
 	public UpdateContactCommand(HttpServletRequest request, ContactService service) {
 		super();
@@ -42,7 +42,6 @@ public class UpdateContactCommand implements Command{
 	@Override
 	public void execute() {
 		if (ServletFileUpload.isMultipartContent(request)) {
-			System.out.println("MultipartRequest");
 			processMultipartRequest(request);
 		}
 	}
@@ -59,7 +58,6 @@ public class UpdateContactCommand implements Command{
 	
 	private void initFileUpload() {
 		ServletContext context = request.getSession().getServletContext();
-		repositoryPath = context.getInitParameter("tempFolder");
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 		servletFileUpload = new ServletFileUpload(factory);
@@ -79,16 +77,13 @@ public class UpdateContactCommand implements Command{
 			Contact contact = parser.parseContactRequest(parameterContainer);
 			storeFiles(files);
 			contactService.createContact(contact);
-		} catch (FileUploadException e) {
-			e.printStackTrace();
-		} catch (ContactValidationException e) {
-			e.printStackTrace();
+			proccesSuccessfullUpdate("Контакт успешно создан");
+		}  catch (ContactValidationException e) {
+			proccessVaidationError(e.getValidationObject());
 		} catch (ContactCreationFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessError(ExceptionMessages.CONTACT_CREATION_FAILED);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessFileError("Unable to store files");
 		}
 	}
 	
@@ -103,18 +98,43 @@ public class UpdateContactCommand implements Command{
 			contact.getPerson().setIdPerson(contactId);
 			storeFiles(files);
 			contactService.updateContact(contact);
-		} catch (FileUploadException e) {
-			e.printStackTrace();
+			proccesSuccessfullUpdate("Контакт успешно обновлён");
 		} catch (ContactValidationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessVaidationError(e.getValidationObject());
 		} catch (ContactUpdateFailed e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessError(ExceptionMessages.CONTACT_UPDATE_FAILED);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessFileError("Unable to store files");
 		}
+	}
+	
+	private void proccesSuccessfullUpdate(String message){
+		Command updateCommand = new ShowContactPageCommand(contactService, request);
+		updateCommand.execute();
+		request.setAttribute("result", message);
+		resultPage = updateCommand.getResultPage();
+	}
+	
+	private void proccessError(String message){
+		resultPage = Pages.ERROR_PAGE;
+		request.setAttribute(StringConstants.ERROR_MESSAGE, message);
+		LOGGER.error(message);
+	}
+	
+	private void proccessVaidationError(ValidationObject result){
+		LOGGER.error("Field validation failed");
+		Command command = new ShowContactPageCommand(contactService, request);
+		command.execute();
+		request.setAttribute("result", "Validation failed, wrong fields: " + result.toString());
+		resultPage = command.getResultPage();
+	}
+	
+	private void proccessFileError(String message){
+		LOGGER.error(message);
+		Command command = new ShowContactPageCommand(contactService, request);
+		command.execute();
+		request.setAttribute("result", message);
+		resultPage = command.getResultPage();
 	}
 	
 	private List<FileItem> getFiles(List<FileItem> items){
@@ -130,7 +150,7 @@ public class UpdateContactCommand implements Command{
 	private void storeFiles(List<FileItem> files) throws Exception{
 		
 		for(FileItem file : files){
-			if(StringConstants.IMAGE_FIELD.equals(file.getFieldName())){
+			if(file.getFieldName().contains(StringConstants.IMAGE_FIELD)){
 				storeContactImage(file);
 			} else {
 				storeAttachment(file);
@@ -140,23 +160,30 @@ public class UpdateContactCommand implements Command{
 	
 	private void storeAttachment(FileItem attachment) throws Exception{
 		String filePath = generateAttahmentPath(attachment);
-		File destination = new File(filePath);
-		attachment.write(destination);
+		if(filePath != null){
+			File destination = new File(filePath);
+			attachment.write(destination);
+		}
 	}
 	
 	private void storeContactImage(FileItem imageFile) throws Exception{
 		
 		String imageFilePath = generateImageFilePath(imageFile);
-		File destination = new File(imageFilePath);
-		imageFile.write(destination);
+		if(imageFilePath != null){
+			File destination = new File(imageFilePath);
+			imageFile.write(destination);
+		}
 	}
 	
 	private String generateAttahmentPath(FileItem attachment){
-		StringBuilder builder = new StringBuilder();
-		builder.append(uploadPath).append("/").append(StringConstants.ATTACHMENT_FOLDER);
-		checkIfExists(builder.toString());
-		builder.append("/").append(attachment.getFieldName()).append(attachment.getName());
-		return builder.toString();
+		if(!attachment.getName().isEmpty()){
+			StringBuilder builder = new StringBuilder();
+			builder.append(uploadPath).append("/").append(StringConstants.ATTACHMENT_FOLDER);
+			checkIfExists(builder.toString());
+			builder.append("/").append(attachment.getFieldName()).append(attachment.getName());
+			return builder.toString();
+		}
+		return null;
 	}
 	private void checkIfExists(String filePath){
 		File file = new File(filePath);
@@ -166,17 +193,19 @@ public class UpdateContactCommand implements Command{
 	}
 	
 	private String generateImageFilePath(FileItem imageFile){
-		StringBuilder builder = new StringBuilder();
-		builder.append(uploadPath).append("/").append(StringConstants.IMAGE_FOLDER);
-		checkIfExists(builder.toString());
-		builder.append("/").append(imageFile.getFieldName()).append(imageFile.getName());
-		return builder.toString();
+		if(!imageFile.getName().isEmpty()){
+			StringBuilder builder = new StringBuilder();
+			builder.append(uploadPath).append("/").append(StringConstants.IMAGE_FOLDER);
+			checkIfExists(builder.toString());
+			builder.append("/").append(imageFile.getFieldName()).append(imageFile.getName());
+			return builder.toString();
+		}
+		return null;
 	}
 
 	@Override
 	public String getResultPage() {
-		// TODO Auto-generated method stub
-		return null;
+		return resultPage;
 	}
 
 }

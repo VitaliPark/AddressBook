@@ -1,10 +1,11 @@
 package controller.command;
 
-import java.net.HttpRetryException;
-
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import constants.DefaultValues;
+import constants.ExceptionMessages;
 import constants.Pages;
 import controller.PageDrawer;
 import exceptioin.ContactReadFailedException;
@@ -18,9 +19,10 @@ import model.service.ContactService;
 
 public class SearchCommand implements Command{
 
-	private String resultString;
+	private String resultPage;
 	private HttpServletRequest request;
 	private ContactService contactService;
+	private Logger LOGGER = Logger.getLogger(SearchCommand.class);
 	
 	public SearchCommand(HttpServletRequest request, ContactService searchService) {
 		super();
@@ -30,10 +32,10 @@ public class SearchCommand implements Command{
 
 	@Override
 	public void execute() {
+		LOGGER.info("Requested command 'Search contacts'");
 		SearchRequest searchRequest = getSearchRequest(request);
 		Validator validator = new Validator();
 		ValidationObject validationResult = validator.validateSearchRequest(searchRequest);
-		System.out.println(validationResult.toString());
 		if(!validationResult.isEmpty()){
 			processValidationFailure(validationResult);
 		}
@@ -44,11 +46,12 @@ public class SearchCommand implements Command{
 
 	@Override
 	public String getResultPage() {
-		return resultString;
+		return resultPage;
 	}
 	
 	private void processValidationFailure(ValidationObject result){
-		System.out.println("ValidationFailed");
+		LOGGER.error("Validation failed: wrong fields:"  + result.toString());
+		proccessVaidationError(result);
 	}
 
 	private void processSearchRequest(SearchRequest searchRequest){
@@ -61,11 +64,24 @@ public class SearchCommand implements Command{
 			request.setAttribute("currentPage", currentPage);
 			setSearchRequestInfo(request, searchRequest);
 			setPagerProperties(request, currentPage, count);
-			resultString = Pages.SEARCH_RESULT;
+			resultPage = Pages.SEARCH_RESULT;
 		} catch (ContactReadFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessError(e.getMessage());
 		}
+	}
+	
+	private void proccessError(String message){
+		resultPage = Pages.ERROR_PAGE;
+		request.setAttribute("errorMessage", ExceptionMessages.CONTACT_READ_FAILED);
+		LOGGER.error(message);
+	}
+	
+	private void proccessVaidationError(ValidationObject result){
+		LOGGER.error("Field validation failed");
+		Command command = new ShowSearchPageCommand();
+		command.execute();
+		request.setAttribute("result", "Validation failed, wrong fields:" + result.toString());
+		resultPage = command.getResultPage();
 	}
 	
 	private void setSearchRequestInfo(HttpServletRequest request, SearchRequest searchRequest){
@@ -78,11 +94,9 @@ public class SearchCommand implements Command{
 		SearchRequest searchRequest = null;
 		String searchId = request.getParameter("requestId");
 		if(searchId != null && !searchId.isEmpty()){
-			System.out.println("we got it");
 			searchRequest = (SearchRequest) request.getSession().getAttribute(searchId);
 			return searchRequest;
 		} else {
-			System.out.println("we dont have it");
 			return SearchRequestParser.INSTANCE.parseSearchRequest(request);
 		}
 	}

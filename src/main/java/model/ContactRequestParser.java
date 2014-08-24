@@ -17,6 +17,7 @@ import model.entity.Address;
 import model.entity.Attachment;
 import model.entity.Contact;
 import model.entity.Gender;
+import model.entity.Image;
 import model.entity.MaritalStatus;
 import model.entity.Person;
 import model.entity.Phone;
@@ -35,11 +36,13 @@ public class ContactRequestParser {
 		Contact contact = new Contact();
 		Person person = formPerson(container);
 		Address address = formAddress(container);
-		contact.setPerson(person);
-		contact.setAddress(address);
+		Image image = formImage(container);
 		List<Phone> phones = parsePhones(container);
 		List<Attachment> attachments = parseAttachments(container);
+		contact.setPerson(person);
+		contact.setAddress(address);
 		contact.setPhoneList(phones);
+		contact.setImage(image);
 		contact.setAttachmentList(attachments);
 		if(!validationObject.isEmpty()){
 			System.out.println(validationObject.toString());
@@ -71,8 +74,31 @@ public class ContactRequestParser {
 				}
 			}
 		}
-
 		return attachments;
+	}
+	
+	public Image formImage(ParameterContainer container){
+		Image image = null;
+		String imageProperties = container.getParameter("mainFormImageFileName");
+		if(imageProperties != null && !imageProperties.isEmpty()){
+			String [] values = imageProperties.split(StringConstants.SEMICOLON);
+			image = parseImage(values);
+		}
+		return image;
+	}
+	
+	private Image parseImage(String values[]){
+		Image image = null;
+		String fileName = values[1];
+		if(fileName != null && !fileName.isEmpty()){
+			image = new Image();
+			String localFileName = values[0] + fileName;
+			Status status = getStatus(values[2]);
+			image.setFileName(fileName);
+			image.setLocalFileName(localFileName);
+			image.setStatus(status);
+		}
+		return image;
 	}
 	
 	private Attachment parseAttachmentInput(String inputValue){
@@ -143,6 +169,7 @@ public class ContactRequestParser {
 	}
 	
 	private int getCountryCode(String stringCode){
+		System.out.println(stringCode);
 		int countryCode;
 		if(!fieldValidator.validateNumber(stringCode)){
 			validationObject.addWrongField(SearchCriteria.COUNTRY_CODE);

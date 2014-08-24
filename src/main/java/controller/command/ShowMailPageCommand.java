@@ -5,7 +5,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
+import constants.ExceptionMessages;
 import constants.Pages;
+import constants.StringConstants;
 import exceptioin.EmailReadFailedException;
 import model.service.ContactService;
 
@@ -14,6 +18,7 @@ public class ShowMailPageCommand implements Command{
 	private String resultPage;
 	private HttpServletRequest request;
 	private ContactService contactService;
+	private Logger LOGGER = Logger.getLogger(ShowMailPageCommand.class);
 	
 	public ShowMailPageCommand(HttpServletRequest request,
 			ContactService contactService) {
@@ -23,11 +28,11 @@ public class ShowMailPageCommand implements Command{
 
 	@Override
 	public void execute() {
+		LOGGER.info("Command requested 'ShowMailCommand'");
 		String [] contactId = request.getParameterValues("contactId");
 		List<String> emails = new ArrayList<>();
 		int id;
 		String email;
-		System.out.println("SHOW Mail");
 		try {
 			for(int i = 0; i < contactId.length; i++){
 				id = Integer.parseInt(contactId[i]);
@@ -36,9 +41,14 @@ public class ShowMailPageCommand implements Command{
 			}
 			setRequestData(emails);
 		} catch (EmailReadFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessError(e.getMessage());
 		}
+	}
+	
+	private void proccessError(String message){
+		resultPage = Pages.ERROR_PAGE;
+		request.setAttribute(StringConstants.ERROR_MESSAGE, ExceptionMessages.EMAIL_READ_FAILED);
+		LOGGER.error(message);
 	}
 	
 	private String listToString(List<String> emails){

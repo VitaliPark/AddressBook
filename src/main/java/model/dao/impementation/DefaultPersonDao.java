@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import constants.StringConstants;
 import constants.database.PersonColumnNames;
 import constants.database.SQLQuery;
@@ -22,7 +24,7 @@ import model.entity.Person;
 public class DefaultPersonDao implements PersonDao{
 
 	private Connection connection;
-	//private String query = "SELECT * FROM contacts.person WHERE (idPerson LIKE ? OR ? IS NULL) AND (secondName LIKE ? OR ? IS NULL)";
+	private Logger LOGGER = Logger.getLogger(DefaultPersonDao.class);
 	
 	@Override
 	public int createPerson(Person person) throws DataAccessException {
@@ -39,6 +41,7 @@ public class DefaultPersonDao implements PersonDao{
 				throw new DataAccessException();
 			}
 		} catch (SQLException e){			
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(createPersonStatement);
@@ -53,6 +56,7 @@ public class DefaultPersonDao implements PersonDao{
 			deletePersonStatement.setInt(1, idPerson);
 			deletePersonStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deletePersonStatement);
@@ -71,6 +75,7 @@ public class DefaultPersonDao implements PersonDao{
 			}
 			return email;
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		}
 	}
@@ -85,6 +90,7 @@ public class DefaultPersonDao implements PersonDao{
 			return buildGetPersonResult(set);
 			
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(getPersonStatement);
@@ -103,6 +109,7 @@ public class DefaultPersonDao implements PersonDao{
 			}
 			return count;
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(getPersonCount);
@@ -137,6 +144,7 @@ public class DefaultPersonDao implements PersonDao{
 			buildUpdateStatement(person, updatePersonStatement);
 			updatePersonStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(updatePersonStatement);
@@ -153,6 +161,7 @@ public class DefaultPersonDao implements PersonDao{
 			ResultSet set = getAllPersonStatement.executeQuery();
 			return buildAllPersonResult(set);
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(getAllPersonStatement);
@@ -212,7 +221,7 @@ public class DefaultPersonDao implements PersonDao{
 			if(createPersonStatement != null){
 				createPersonStatement.close();
 			}
-		} catch (SQLException e) {}
+		} catch (SQLException e) {LOGGER.error(e.getMessage());}
 	}
 	
 
@@ -250,6 +259,7 @@ public class DefaultPersonDao implements PersonDao{
 			ResultSet set = getPersonsStatement.executeQuery();
 			return buildAllPersonResult(set);
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(getPersonsStatement);

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import constants.database.AttachmentColumnNames;
 import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
@@ -17,6 +19,7 @@ import model.entity.Attachment;
 public class DefaultAttachmentDao implements AttachmentDao{
 
 	private Connection connection;
+	private Logger LOGGER = Logger.getLogger(DefaultAttachmentDao.class);
 	
 	@Override
 	public void setConnection(Connection connection) {
@@ -32,6 +35,7 @@ public class DefaultAttachmentDao implements AttachmentDao{
 			ResultSet set = getAttachmentStatement.executeQuery();
 			return buildGetPersonAttachments(set);
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(getAttachmentStatement);
@@ -46,6 +50,7 @@ public class DefaultAttachmentDao implements AttachmentDao{
 			deletePersonAttachments.setInt(1, idPerson);
 			deletePersonAttachments.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally{
 			closeStatement(deletePersonAttachments);
@@ -60,6 +65,7 @@ public class DefaultAttachmentDao implements AttachmentDao{
 					createAttachmentStatement);
 			createAttachmentStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(createAttachmentStatement);
@@ -74,6 +80,7 @@ public class DefaultAttachmentDao implements AttachmentDao{
 			buildUpdateStatement(attachment, updateAttachmentStatement);
 			updateAttachmentStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(updateAttachmentStatement);
@@ -87,6 +94,7 @@ public class DefaultAttachmentDao implements AttachmentDao{
 			deleteAttachmentStatement.setInt(1, attachmentId);
 			deleteAttachmentStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deleteAttachmentStatement);
@@ -144,6 +152,8 @@ public class DefaultAttachmentDao implements AttachmentDao{
 			if(statement != null){
 				statement.close();
 			}
-		} catch (SQLException e) {}
+		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
+		}
 	}
 }

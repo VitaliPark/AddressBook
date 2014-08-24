@@ -43,6 +43,12 @@ public enum SQLQuery {
 			AddressColumnNames.postIndex +  " )" +
 	" VALUES(?, ?, ?, ?, ?, ?, ?)"),
 	
+	CREATE_IMAGE("INSERT INTO " + TableNames.databaseName + "." + TableNames.imageTable + 
+			"(" + PersonColumnNames.idPerson + "," + 
+			ImageColumnNames.fileName + "," + 
+			ImageColumnNames.localFileName + ")" +
+	" VALUES(?,?,?)"),
+	
 	UPDATE_PERSON("UPDATE " + TableNames.databaseName + "." + TableNames.personTable + 
 			" SET " + PersonColumnNames.firstName + " = ?," +
 			PersonColumnNames.secondName + "=?," + 
@@ -63,6 +69,11 @@ public enum SQLQuery {
 			AddressColumnNames.houseNumber + "=?," +
 			AddressColumnNames.apartment + "=?," +
 			AddressColumnNames.postIndex + "=?" + 
+	" WHERE " + PersonColumnNames.idPerson + "=?"),
+	
+	UPDATE_IMAGE("UPDATE " + TableNames.databaseName + "." + TableNames.imageTable + 
+			" SET " + ImageColumnNames.fileName + " = ?," +
+			ImageColumnNames.localFileName + "=?" + 
 	" WHERE " + PersonColumnNames.idPerson + "=?"),
 	
 	UPDATE_PHONE("UPDATE " + TableNames.databaseName + "." + TableNames.phoneTable + 
@@ -97,6 +108,9 @@ public enum SQLQuery {
 			
 	DELETE_PERSON_ADDRESS("DELETE FROM " + TableNames.databaseName + "." + TableNames.addressTable +
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+			
+	DELETE_PERSON_IMAGE("DELETE FROM " + TableNames.databaseName + "." + TableNames.imageTable +
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),			
 	
 	GET_PERSONS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable +
 			" LIMIT ?, ?"),
@@ -111,6 +125,9 @@ public enum SQLQuery {
 			
     GET_PERSON_ATTACHMENTS("SELECT * FROM " + TableNames.databaseName + "." + TableNames.attachmentTable + 
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),
+			
+	GET_PERSON_IMAGE("SELECT * FROM " + TableNames.databaseName + "." + TableNames.imageTable + 
+			" WHERE " + PersonColumnNames.idPerson + "= ?"),		
 	
 	GET_PERSON("SELECT * FROM " + TableNames.databaseName + "." + TableNames.personTable + 
 			" WHERE " + PersonColumnNames.idPerson + "= ?"),

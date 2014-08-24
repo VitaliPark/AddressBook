@@ -11,12 +11,14 @@ public class Contact {
 
 	private Person person;
 	private Address address;
+	private Image image;
 	private List<Phone> phones;
 	private List<Attachment> attachments;
 	
 	public Contact() {
 		phones = new ArrayList<>();
 		attachments = new ArrayList<>();
+		image = null;
 	}
 
 	public Person getPerson(){
@@ -76,4 +78,14 @@ public class Contact {
 	public void setAttachmentList(List<Attachment> attachments){
 		this.attachments = attachments;
 	}
+
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+	
+	
 }

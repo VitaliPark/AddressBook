@@ -9,6 +9,12 @@ window.onload = function () {
     document.body.onclick = select;
 };
 
+function checkForResult(flag){
+    if(flag != null && flag.length != 0){
+        alert(flag.toString());
+    }
+}
+
 function switchPage(currentPage, path, type){
     var form = document.createElement("form");
     form.setAttribute("method", "post");

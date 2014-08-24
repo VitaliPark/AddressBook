@@ -1,5 +1,6 @@
 package controller.command;
 
+import org.apache.log4j.Logger;
 import org.quartz.DateBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -18,6 +19,7 @@ public class SheduleMailCommand implements Command{
 
 	private MailService mailService;
 	private ContactService contactService;
+	private Logger LOGGER = Logger.getLogger(SheduleMailCommand.class);
 	
 	public SheduleMailCommand(MailService mailService,
 			ContactService contactService) {
@@ -46,7 +48,7 @@ public class SheduleMailCommand implements Command{
 			scheduler.start();
 			scheduler.scheduleJob(job, trigger);
 		} catch (SchedulerException e) {
-			e.printStackTrace();
+			LOGGER.error("Scheduler error:" + e.getMessage());
 		}
 	}
 

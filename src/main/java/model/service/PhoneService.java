@@ -3,6 +3,8 @@ package model.service;
 import java.sql.Connection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import constants.ExceptionMessages;
 import exceptioin.DataAccessException;
 import exceptioin.ServiceException;
@@ -14,6 +16,7 @@ import model.entity.Phone;
 public class PhoneService {
 
 	private PhoneDao phoneDao;
+	private Logger LOGGER = Logger.getLogger(PhoneService.class);
 
 	public PhoneService() {
 		phoneDao = new DefaultPhoneDao();
@@ -24,6 +27,7 @@ public class PhoneService {
 		try {
 			phoneDao.createPhone(phone, personId);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.PHONE_CREATION_FAILED);
 			throw new ServiceException(ExceptionMessages.PHONE_CREATION_FAILED + e.getMessage());
 		}
 	}
@@ -33,6 +37,7 @@ public class PhoneService {
 		try {
 			phoneDao.updatePhone(phone);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.PHONE_UPDATE_FAILED);
 			throw new ServiceException(ExceptionMessages.PERSON_UPDATE_FAILED + e.getMessage());
 		} 
 	}
@@ -44,6 +49,7 @@ public class PhoneService {
 			try {
 				phoneDao.createPhone(phone, newContact.getPerson().getIdPerson());
 			} catch (DataAccessException e) {
+				LOGGER.error(ExceptionMessages.PHONE_CREATION_FAILED);
 				throw new ServiceException(ExceptionMessages.PHONE_CREATION_FAILED + e.getMessage());
 			}
 		}
@@ -54,6 +60,7 @@ public class PhoneService {
 		try {
 			phoneDao.deletePersonPhones(idPerson);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.PHONE_DELETION_FAILED);
 			throw new ServiceException(ExceptionMessages.PHONE_DELETION_FAILED + e.getMessage());
 		}
 	}
@@ -63,6 +70,7 @@ public class PhoneService {
 		try {
 			phoneDao.deletePhone(phoneId);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.PHONE_DELETION_FAILED);
 			throw new ServiceException(ExceptionMessages.PHONE_DELETION_FAILED + e.getMessage());
 		}
 	}
@@ -72,6 +80,7 @@ public class PhoneService {
 		try {		
 		  return phoneDao.getPersonPhones(personId);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.PHONE_READ_FAILED);
 			throw new ServiceException(ExceptionMessages.PHONE_READ_FAILED + e.getMessage());
 		}	
 	}

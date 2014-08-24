@@ -11,4 +11,6 @@ public class TableNames {
 	public static final String addressTable = "address";
 	
 	public static final String attachmentTable = "attachment";
+	
+	public static final String imageTable = "image";
 }

@@ -24,7 +24,7 @@ public class ValidationObject {
 		StringBuilder builder = new StringBuilder();
 		for(SearchCriteria criteria : wrongFields){
 			builder.append(criteria.getValue());
-			builder.append("\n");
+			builder.append(", ");
 		}
 		return builder.toString();
 	}

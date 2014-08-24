@@ -2,7 +2,10 @@ package controller.command;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import constants.DefaultValues;
+import constants.ExceptionMessages;
 import constants.Pages;
 import controller.PageDrawer;
 import exceptioin.ContactReadFailedException;
@@ -12,13 +15,15 @@ import model.service.ContactService;
 
 public class GetAllContactsCommand implements Command{
 
+	final static Logger LOGGER = Logger.getLogger(GetAllContactsCommand.class);
 	private ContactService contactService;
 	private HttpServletRequest request;
-	private String resultString;
+	private String resultPage;
 	
 	public GetAllContactsCommand(ContactService contactService, HttpServletRequest request) {
 		this.contactService = contactService;
 		this.request = request;
+		
 	}
 
 	@Override
@@ -28,14 +33,20 @@ public class GetAllContactsCommand implements Command{
 			int first = getFirstRecordNumber(currentPage);
 			ContactTransferObject result = contactService.getContacts(first, DefaultValues.contactsOnPage);
 			int count = result.getNumberOfRecords();
+			LOGGER.info("Requested command 'Get Contacts', page: " + currentPage);
 			request.setAttribute("allContacts", result.getContacts());
 			request.setAttribute("currentPage", currentPage);
 			setPagerProperties(request, currentPage, count);
-			resultString = Pages.INDEX_PAGE;
+			resultPage = Pages.INDEX_PAGE;
 		} catch (ContactReadFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			proccessError(e.getMessage());
 		}
+	}
+	
+	private void proccessError(String message){
+		LOGGER.error(message);
+		request.setAttribute("errorMessage", ExceptionMessages.CONTACT_READ_FAILED);
+		resultPage = Pages.ERROR_PAGE;
 	}
 	
 	private int getFirstRecordNumber(int currentPage){
@@ -61,7 +72,7 @@ public class GetAllContactsCommand implements Command{
 	
 	@Override
 	public String getResultPage() {
-		return resultString;
+		return resultPage;
 	}
 	
 }

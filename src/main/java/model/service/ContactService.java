@@ -15,6 +15,8 @@ import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
 import constants.ExceptionMessages;
 import constants.Status;
 import constants.database.DatabaseConstants;
@@ -29,6 +31,7 @@ import model.SearchRequest;
 import model.entity.Address;
 import model.entity.Attachment;
 import model.entity.Contact;
+import model.entity.Image;
 import model.entity.Person;
 import model.entity.Phone;
 
@@ -41,7 +44,9 @@ public class ContactService {
 	private AddressService addressService;
 	private PersonService personService;
 	private SearchService searchService;
+	private ImageService imageService;
 	private AttachmentService attachmentService;
+	private Logger LOGGER = Logger.getLogger(ContactService.class);
 	
 	public ContactService() {
 		initServices();
@@ -53,6 +58,7 @@ public class ContactService {
 		addressService = new AddressService();
 		personService = new PersonService();
 		attachmentService = new AttachmentService();
+		imageService = new ImageService();
 		searchService = new SearchService();
 	}
 	
@@ -65,9 +71,9 @@ public class ContactService {
 	             throw new ServletException("Couldn't find Datasource");
 	         }
 	     } catch (NamingException e) {
-	            
+	    	 LOGGER.error(e.getMessage());
 	     } catch (ServletException e){
-	        	
+	    	 LOGGER.error(e.getMessage());
 	     }
 	}
 	
@@ -85,6 +91,8 @@ public class ContactService {
 			connection.commit();
 			return searchResult;
 		} catch (SQLException | ServiceException e) {
+			LOGGER.error(e.getMessage());
+			transactionRollback(connection);
 			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
 		} finally {
 			closeConnection(connection);
@@ -100,9 +108,14 @@ public class ContactService {
 			newContact.getPerson().setIdPerson(newId);
 			phoneService.addAllPhones(newContact, connection);
 			attachmentService.addAllAttachments(newContact, connection);
-			addressService.addAddress(newContact, connection);			
+			addressService.addAddress(newContact, connection);	
+			Image image = newContact.getImage();
+			if(image != null){
+				imageService.createImage(image, newContact.getPersonId(), connection);
+			}
 			connection.commit();
 		} catch (ServiceException | SQLException e){
+			LOGGER.error(e.getMessage());
 			transactionRollback(connection);
 			throw new ContactCreationFailedException(ExceptionMessages.CONTACT_CREATION_FAILED + e.getMessage());
 		} finally {
@@ -117,13 +130,35 @@ public class ContactService {
 			connection.setAutoCommit(false);
 			personService.updatePerson(contact.getPerson(), connection);
 			addressService.updatePersonAddress(contact.getAddress(), contact.getPersonId(), connection);
+			processImage(contact, connection);
 			processPhones(contact, connection);
 			processAttachments(contact, connection);
 			connection.commit();
 		} catch (SQLException | ServiceException e) {
+			LOGGER.error(e.getMessage());
+			transactionRollback(connection);
 			throw new ContactUpdateFailed(" Unable to update contcat " + e.getMessage());
 		} finally {
 			closeConnection(connection);
+		}
+	}
+
+	@SuppressWarnings("incomplete-switch")
+	private void processImage(Contact contact, Connection connection)
+			throws ServiceException {
+		Image image = contact.getImage();
+		if(image != null){
+			Status status = image.getStatus();
+			switch(status){
+				case CREATED: {
+					imageService.createImage(image, contact.getPersonId(), connection);
+					break;
+				}
+				case UPDATED: {
+					imageService.updateImage(image, contact.getPersonId(), connection);
+					break;
+				}
+			}
 		}
 	}
 	
@@ -134,10 +169,12 @@ public class ContactService {
 			connection.setAutoCommit(false);
 			phoneService.deleteAllPersonPhones(idPerson, connection);
 			addressService.deleteAddressByPersonId(idPerson, connection);
-			personService.deletePerson(idPerson, connection);
 			attachmentService.deletePersonAttachments(idPerson, connection);
+			imageService.deletePersonImage(idPerson, connection);
+			personService.deletePerson(idPerson, connection);
 			connection.commit();
 		} catch (ServiceException | SQLException e) {
+			LOGGER.error(e.getMessage());
 			transactionRollback(connection);
 			throw new ContactDelitionFailedException(ExceptionMessages.CONTACT_DELITION_FAILED + e.getMessage());
 		} finally {
@@ -155,13 +192,16 @@ public class ContactService {
 			List<Phone> phones = phoneService.getAllPersonPhones(personId, connection);
 			List<Attachment> attachments = attachmentService.getAllPersonPhones(personId, connection);
 			Address address = addressService.getAddressByPersonId(personId, connection);
+			Image image = imageService.getImage(personId, connection);
 			contact.setPerson(person);
 			contact.setAddress(address);
+			contact.setImage(image);
 			contact.setPhoneList(phones);
 			contact.setAttachmentList(attachments);
 			connection.commit();
 			return contact;
 		} catch (ServiceException | SQLException e){
+			LOGGER.error(e.getMessage());
 			transactionRollback(connection);
 			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
 		} finally {
@@ -178,6 +218,8 @@ public class ContactService {
 			connection.commit();
 			return email;
 		} catch (ServiceException | SQLException e) {
+			LOGGER.error(e.getMessage());
+			transactionRollback(connection);
 			throw new EmailReadFailedException(ExceptionMessages.EMAIL_READ_FAILED + e.getMessage());
 		} finally{
 			closeConnection(connection);
@@ -198,6 +240,7 @@ public class ContactService {
 			connection.commit();
 			return result;
 		} catch (ServiceException | SQLException e) {
+			LOGGER.error(e.getMessage());
 			transactionRollback(connection);
 			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
 		} finally {
@@ -225,6 +268,7 @@ public class ContactService {
 			}
 		}
 	}
+	
 
 	private void processPhones(Contact contact, Connection connection) throws ServiceException {
 		for(Phone phone : contact.getPhones()){
@@ -262,6 +306,7 @@ public class ContactService {
 			connection = pool.getConnection();
 			return personService.getPersonsByDate(date, connection);
 		} catch (SQLException | ServiceException e) {
+			LOGGER.error(e.getMessage());
 			throw new ContactReadFailedException(ExceptionMessages.CONTACT_READ_FAILED + e.getMessage());
 		} finally {
 			closeConnection(connection);
@@ -283,11 +328,11 @@ public class ContactService {
 	private void transactionRollback(Connection connection) {
 		if(connection != null){
 			try {
-				System.out.println("rollback");
+				LOGGER.debug("Transaction rollback...");
 				connection.rollback();
-				System.out.println("rollback seccesfull");
+				LOGGER.debug("Transaction rollback successfull");
 			} catch (SQLException e1) {
-				// TODO logger
+				LOGGER.error(e1.getMessage());
 			}
 		}
 	}
@@ -298,7 +343,7 @@ public class ContactService {
 				connection.setAutoCommit(true);
 				connection.close();
 			} catch (SQLException e) {
-				// TODO logger
+				LOGGER.debug(e.getMessage());
 			}
 		}
 	}

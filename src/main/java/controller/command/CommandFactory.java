@@ -27,12 +27,12 @@ public class CommandFactory {
 			case GET_ALL_CONTACTS: 	return new GetAllContactsCommand(contactService, request);
 			case DELETE_CONTACTS: 	return new DeleteContactsCommand(contactService, request);
 			case UPDATE_CONTACT:    return new UpdateContactCommand(request, contactService);
-			case EDIT_CONTACT: 		return new EditContactCommand(contactService, request);
-			case CREATE_CONTACT:	return new EditContactCommand(contactService, request);
+			case EDIT_CONTACT: 		return new ShowContactPageCommand(contactService, request);
+			case CREATE_CONTACT:	return new ShowContactPageCommand(contactService, request);
 			case SEARCH_CONTACTS: 	return new SearchCommand(request, contactService);
 			case SHOW_SEARCH_PAGE:  return new ShowSearchPageCommand();
 			case SHOW_MAIL_PAGE: 	return new ShowMailPageCommand(request, contactService);	
-			case SEND_MAIL: 		return new SendMailCommand(request, mailService);
+			case SEND_MAIL: 		return new SendMailCommand(request, mailService, contactService);
 			case SCHEDULE_MAIL_SEND:return new SheduleMailCommand(mailService, contactService);
 			default: 				return new ErrorCommand();
 		}

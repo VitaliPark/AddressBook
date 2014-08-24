@@ -23,4 +23,6 @@ public class StringConstants {
 	public static final String IMAGE_FOLDER = "images";
 	
 	public static final String IMAGE_FIELD = "contact_image";
+	
+	public static final String ERROR_MESSAGE = "errorMessage";
 }

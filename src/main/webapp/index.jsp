@@ -8,7 +8,7 @@
     <title>index</title>
 </head>
 <body>
-<a href = "index?<%=StringConstants.command %>=<%= CommandTypes.GET_ALL_CONTACTS.getValue() %>">blabla</a>
+<a href = "index?<%=StringConstants.COMMAND %>=<%= CommandTypes.GET_ALL_CONTACTS.getValue() %>">blabla</a>
 <c:redirect url="index?command=getAllContacts"/>
 </body>
 </html>

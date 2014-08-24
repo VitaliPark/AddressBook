@@ -13,7 +13,12 @@
     <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width;">
 </head>
 
-<body>
+<body onLoad="checkForResult('${requestScope.result}')">
+    <c:set var="person" value="${requestScope.contact.getPerson()}" scope="request" />
+    <c:set var="address" value="${requestScope.contact.getAddress()}" scope="request" />
+    <c:set var="gender" value="${requestScope.person.getGender()}" scope="request" />
+    <c:set var="status" value="${requestScope.person.getMaritalStatus()}" scope="request" />
+    <c:set var="image" value="${requestScope.contact.getImage()}" scope="request" />
 <div id="index_wrapper">
 <div class="toolbar">
     <ul>
@@ -28,11 +33,20 @@
     </ul>
 </div>
 
+    <img id = "contactImage" src="
+        <c:choose>
+        <c:when test='${empty requestScope.image}'>
+            static/images/avatar.jpg
+        </c:when>
+        <c:otherwise>
+            static/images/${requestScope.image.getLocalFileName()}
+        </c:otherwise>
+    </c:choose>"
+
+    onclick="showImageDialog()" >
+
 <div class="inputFields">
-    <c:set var="person" value="${requestScope.contact.getPerson()}" scope="request" />
-    <c:set var="address" value="${requestScope.contact.getAddress()}" scope="request" />
-    <c:set var="gender" value="${requestScope.person.getGender()}" scope="request" />
-    <c:set var="status" value="${requestScope.person.getMaritalStatus()}" scope="request" />
+
     <form id="mainForm" enctype="multipart/form-data" action="index?command=updateContact&idPerson=${person.getIdPerson()}" method="post" onsubmit="onMainFormSubmit()">
         <ul>
             <li>
@@ -229,6 +243,27 @@
     <a href='#' onclick='addAttachmentInputToForm()'>Click here to show the overlay</a>
 </div>
 
+<div id="imageOverlay" class = overlay>
+
+    <label id = "imageId"><c:out value="${requestScope.image.getImageId()}"></c:out></label>
+    <div id="imagePopup">
+        <div id="imageTitle" class="popupHeader">Выбор изображения</div>
+        <ui>
+            <li>
+                <label class="inputLabel" for="imageChooser">Выберите файл:</label>
+                <input class="inputField" accept="image/*" type="file" onchange="setFileName(this.value, 'imageFileName')" name="imageChooser" id="imageChooser">
+            </li>
+            <li>
+                <label class="inputLabel" for="imageFileName">Имя файла:</label>
+                <input class="inputField" type="text" name="imageFileName" id="imageFileName">
+            </li>
+        </ui>
+
+        <button type="button" onclick="document.contactController.submitImage()">Применить</button>
+        <button type="button" onclick="closeDialog('image')">Закрыть</button>
+    </div>
+</div>
+
 <div id="phoneOverlay" class="overlay">
     <div id="phonePopup">
         <div id="phoneTitle" class="popupHeader">PhoneDialog</div>
@@ -268,7 +303,7 @@
             <ul>
                 <li>
                     <label class="inputLabel" for="attachChooser">Выберите файл:</label>
-                    <input class="inputField" type="file" onchange="setFileName(this.value)" name="attachChooser" id="attachChooser">
+                    <input class="inputField" type="file" onchange="setFileName(this.value, 'fileName')" name="attachChooser" id="attachChooser">
                 </li>
                 <li>
                     <label class="inputLabel" for="fileName">Имя файла:</label>

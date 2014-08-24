@@ -2,6 +2,9 @@ package model.service;
 
 import java.sql.Connection;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import constants.ExceptionMessages;
 import exceptioin.DataAccessException;
 import exceptioin.ServiceException;
@@ -13,6 +16,7 @@ import model.entity.Contact;
 public class AttachmentService {
 
 	private AttachmentDao attachmentDao;
+	private Logger LOGGER = Logger.getLogger(AttachmentService.class);
 
 	public AttachmentService() {
 		this.attachmentDao = new DefaultAttachmentDao();
@@ -23,6 +27,7 @@ public class AttachmentService {
 		try {
 			attachmentDao.createAttachment(attachment, idPerson);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.ATTACHMENT_CREATION_FAILED);
 			throw new ServiceException(ExceptionMessages.ATTACHMENT_CREATION_FAILED + e.getMessage());
 		}
 	}
@@ -32,6 +37,7 @@ public class AttachmentService {
 		try {
 			attachmentDao.deleteAttachment(attachmentId);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.ATTACHMENT_DELETION_FAILED);
 			throw new ServiceException(ExceptionMessages.ATTACHMENT_DELETION_FAILED + e.getMessage());
 		}
 	}
@@ -41,6 +47,7 @@ public class AttachmentService {
 		try {
 			attachmentDao.updateAttachment(attachment);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.ATTACHMENT_UPDATE_FAILED);
 			throw new ServiceException(ExceptionMessages.ATTACHMENT_UPDATE_FAILED + e.getMessage());
 		}
 	}
@@ -50,6 +57,7 @@ public class AttachmentService {
 		try {		
 		  return attachmentDao.getPersonAttachments(personId);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.ATTACHMENT_READ_FAILED);
 			throw new ServiceException(ExceptionMessages.ATTACHMENT_READ_FAILED + e.getMessage());
 		}	
 	}
@@ -59,6 +67,7 @@ public class AttachmentService {
 		try {
 			attachmentDao.deleteContactAttachments(personId);
 		} catch (DataAccessException e) {
+			LOGGER.error(ExceptionMessages.ATTACHMENT_DELETION_FAILED);
 			throw new ServiceException(ExceptionMessages.ATTACHMENT_DELETION_FAILED + e.getMessage());
 		}
 	}
@@ -69,6 +78,7 @@ public class AttachmentService {
 			try {
 				attachmentDao.createAttachment(attachment, contact.getPersonId());
 			} catch (DataAccessException e) {
+				LOGGER.error(ExceptionMessages.ATTACHMENT_CREATION_FAILED);
 				throw new ServiceException(ExceptionMessages.ATTACHMENT_CREATION_FAILED + e.getMessage());
 			}
 		}

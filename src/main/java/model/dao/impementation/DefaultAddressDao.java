@@ -5,15 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
 import constants.database.AddressColumnNames;
 import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.AddressDao;
 import model.entity.Address;
+import model.service.AddressService;
 
 public class DefaultAddressDao implements AddressDao{
 
 	private Connection connection;
+	private Logger LOGGER = Logger.getLogger(DefaultAddressDao.class);
 	
 	@Override
 	public void createAddress(Address address, int idPerson) throws DataAccessException{
@@ -23,6 +27,7 @@ public class DefaultAddressDao implements AddressDao{
 			buildCreateAddressStatement(address, idPerson, createAddressStatement);
 			createAddressStatement.executeUpdate();
 		} catch (SQLException e){
+			LOGGER.error(e.getMessage());
 				throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(createAddressStatement);
@@ -37,6 +42,7 @@ public class DefaultAddressDao implements AddressDao{
 			deletePersonAddressStatement.setInt(1, idPerson);
 			deletePersonAddressStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(deletePersonAddressStatement);
@@ -52,6 +58,7 @@ public class DefaultAddressDao implements AddressDao{
 			ResultSet set = getPersonAddressStatement.executeQuery();
 			return buildGetPersonAddress(set);
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(getPersonAddressStatement);
@@ -66,6 +73,7 @@ public class DefaultAddressDao implements AddressDao{
 			buildUpdateStetement(address, personid,updateAddressStatement);
 			updateAddressStatement.executeUpdate();
 		} catch (SQLException e) {
+			LOGGER.error(e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		} finally {
 			closeStatement(updateAddressStatement);

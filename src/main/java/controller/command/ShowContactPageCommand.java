@@ -2,19 +2,22 @@ package controller.command;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import model.entity.Contact;
 import model.service.ContactService;
 import constants.Pages;
 import constants.database.PersonColumnNames;
 import exceptioin.ContactReadFailedException;
 
-public class EditContactCommand implements Command{
+public class ShowContactPageCommand implements Command{
 
 	private String resultString;
 	private ContactService contactService;
 	private HttpServletRequest request;
+	private Logger LOGGER = Logger.getLogger(ShowContactPageCommand.class);
 	
-	public EditContactCommand(ContactService contactService,
+	public ShowContactPageCommand(ContactService contactService,
 			HttpServletRequest request) {
 		super();
 		this.contactService = contactService;
@@ -27,18 +30,24 @@ public class EditContactCommand implements Command{
 		String personId = request.getParameter(PersonColumnNames.idPerson);		
 		if(personId != null && !personId.isEmpty()){
 			try {
+				LOGGER.info("Contact info request with id: " + personId);
 				setContactData(personId);
 				resultString = Pages.EDIT_PAGE;
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				proccessError("Wrong contact id");
 			} catch (ContactReadFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				proccessError(e.getMessage());
 			}
 		}
 		else {
 			resultString = Pages.EDIT_PAGE;
 		}
+	}
+	
+	private void proccessError(String message){
+		LOGGER.error(message);
+		request.setAttribute("errorMessage", message);
+		resultString = Pages.ERROR_PAGE;
 	}
 
 	private void setContactData(String personId) throws NumberFormatException, ContactReadFailedException{

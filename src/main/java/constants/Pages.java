@@ -7,4 +7,5 @@ public class Pages {
 	public static final String SEARCH_PAGE = "/pages/search.jsp";
 	public static final String SEARCH_RESULT = "/pages/searchResult.jsp";
 	public static final String EMAIL_PAGE = "/pages/mail.jsp";
+	public static final String ERROR_PAGE = "/pages/error.jsp";
 }

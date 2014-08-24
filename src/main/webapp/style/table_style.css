@@ -359,3 +359,10 @@ a.disabled {
     border-top:3px solid #3B003B;
     border-right:3px solid #3B003B;
 }
+
+#errorMessage {
+    margin-left:100px;
+}
+.errorP{
+    font-size: 20px;
+}

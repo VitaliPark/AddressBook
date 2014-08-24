@@ -1,5 +1,6 @@
 package model.entity;
 
+import constants.DefaultValues;
 import constants.Status;
 import constants.StringConstants;
 
@@ -60,8 +61,12 @@ public class Phone {
 	}
 	public String getFullPhone(){
 		StringBuilder builder = new StringBuilder();
-		builder.append(getCountryCode()); builder.append(StringConstants.PHONE_SEPARATOR);
-		builder.append(getOperatorCode()); builder.append(StringConstants.PHONE_SEPARATOR);
+		if(countryCode != DefaultValues.defaultNumericValue){
+			builder.append(getCountryCode()); builder.append(StringConstants.PHONE_SEPARATOR);
+		}
+		if(operatorCode != DefaultValues.defaultNumericValue){
+			builder.append(getOperatorCode()); builder.append(StringConstants.PHONE_SEPARATOR);
+		}
 		builder.append(getPhoneNumber());
 		return builder.toString();
 	}

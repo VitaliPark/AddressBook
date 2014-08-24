@@ -4,6 +4,8 @@ public class ExceptionMessages {
 
 	public static final String CONTACT_CREATION_FAILED = " Unable to create contact ";
 	
+	public static final String CONTACT_UPDATE_FAILED = " Unable to update contact ";
+	
 	public static final String CONTACT_DELITION_FAILED = " Unable to delete contact ";
 	
 	public static final String CONTACT_READ_FAILED = " Unable to read contact "; 

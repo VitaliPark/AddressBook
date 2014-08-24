@@ -3,6 +3,8 @@ package model.service;
 import java.sql.Connection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import exceptioin.DataAccessException;
 import exceptioin.ServiceException;
 import model.SearchRequest;
@@ -13,6 +15,7 @@ import model.entity.Contact;
 public class SearchService {
 	
 	private SearchDao searchDao;
+	private Logger LOGGER = Logger.getLogger(SearchService.class);
 	
 	public SearchService() {
 		searchDao = new DefaultSearchDao();
@@ -23,6 +26,7 @@ public class SearchService {
 		try {
 			return searchDao.search(request, first, count);
 		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage());
 			throw new ServiceException(e.getMessage());
 		} 
 	}
@@ -32,6 +36,7 @@ public class SearchService {
 		try {
 			return searchDao.getCountOnRequest(searchRequest);
 		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage());
 			throw new ServiceException(e.getMessage());
 		} 
 	}
