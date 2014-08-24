@@ -77,7 +77,7 @@ public class UpdateContactCommand implements Command{
 			Contact contact = parser.parseContactRequest(parameterContainer);
 			storeFiles(files);
 			contactService.createContact(contact);
-			proccesSuccessfullUpdate("Контакт успешно создан");
+			proccesSuccessfullCreation("Контакт успешно создан");
 		}  catch (ContactValidationException e) {
 			proccessVaidationError(e.getValidationObject());
 		} catch (ContactCreationFailedException e) {
@@ -110,6 +110,13 @@ public class UpdateContactCommand implements Command{
 	
 	private void proccesSuccessfullUpdate(String message){
 		Command updateCommand = new ShowContactPageCommand(contactService, request);
+		updateCommand.execute();
+		request.setAttribute("result", message);
+		resultPage = updateCommand.getResultPage();
+	}
+	
+	private void proccesSuccessfullCreation(String message){
+		Command updateCommand = new GetAllContactsCommand(contactService, request);
 		updateCommand.execute();
 		request.setAttribute("result", message);
 		resultPage = updateCommand.getResultPage();

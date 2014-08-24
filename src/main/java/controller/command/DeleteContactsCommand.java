@@ -32,6 +32,7 @@ public class DeleteContactsCommand implements Command{
 			}
 			Command updateCommand = new GetAllContactsCommand(service, request);
 			updateCommand.execute();
+			request.setAttribute("result", "Удаление успешно");
 			resultPage = updateCommand.getResultPage();
 			
 		} catch (ContactDelitionFailedException e) {

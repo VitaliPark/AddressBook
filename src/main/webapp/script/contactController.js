@@ -38,7 +38,22 @@
             } else if(type.innerHTML == "Редактирование присоединения"){
                 this.updateAttachment();
             }
+        },
 
+        downloadAttachment: function(){
+            var element = document.getElementById("attachmentBody");
+            var rows = element.getElementsByClassName("selected");
+            var localFileName;
+            var path = "static/attachments/";
+            var fullPath;
+            if(rows != null && rows.length != 0){
+                localFileName = rows[0].id;
+                fullPath = path + localFileName;
+                var aLink = document.createElement("a");
+                aLink.setAttribute("href", fullPath);
+                aLink.click();
+                document.removeChild(aLink);
+            }
         },
 
         submitImage: function (){

@@ -212,6 +212,7 @@
         <div class="tableButtons">
             <button type="button" onclick="showAttachmentDialog('Создание присоединения')">Создать</button>
             <button type="button" onclick="document.contactController.deleteAttachment()">Удалить</button>
+            <button type="button" onclick="document.contactController.downloadAttachment()">Скачать</button>
         </div>
         <div class="table">
             <table id="attachmentTable">
@@ -225,7 +226,8 @@
                 <tbody class="table-hover" id="attachmentBody">
 
                     <c:forEach items="${requestScope.attachments}" var="attach">
-                        <tr class = "row unmodified" ondblclick = "showAttachmentDialog('Редактирование присоединения', this, '${attach.getIdAttachment()}')" >
+                        <tr class = "row unmodified" ondblclick = "showAttachmentDialog('Редактирование присоединения', this, '${attach.getIdAttachment()}')"
+                            id="<c:out value='${attach.getLocalFileName()}'></c:out>">
                             <td class = "text-left smallFont"><c:out value="${attach.getFileName()}"></c:out></td>
                             <td class = "text-left smallFont"><c:out value="${attach.getUploadDateAsString()}"></c:out></td>
                             <td class = "text-left smallFont"><c:out value="${attach.getComment()}"></c:out></td>
