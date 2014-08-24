@@ -1,26 +1,10 @@
 (function() {
 
-
-
-    var Phone = function(id, countryCode, operatorCode, phoneNumber, phoneType, comment, status) {
-        this.id = id;
-        this.countyrCode = countryCode;
-        this.operatorCode = operatorCode;
-        this.phoneNumber = phoneNumber;
-        this.phoneType = phoneType;
-        this.comment = comment;
-        this.status = status;
-        this.serialize = function() {
-            return id + '|' + countryCode + '|' + operatorCode;
-        };
-    };
-
         document.contactController = {
 
 
         lastUsedId: -1,
         lastAttachId: -1,
-        arrayIndex: 1,
 
         submitPhone: function (){
             var type = document.getElementById("phoneTitle")
@@ -74,7 +58,7 @@
             popupImageInput.id = "mainFormImageFileInput";
             var timeStamp = getTimeStamp();
             popupImageInput.setAttribute("name", "contact_image" + timeStamp);
-            //popupImageInput.className = 'hidden';
+            popupImageInput.className = 'hidden';
             switchInputs(newImageFileInput, popupImageInput);
             mainForm.appendChild(popupImageInput);
 
@@ -198,7 +182,7 @@
             fileInput.id = timeStamp;
 
             //fileInput.id = "attachment" + attachId;
-            //fileInput.className = "hidden";
+            fileInput.className = "hidden";
             //fileInput.setAttribute("name", "attachment" + attachId);
             fileInput.setAttribute("name", timeStamp);
             switchInputs(newFileInput, fileInput);
@@ -306,68 +290,7 @@
              dataCells[5].innerHTML = timeStamp;
              document.getElementById("attachmentPopup").removeChild(attachId);
              closeDialog("attachment");
-         },
-
-
-
-        createInput: function (){
-
-        },
-
-        deleteRow: function() {
-            var id = prompt("Enter id");
-            this.rows[id] = null;
-        },
-
-        updateRow: function(id, key, value) {
-            var row = this.rows[id];
-            row.key = key;
-            row.value = value;
-        },
-
-        redraw: function(containerId) {
-            var element = document.getElementById(containerId);
-            element.innerHTML = "";
-            var tr, td, obj;
-            for(var e in this.rows) {
-                obj = this.rows[e];
-                console.info(obj.id);
-                tr = document.createElement("tr");
-                tr.id = obj.id;
-                td = document.createElement("td");
-                td.innerHTML = obj.id;
-                tr.appendChild(td);
-                td = document.createElement("td");
-                td.innerHTML = obj.key;
-                tr.appendChild(td);
-                td = document.createElement("td");
-                td.innerHTML = obj.value;
-                tr.appendChild(td);
-                element.appendChild(tr);
-            }
-        },
-
-        createRow: function() {
-            var key = prompt("Please enter key");
-            var value = prompt("Please enter value");
-            this.addRow(key, value);
-        },
-
-        showSerialized: function() {
-            var id = prompt("Enter id");
-            var pair = this.rows[id];
-            alert(pair.serialize());
-        },
-
-			hello: function(){
-			var p;
-			alert("hello");
-			p = document.createElement("p");
-			p.innerHTML="hello";
-			p.style.display="none";
-			document.body.appendChild(p);
-		}
-
+         }
     };
 })();
 

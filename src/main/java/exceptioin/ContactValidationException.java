@@ -1,6 +1,6 @@
 package exceptioin;
 
-import model.ValidationObject;
+import validation.ValidationObject;
 
 @SuppressWarnings("serial")
 public class ContactValidationException extends Exception{

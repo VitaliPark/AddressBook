@@ -2,8 +2,8 @@ package model.dao;
 
 import java.util.List;
 
+import search.SearchRequest;
 import exceptioin.DataAccessException;
-import model.SearchRequest;
 import model.entity.Contact;
 
 public interface SearchDao extends HasConnection{

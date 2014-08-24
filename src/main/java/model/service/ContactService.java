@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
+import search.SearchRequest;
 import constants.ExceptionMessages;
 import constants.Status;
 import constants.database.DatabaseConstants;
@@ -27,7 +28,6 @@ import exceptioin.ContactUpdateFailed;
 import exceptioin.EmailReadFailedException;
 import exceptioin.ServiceException;
 import model.ContactTransferObject;
-import model.SearchRequest;
 import model.entity.Address;
 import model.entity.Attachment;
 import model.entity.Contact;

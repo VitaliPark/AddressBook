@@ -51,16 +51,16 @@
 
                 <li>
                     <label class="inputLabel" for="dateOfBirth">Дата Рождения:</label>
-                    <input class="inputField" name="dateOfBirth" id="dateOfBirth" type="date" required>
+                    <input class="inputField" name="dateOfBirth" id="dateOfBirth" type="date">
                 </li>
 
                 <li>
                     <div class="register-switch">
-                        <input type="radio" name="operatorType" value=">" id="more" class="register-switch-input">
+                        <input type="radio" name="operatorType" value=">" id="more" class="register-switch-input" checked>
                         <label for="more" class="register-switch-label">больше</label>
                         <input type="radio" name="operatorType" value="<" id="less" class="register-switch-input">
                         <label for="less" class="register-switch-label">меньше</label>
-                        <input type="radio" name="operatorType" value="=" id="equal" class="register-switch-input" checked>
+                        <input type="radio" name="operatorType" value="=" id="equal" class="register-switch-input" >
                         <label for="equal" class="register-switch-label">равно</label>
                     </div>
                 </li>

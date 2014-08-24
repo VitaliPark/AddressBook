@@ -172,9 +172,8 @@
                 >
             </li>
         </ul>
-        <input type="submit" name="Submit" value="Submit">
-    </form>
-</div>
+
+
 <c:set var="phones" value="${requestScope.contact.getPhones()}" scope="request" />
 <c:set var="attachments" value="${requestScope.contact.getAttachments()}" scope="request" />
 <div id="tables">
@@ -242,8 +241,10 @@
     </article>
 </div>
 <div id="buttons">
-    <a href='#' onclick='addAttachmentInputToForm()'>Click here to show the overlay</a>
+    <input type="submit" name="Submit" value="Submit">
 </div>
+    </form>
+    </div>
 
 <div id="imageOverlay" class = overlay>
 

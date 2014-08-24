@@ -4,17 +4,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import search.SearchRequest;
+import search.SearchRequestParser;
+import validation.ValidationObject;
+import validation.Validator;
 import constants.DefaultValues;
 import constants.ExceptionMessages;
 import constants.Pages;
+import controller.PageConfig;
 import controller.PageDrawer;
 import exceptioin.ContactReadFailedException;
 import model.ContactTransferObject;
-import model.PageConfig;
-import model.SearchRequestParser;
-import model.SearchRequest;
-import model.ValidationObject;
-import model.Validator;
 import model.service.ContactService;
 
 public class SearchCommand implements Command{

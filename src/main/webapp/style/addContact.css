@@ -152,10 +152,11 @@ article.phone {
 #buttons {
     overflow: hidden;
     padding-top: 20px;
-    margin-left: auto;
+    margin-left: 50%;
     margin-right: auto;
+    margin-top: 10px;
+    margin-bottom:20px;
     position: relative;
-    margin-top: 0px;
 }
 
 .tableButtons {

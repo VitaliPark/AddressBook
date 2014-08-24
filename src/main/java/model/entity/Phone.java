@@ -62,11 +62,13 @@ public class Phone {
 	public String getFullPhone(){
 		StringBuilder builder = new StringBuilder();
 		if(countryCode != DefaultValues.defaultNumericValue){
-			builder.append(getCountryCode()); builder.append(StringConstants.PHONE_SEPARATOR);
+			builder.append(getCountryCode()); 
 		}
+		builder.append(StringConstants.PHONE_SEPARATOR);
 		if(operatorCode != DefaultValues.defaultNumericValue){
-			builder.append(getOperatorCode()); builder.append(StringConstants.PHONE_SEPARATOR);
+			builder.append(getOperatorCode()); 
 		}
+		builder.append(StringConstants.PHONE_SEPARATOR);
 		builder.append(getPhoneNumber());
 		return builder.toString();
 	}

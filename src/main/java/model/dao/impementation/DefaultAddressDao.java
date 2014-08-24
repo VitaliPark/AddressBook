@@ -12,7 +12,6 @@ import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
 import model.dao.AddressDao;
 import model.entity.Address;
-import model.service.AddressService;
 
 public class DefaultAddressDao implements AddressDao{
 
@@ -124,19 +123,6 @@ public class DefaultAddressDao implements AddressDao{
 		createAddressStatement.setInt(5, address.getHouseNumber());
 		createAddressStatement.setInt(6, address.getApartment());
 		createAddressStatement.setString(7, address.getIndex());
-	}
-
-
-	@Override
-	public void deleteAddress(Address address) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Address getAddress() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 

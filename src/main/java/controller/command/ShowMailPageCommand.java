@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -20,14 +21,18 @@ public class ShowMailPageCommand implements Command{
 	private ContactService contactService;
 	private Logger LOGGER = Logger.getLogger(ShowMailPageCommand.class);
 	
-	public ShowMailPageCommand(HttpServletRequest request,
+	public ShowMailPageCommand(HttpServletRequest request, HttpServletResponse response,
 			ContactService contactService) {
 		this.request = request;
 		this.contactService = contactService;
 	}
 
 	@Override
-	public void execute() {
+	public void execute(){
+		showMailPage();
+	}
+
+	private void showMailPage() {
 		LOGGER.info("Command requested 'ShowMailCommand'");
 		String [] contactId = request.getParameterValues("contactId");
 		List<String> emails = new ArrayList<>();

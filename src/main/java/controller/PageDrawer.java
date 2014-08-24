@@ -1,7 +1,6 @@
 package controller;
 
 import constants.DefaultValues;
-import model.PageConfig;
 
 public enum PageDrawer {
 

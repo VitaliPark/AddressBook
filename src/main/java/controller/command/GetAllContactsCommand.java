@@ -7,10 +7,10 @@ import org.apache.log4j.Logger;
 import constants.DefaultValues;
 import constants.ExceptionMessages;
 import constants.Pages;
+import controller.PageConfig;
 import controller.PageDrawer;
 import exceptioin.ContactReadFailedException;
 import model.ContactTransferObject;
-import model.PageConfig;
 import model.service.ContactService;
 
 public class GetAllContactsCommand implements Command{

@@ -39,6 +39,9 @@ public class SheduleMailCommand implements Command{
 	}
 	
 	private void scheduleTask(){
+		System.setProperty("org.quartz.scheduler.makeSchedulerThreadDaemon", 
+				"true");
+				System.setProperty("org.quartz.threadPool.makeThreadsDaemons", "true");
 		Trigger trigger =  initTrigger();
 		
 	    JobDetail job = initJob();

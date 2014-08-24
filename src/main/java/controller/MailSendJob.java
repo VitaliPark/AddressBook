@@ -10,6 +10,7 @@ import model.entity.Person;
 import model.service.ContactService;
 import model.service.MailService;
 
+import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -22,6 +23,7 @@ public class MailSendJob implements Job{
 	
 	private ContactService contactService;
 	private MailService mailService;
+	Logger LOGGER = Logger.getLogger(MailSendJob.class);
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -36,7 +38,7 @@ public class MailSendJob implements Job{
 				mailService.sendMail(to, subject, message);
 			}
 		} catch (ContactReadFailedException | MessagingException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 			throw new JobExecutionException(e.getMessage());
 		}
 	}

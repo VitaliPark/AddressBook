@@ -9,12 +9,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import search.SearchPair;
+import search.SearchRequest;
 import constants.database.AddressColumnNames;
 import constants.database.PersonColumnNames;
 import constants.database.SQLQuery;
 import exceptioin.DataAccessException;
-import model.SearchPair;
-import model.SearchRequest;
 import model.dao.SearchDao;
 import model.entity.Address;
 import model.entity.Contact;

@@ -19,14 +19,14 @@ import controller.command.CommandFactory;
 @SuppressWarnings("serial")
 public class FrontController extends HttpServlet {
 
-	public static final Logger log = Logger.getLogger(FrontController.class);	
+	public static final Logger LOGGER = Logger.getLogger(FrontController.class);	
 	private CommandFactory factory;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         factory = new CommandFactory();
-        //scheduleTask();
+        scheduleTask();
     }
     
     private void scheduleTask(){
@@ -58,11 +58,9 @@ public class FrontController extends HttpServlet {
 		try {
 			dispatcher.forward(request, response);			
 		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 	}
 

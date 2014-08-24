@@ -3,22 +3,26 @@ package controller.command;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import model.ContactRequestParser;
-import model.DefaultParameterContainer;
-import model.ParameterContainer;
-import model.ValidationObject;
+
 import model.entity.Contact;
 import model.service.ContactService;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+
+import validation.ValidationObject;
 import constants.ExceptionMessages;
 import constants.Pages;
 import constants.StringConstants;
 import constants.database.PersonColumnNames;
+import controller.ContactRequestParser;
+import controller.DefaultParameterContainer;
+import controller.ParameterContainer;
 import exceptioin.ContactCreationFailedException;
 import exceptioin.ContactUpdateFailed;
 import exceptioin.ContactValidationException;
@@ -68,6 +72,7 @@ public class UpdateContactCommand implements Command{
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void processCreateContact(HttpServletRequest request){
 		ContactRequestParser parser = new ContactRequestParser();
 		try {
@@ -87,6 +92,7 @@ public class UpdateContactCommand implements Command{
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void processUpdateContact(HttpServletRequest request){
 		ContactRequestParser parser = new ContactRequestParser();
 		int contactId = Integer.parseInt(request.getParameter(PersonColumnNames.idPerson));

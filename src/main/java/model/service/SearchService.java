@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import search.SearchRequest;
 import exceptioin.DataAccessException;
 import exceptioin.ServiceException;
-import model.SearchRequest;
 import model.dao.SearchDao;
 import model.dao.impementation.DefaultSearchDao;
 import model.entity.Contact;
