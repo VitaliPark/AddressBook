@@ -67,7 +67,7 @@ public class SheduleMailCommand implements Command{
 		Trigger trigger = TriggerBuilder
 	    		.newTrigger()
 	    		.withIdentity("dummyTriggerName", "group1")
-	    		.startAt(DateBuilder.todayAt(21, 39, 0))
+	    		.startAt(DateBuilder.todayAt(23, 45, 0))
 	    	    .withSchedule(SimpleScheduleBuilder.simpleSchedule()
 	    	            .withIntervalInHours(24)
 	    	            .repeatForever())
