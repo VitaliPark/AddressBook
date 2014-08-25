@@ -41,7 +41,6 @@ CREATE TABLE `image` (
 
 LOCK TABLES `image` WRITE;
 /*!40000 ALTER TABLE `image` DISABLE KEYS */;
-INSERT INTO `image` VALUES (1,20,'third_seventh_13.jpg','contact_image1408715054third_seventh_13.jpg'),(2,20,'images (1).jpg','contact_image1408715332images (1).jpg'),(3,13,'images (1).jpg','contact_image1408954530images (1).jpg'),(4,22,'DSC08290.JPG','contact_image1408897096DSC08290.JPG'),(5,29,'DSC08159.JPG','contact_image1408904075DSC08159.JPG'),(6,2,'Thom Yorke.jpg','contact_image1408913453Thom Yorke.jpg'),(7,1,'JustinVernon.jpg','contact_image1408913748JustinVernon.jpg'),(8,14,'MagnusBirgerrson.jpg','contact_image1408914084MagnusBirgerrson.jpg');
 /*!40000 ALTER TABLE `image` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-25 13:03:30
+-- Dump completed on 2014-08-25 13:27:13
